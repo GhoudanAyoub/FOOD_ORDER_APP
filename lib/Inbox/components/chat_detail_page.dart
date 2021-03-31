@@ -62,7 +62,7 @@ class ChatDetailPage extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: white),
+                          color: Colors.white),
                     ),
                     SizedBox(
                       height: 3,
@@ -70,7 +70,7 @@ class ChatDetailPage extends StatelessWidget {
                     Text(
                       "Active now",
                       style: TextStyle(
-                          color: white.withOpacity(0.4), fontSize: 14),
+                          color: Colors.white.withOpacity(0.4), fontSize: 14),
                     )
                   ],
                 )
@@ -136,7 +136,7 @@ class ChatDetailPage extends StatelessWidget {
                   Icon(
                     Icons.add_circle,
                     size: 25,
-                    color: white,
+                    color: Colors.white,
                   ),
                   SizedBox(
                     width: getProportionateScreenWidth(10),
@@ -144,7 +144,7 @@ class ChatDetailPage extends StatelessWidget {
                   Icon(
                     Icons.camera_alt,
                     size: 25,
-                    color: white,
+                    color: Colors.white,
                   ),
                   SizedBox(
                     width: getProportionateScreenWidth(10),
@@ -152,7 +152,7 @@ class ChatDetailPage extends StatelessWidget {
                   Icon(
                     Icons.photo,
                     size: 25,
-                    color: white,
+                    color: Colors.white,
                   ),
                   SizedBox(
                     width: getProportionateScreenWidth(10),
@@ -160,7 +160,8 @@ class ChatDetailPage extends StatelessWidget {
                   Container(
                     width: getProportionateScreenWidth(170),
                     decoration: BoxDecoration(
-                        color: white, borderRadius: BorderRadius.circular(20)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 0.2),
                       child: buildMsg2FormField(),

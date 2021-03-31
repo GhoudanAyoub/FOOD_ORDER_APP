@@ -78,14 +78,14 @@ class ChatItem extends StatelessWidget {
               '${user.username}',
               maxLines: 1,
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
             subtitle: Text(
               type == MessageType.IMAGE ? "IMAGE" : "$msg",
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               style:
-                  TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
+                  TextStyle(fontWeight: FontWeight.normal, color: Colors.black),
             ),
             trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,7 +97,7 @@ class ChatItem extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 11,
-                        color: Colors.white),
+                        color: Colors.black),
                   ),
                 ),
                 SizedBox(height: 5),
@@ -151,7 +151,7 @@ class ChatItem extends StatelessWidget {
                 child: Text(
                   "$counter",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 10,
                   ),
                   textAlign: TextAlign.center,

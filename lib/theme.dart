@@ -53,7 +53,7 @@ TextTheme textTheme() {
 
 AppBarTheme appBarTheme() {
   return AppBarTheme(
-    color: GBottomNav,
+    color: white,
     elevation: 0,
     brightness: Brightness.light,
     iconTheme: IconThemeData(color: Colors.white),

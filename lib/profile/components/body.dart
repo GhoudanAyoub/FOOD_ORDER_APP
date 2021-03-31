@@ -2,21 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mystore/Inbox/components/conversation.dart';
-import 'package:mystore/components/post_tiles.dart';
-import 'package:mystore/components/post_view.dart';
-import 'package:mystore/components/stream_builder_wrapper.dart';
-import 'package:mystore/components/stream_grid_wrapper.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/User.dart';
-import 'package:mystore/models/post.dart';
+import 'package:mystore/profile/components/profile_menu.dart';
 import 'package:mystore/profile/components/profile_pic.dart';
 import 'package:mystore/utils/firebase.dart';
 
 import '../../SizeConfig.dart';
 import '../../constants.dart';
-import 'follow_unfollow_page.dart';
+import 'edit_profile.dart';
 
 class Body extends StatefulWidget {
   final profileId;
@@ -47,18 +41,6 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    checkIfFollowing();
-  }
-
-  checkIfFollowing() async {
-    DocumentSnapshot doc = await followersRef
-        .doc(widget.profileId)
-        .collection('userFollowers')
-        .doc(currentUserId())
-        .get();
-    setState(() {
-      isFollowing = doc.exists;
-    });
   }
 
   @override
@@ -72,7 +54,7 @@ class _BodyState extends State<Body> {
             floating: false,
             toolbarHeight: 4.0,
             collapsedHeight: 5.0,
-            expandedHeight: 390.0,
+            expandedHeight: SizeConfig.screenHeight,
             flexibleSpace: FlexibleSpaceBar(
               background: StreamBuilder(
                 stream: usersRef.doc(widget.profileId).snapshots(),
@@ -86,26 +68,6 @@ class _BodyState extends State<Body> {
               ),
             ),
           ),
-          SliverList(delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) {
-            if (index > 0) return null;
-            return Column(children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'All Posts',
-                      style: TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                    Spacer(),
-                    buildIcons(),
-                  ],
-                ),
-              ),
-              buildPostView()
-            ]);
-          })),
         ],
       ),
     );
@@ -117,33 +79,6 @@ class _BodyState extends State<Body> {
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
       );
-
-  buildIcons() {
-    if (isToggle) {
-      return IconButton(
-          icon: Icon(
-            Icons.list,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            setState(() {
-              isToggle = false;
-            });
-          });
-    } else if (isToggle == false) {
-      return IconButton(
-        icon: Icon(
-          Icons.grid_on,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          setState(() {
-            isToggle = true;
-          });
-        },
-      );
-    }
-  }
 
   buildCount(String label, int count) {
     return Column(
@@ -164,48 +99,6 @@ class _BodyState extends State<Body> {
               fontFamily: 'Ubuntu-Regular'),
         )
       ],
-    );
-  }
-
-  buildPostView() {
-    if (isToggle == true) {
-      return buildGridPost();
-    } else if (isToggle == false) {
-      return buildPosts();
-    }
-  }
-
-  buildPosts() {
-    return StreamBuilderWrapper(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      text: "No Posts For The Moment",
-      stream: postRef.where('ownerId', isEqualTo: widget.profileId).snapshots(),
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (_, DocumentSnapshot snapshot) {
-        PostModel posts = PostModel.fromJson(snapshot.data());
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 15.0),
-          child: Posts(
-            post: posts,
-          ),
-        );
-      },
-    );
-  }
-
-  buildGridPost() {
-    return StreamGridWrapper(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      stream: postRef.where('ownerId', isEqualTo: widget.profileId).snapshots(),
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (_, DocumentSnapshot snapshot) {
-        PostModel posts = PostModel.fromJson(snapshot.data());
-        return PostTile(
-          post: posts,
-        );
-      },
     );
   }
 
@@ -356,33 +249,8 @@ class _BodyState extends State<Body> {
             width: SizeConfig.screenWidth,
             child: Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(width: getProportionateScreenWidth(10)),
-                  widget.profileId == firebaseAuth.currentUser.uid
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.settings_outlined,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            /*
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SettingScreen(
-                                    users: user1,
-                                  ),
-                                ));*/
-                          })
-                      : IconButton(
-                          icon: Icon(
-                            Icons.list,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            reportSystem();
-                          }),
                   SizedBox(
                     width: getProportionateScreenWidth(260),
                     height: getProportionateScreenHeight(10),
@@ -390,8 +258,8 @@ class _BodyState extends State<Body> {
                   widget.profileId == firebaseAuth.currentUser.uid
                       ? IconButton(
                           icon: Icon(
-                            Icons.search,
-                            color: Colors.white,
+                            Icons.list,
+                            color: Colors.red[900],
                           ),
                           onPressed: () {})
                       : Container(),
@@ -404,465 +272,84 @@ class _BodyState extends State<Body> {
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasData) {
               UserModel user = UserModel.fromJson(snapshot.data.data());
-              return Column(
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(width: 30.0),
                   ProfilePic(
                     image: firebaseAuth.currentUser.uid == user.id
                         ? auth.getProfileImage()
                         : user.photoUrl,
                   ),
-                  SizedBox(height: 5),
-                  Text("${user.username ?? 'Anonymous'}",
-                      style: TextStyle(
-                        fontSize: getProportionateScreenWidth(22),
-                        color: GTextColorWhite,
-                        fontFamily: "SFProDisplay-Bold",
-                        fontWeight: FontWeight.bold,
-                      )),
-                  SizedBox(height: 5),
+                  SizedBox(width: 20.0),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                            child: Text(
-                                "${user.bio.isEmpty ? 'Everyday mystore' : user.bio}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(12),
-                                  color: GTextColorWhite,
-                                  fontFamily: "SFProDisplay-Light",
-                                  fontWeight: FontWeight.normal,
-                                )),
-                          ),
-                        ),
-                      ),
+                      SizedBox(height: 5),
+                      Text("${user.username ?? 'Anonymous'}",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: "SFProDisplay-Bold",
+                            fontWeight: FontWeight.bold,
+                          )),
+                      SizedBox(height: 5),
+                      Text("${user.country.isEmpty ? '' : user.country}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontFamily: "SFProDisplay-Light",
+                            fontWeight: FontWeight.normal,
+                          )),
                     ],
                   ),
-                  SizedBox(height: 10.0),
-                  Container(
-                    height: 60.0,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: FlatButton(
-                          padding: EdgeInsets.all(10),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          color: Color(0xFFF5F6F9),
-                          onPressed: () {},
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => FollowUnfollowPage(
-                                          profileId: widget.profileId),
-                                    ));
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  StreamBuilder(
-                                    stream: postRef
-                                        .where('ownerId',
-                                            isEqualTo: widget.profileId)
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasData) {
-                                        QuerySnapshot snap = snapshot.data;
-                                        List<DocumentSnapshot> docs = snap.docs;
-                                        return buildCount(
-                                            "POSTS", docs?.length ?? 0);
-                                      } else {
-                                        return buildCount("POSTS", 0);
-                                      }
-                                    },
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 15.0),
-                                    child: Container(
-                                      height: 50.0,
-                                      width: 0.3,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  StreamBuilder(
-                                    stream: followersRef
-                                        .doc(widget.profileId)
-                                        .collection('userFollowers')
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasData) {
-                                        QuerySnapshot snap = snapshot.data;
-                                        List<DocumentSnapshot> docs = snap.docs;
-                                        return buildCount(
-                                            "FOLLOWERS", docs?.length ?? 0);
-                                      } else {
-                                        return buildCount("FOLLOWERS", 0);
-                                      }
-                                    },
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 15.0),
-                                    child: Container(
-                                      height: 50.0,
-                                      width: 0.3,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  StreamBuilder(
-                                    stream: followingRef
-                                        .doc(widget.profileId)
-                                        .collection('userFollowing')
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasData) {
-                                        QuerySnapshot snap = snapshot.data;
-                                        List<DocumentSnapshot> docs = snap.docs;
-                                        return buildCount(
-                                            "FOLLOWING", docs?.length ?? 0);
-                                      } else {
-                                        return buildCount("FOLLOWING", 0);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  buildProfileButton(user),
                 ],
               );
             }
             return Container();
           },
         ),
+        SizedBox(height: 40.0),
+        ProfileMenu(
+          text: "Edit Profile",
+          icon: "assets/icons/User Icon.svg",
+          press: () => {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => EditProfile(
+                  user: user1,
+                ),
+              ),
+            )
+          },
+        ),
+        ProfileMenu(
+          text: "My orders",
+          icon: "assets/icons/Shop Icon.svg",
+          press: () {},
+        ),
+        ProfileMenu(
+          text: "Purchasing History",
+          icon: "assets/icons/Parcel.svg",
+          press: () {},
+        ),
+        ProfileMenu(
+          text: "Recently viewed",
+          icon: "assets/icons/Question mark.svg",
+          press: () {},
+        ),
+        ProfileMenu(
+          text: "To be reviewed",
+          icon: "assets/icons/Plus Icon.svg",
+          press: () {},
+        ),
+        ProfileMenu(
+          text: "Unpaid Orders",
+          icon: "assets/icons/Bill Icon.svg",
+          press: () {},
+        ),
       ],
     );
-  }
-
-  reportSystem() {
-    return showModalBottomSheet(
-      backgroundColor: GBottomNav,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      builder: (BuildContext context) {
-        return FractionallySizedBox(
-          heightFactor: .3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Center(
-                  child: Text(
-                    'SELECT',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
-              ),
-              Divider(
-                color: Colors.white,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 10.0),
-                  Column(
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            CupertinoIcons.flag,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            reportButton();
-                          }),
-                      Text('Report',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ],
-                  ),
-                  SizedBox(width: 10.0),
-                  Column(
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            Icons.email_outlined,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Conversation(
-                                    userId: widget.profileId,
-                                    chatId: 'newChat',
-                                  ),
-                                ));
-                          }),
-                      Center(
-                          child: Text('Send',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white))),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  reportButton() {
-    return showModalBottomSheet(
-        backgroundColor: GBottomNav,
-        context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (BuildContext context) {
-          return FractionallySizedBox(
-            heightFactor: .4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Center(
-                    child: Text(
-                      'Select a reason',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Colors.white,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      title: Text('Report account',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                      onTap: () {
-                        Navigator.pop(context);
-                        reportAccountButton();
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Report content',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                      onTap: () {
-                        report('Content report');
-                      },
-                    ),
-                  ],
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  reportAccountButton() {
-    return showModalBottomSheet(
-        backgroundColor: GBottomNav,
-        context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (BuildContext context) {
-          return FractionallySizedBox(
-            heightFactor: 0.75,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Center(
-                    child: Text(
-                      'Select a reason',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Colors.white,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                        title: Text('Posting Inappropriate Content',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          Navigator.pop(context);
-                          reportPostingButton();
-                        }),
-                    ListTile(
-                      title: Text('Inappropriate Profile Info',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                      onTap: () {
-                        report('Inappropriate Profile Info');
-                      },
-                    ),
-                    ListTile(
-                        title: Text('Intellectual property infringement',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          report('Intellectual property infringement');
-                        }),
-                    ListTile(
-                        title: Text('Other',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          report('Other report');
-                        }),
-                  ],
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  reportPostingButton() {
-    return showModalBottomSheet(
-        backgroundColor: GBottomNav,
-        context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (BuildContext context) {
-          return FractionallySizedBox(
-            heightFactor: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Center(
-                    child: Text(
-                      'Select a reason',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Colors.white,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                        title: Text('Pornography and nudity',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          report('Pornography and nudity');
-                        }),
-                    ListTile(
-                      title: Text('Illegal activities and regulated goods',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                      onTap: () {
-                        report('Illegal activities and regulated goods');
-                      },
-                    ),
-                    ListTile(
-                        title: Text('Hate speech',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          report('Hate speech');
-                        }),
-                    ListTile(
-                        title: Text('Violent and graphic content',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          report('Violent and graphic content');
-                        }),
-                    ListTile(
-                        title: Text('Suicide, self-harm, and dangerous acts',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        onTap: () {
-                          report('Suicide, self-harm, and dangerous acts');
-                        }),
-                  ],
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  report(String type) {
-    Navigator.pop(context);
-    reportRef.doc(widget.profileId).set({
-      'accountId': widget.profileId,
-      'type': type,
-      'reporterId': firebaseAuth.currentUser.uid
-    });
-    Fluttertoast.showToast(
-        msg: "Thank You For Reporting We Will Take It From Here",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: GBottomNav,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
 }
