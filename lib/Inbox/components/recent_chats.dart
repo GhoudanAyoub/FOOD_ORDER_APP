@@ -63,7 +63,11 @@ class Chats extends StatelessWidget {
                   },
                 );
               } else {
-                return Center(child: Text('No Chats'));
+                return Center(
+                    child: Text(
+                  'No Chats',
+                  style: TextStyle(color: Colors.black),
+                ));
               }
             } else {
               return Center(

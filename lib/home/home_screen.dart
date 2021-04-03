@@ -8,6 +8,8 @@ import 'package:mystore/profile/profile_screen.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'Conposante/body.dart';
+
 class HomeScreen extends StatefulWidget {
   static String routeName = "/home";
   @override
@@ -73,9 +75,7 @@ class _State extends State<HomeScreen> {
     return IndexedStack(
       index: pageIndex,
       children: [
-        Container(
-          child: Text("hello"),
-        ),
+        Body(),
         DiscoverScreen(),
         Activities(),
         ProfileScreen(
