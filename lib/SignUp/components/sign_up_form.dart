@@ -70,7 +70,7 @@ class _SignUpFormState extends State<SignUpForm> {
             FormError(errors: errors),
             SizedBox(height: getProportionateScreenHeight(15)),
             DefaultButton(
-              text: "Continue",
+              text: "SIGN UP",
               submitted: submitted,
               press: () async {
                 try {

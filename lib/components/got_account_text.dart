@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mystore/SignIn/sign_in_screen.dart';
 
-import '../SizeConfig.dart';
-import '../constants.dart';
-
 class GotAccountText extends StatelessWidget {
   GotAccountText({
     Key key,
@@ -13,14 +10,12 @@ class GotAccountText extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("I Have Account "),
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, SignInScreen.routeName),
           child: Text(
-            "Sign In",
+            "Sign In Using",
             style: TextStyle(
-                fontSize: getProportionateScreenWidth(14),
-                color: kPrimaryColor),
+                fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
           ),
         ),
       ],

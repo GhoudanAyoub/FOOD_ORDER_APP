@@ -10,8 +10,6 @@ import 'package:mystore/services/auth_service.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:mystore/utils/validation.dart';
 
-import '../../SizeConfig.dart';
-
 class SignForm extends StatefulWidget {
   @override
   _SignFormState createState() => _SignFormState();
@@ -73,9 +71,9 @@ class _SignFormState extends State<SignForm> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           buildEmailFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          SizedBox(height: 5),
           buildPasswordFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          SizedBox(height: 10),
           Row(
             children: [
               Spacer(),
@@ -86,14 +84,13 @@ class _SignFormState extends State<SignForm> {
                   "Forgot Password?",
                   style: TextStyle(
                       fontSize: 14,
-                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
               )
             ],
           ),
-          FormError(errors: errors),
-          SizedBox(height: getProportionateScreenHeight(20)),
+          SizedBox(height: 10),
           DefaultButton(
             text: buttonText,
             submitted: submitted,
@@ -129,6 +126,7 @@ class _SignFormState extends State<SignForm> {
               }
             },
           ),
+          FormError(errors: errors),
         ],
       ),
     );

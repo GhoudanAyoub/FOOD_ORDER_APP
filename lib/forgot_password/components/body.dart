@@ -1,45 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:mystore/components/custom_surfix_icon.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mystore/components/default_button.dart';
-import 'package:mystore/components/form_error.dart';
-import 'package:mystore/components/no_account_text.dart';
+import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
+import 'package:mystore/utils/validation.dart';
 
 import '../../SizeConfig.dart';
-import '../../constants.dart';
-import '../../theme.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: Column(
-            children: [
-              SizedBox(height: SizeConfig.screenHeight * 0.04),
-              Text(
-                "Forgot Password",
-                style: TextStyle(
-                  fontSize: getProportionateScreenWidth(28),
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "Please enter your email and we will send \nyou a link to return to your account",
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: SizeConfig.screenHeight * 0.1),
-              ForgotPassForm(),
-            ],
+    return Container(
+        height: SizeConfig.screenHeight,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Colors.black.withOpacity(0.8),
+                Colors.grey.withOpacity(0),
+              ]),
+          image: DecorationImage(
+            image: ExactAssetImage('assets/images/logo.png'),
+            fit: BoxFit.cover,
           ),
         ),
-      ),
-    );
+        child: SizedBox(
+          width: double.infinity,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                children: [
+                  SizedBox(height: SizeConfig.screenHeight * 0.35),
+                  Text(
+                    "Forgot Password",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "Please enter your email and we will send \nyou a link to return to your account",
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  ForgotPassForm(),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
 
@@ -51,60 +63,18 @@ class ForgotPassForm extends StatefulWidget {
 class _ForgotPassFormState extends State<ForgotPassForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _emailContoller = TextEditingController();
-  List<String> errors = [];
-  String email;
   var submitted = false;
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          TextFormField(
-            controller: _emailContoller,
-            style: TextStyle(color: Colors.white),
-            keyboardType: TextInputType.emailAddress,
-            onSaved: (newValue) => email = newValue,
-            onChanged: (value) {
-              if (value.isNotEmpty && errors.contains(kEmailNullError)) {
-                setState(() {
-                  errors.remove(kEmailNullError);
-                });
-              } else if (emailValidatorRegExp.hasMatch(value) &&
-                  errors.contains(kInvalidEmailError)) {
-                setState(() {
-                  errors.remove(kInvalidEmailError);
-                });
-              }
-              return null;
-            },
-            validator: (value) {
-              if (value.isEmpty && !errors.contains(kEmailNullError)) {
-                setState(() {
-                  errors.add(kEmailNullError);
-                });
-              } else if (!emailValidatorRegExp.hasMatch(value) &&
-                  !errors.contains(kInvalidEmailError)) {
-                setState(() {
-                  errors.add(kInvalidEmailError);
-                });
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              labelText: "Email",
-              hintText: "Enter your email",
-              labelStyle: textTheme().bodyText2,
-              hintStyle: textTheme().bodyText2,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
-            ),
-          ),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          FormError(errors: errors),
-          SizedBox(height: SizeConfig.screenHeight * 0.1),
+          buildEmailFormField(),
+          SizedBox(height: 20),
           DefaultButton(
-            text: "Continue",
+            text: "Reset",
             submitted: submitted,
             press: () {
               if (_formKey.currentState.validate()) {
@@ -117,10 +87,18 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
               }
             },
           ),
-          SizedBox(height: SizeConfig.screenHeight * 0.1),
-          NoAccountText(),
         ],
       ),
+    );
+  }
+
+  buildEmailFormField() {
+    return TextFormBuilder(
+      prefix: Feather.mail,
+      controller: _emailContoller,
+      hintText: "Email",
+      textInputAction: TextInputAction.next,
+      validateFunction: Validations.validateEmail,
     );
   }
 }

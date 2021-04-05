@@ -4,13 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../SizeConfig.dart';
 
 class SocalCard extends StatelessWidget {
-  const SocalCard({
-    Key key,
-    this.icon,
-    this.press,
-  }) : super(key: key);
+  const SocalCard({Key key, this.icon, this.press, this.Name})
+      : super(key: key);
 
   final String icon;
+  final String Name;
   final Function press;
 
   @override
@@ -22,12 +20,21 @@ class SocalCard extends StatelessWidget {
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(10)),
         padding: EdgeInsets.all(getProportionateScreenWidth(12)),
         height: getProportionateScreenHeight(50),
-        width: getProportionateScreenWidth(50),
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.1),
-          shape: BoxShape.circle,
+        child: Row(
+          children: [
+            SvgPicture.asset(icon),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              Name,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            )
+          ],
         ),
-        child: SvgPicture.asset(icon),
       ),
     );
   }

@@ -22,14 +22,126 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: SizeConfig.screenHeight,
         decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Colors.black.withOpacity(0.8),
+                Colors.grey.withOpacity(0),
+              ]),
           image: DecorationImage(
             image: ExactAssetImage('assets/images/logo.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Stack(
-          children: [
+        child: SafeArea(
+          child: SizedBox(
+            width: double.infinity,
+            height: SizeConfig.screenHeight,
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    SizedBox(height: SizeConfig.screenHeight * 0.35),
+                    SignForm(),
+                    SizedBox(height: SizeConfig.screenHeight * 0.2),
+                    Container(
+                      child: Column(
+                        children: [
+                          NoAccountText(),
+                          SizedBox(height: 20),
+                          Text(
+                            "Or Signup using",
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SocalCard(
+                                icon: "assets/icons/facebook-2.svg",
+                                Name: "Facebook",
+                                press: () {
+                                  handleLogin(context);
+                                },
+                              ),
+                              SocalCard(
+                                icon: "assets/icons/google-icon.svg",
+                                Name: "Gmail",
+                                press: () async {
+                                  await signInWithGoogle(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+          ),
+        ));
+  }
+
+  /*
+  *
+  *
+  *Container(
+          height: SizeConfig.screenHeight,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: ExactAssetImage('assets/images/logo.png'),
+              fit: BoxFit.cover,
+            ),
+            gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black45,
+                  Colors.grey.withOpacity(0.2),
+                ]),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Align(alignment: Alignment(0, 20), child: SignForm()),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          NoAccountText(),
+                          SizedBox(height: getProportionateScreenHeight(10)),
+                          Text(
+                            "Or Signup using",
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SocalCard(
+                                icon: "assets/icons/google-icon.svg",
+                                press: () async {
+                                  await signInWithGoogle(context);
+                                },
+                              ),
+                              SocalCard(
+                                icon: "assets/icons/facebook-2.svg",
+                                press: () {
+                                  handleLogin(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+            ],
+          ))
+          *
             Positioned(
               left: 0.0,
               bottom: 0.0,
@@ -44,64 +156,7 @@ class Body extends StatelessWidget {
                     ])),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: getProportionateScreenWidth(20)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Spacer(flex: 2),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        SignForm(),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 40),
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Stack(
-                        children: [
-                          Column(
-                            children: [
-                              NoAccountText(),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(10)),
-                              Text(
-                                "Or Signup using",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SocalCard(
-                                    icon: "assets/icons/google-icon.svg",
-                                    press: () async {
-                                      await signInWithGoogle(context);
-                                    },
-                                  ),
-                                  SocalCard(
-                                    icon: "assets/icons/facebook-2.svg",
-                                    press: () {
-                                      handleLogin(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }
-
+  * */
   Future<void> signInWithGoogle(context) async {
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text("Checking Your Account..")));

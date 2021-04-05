@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/profile/components/profile_menu.dart';
@@ -349,7 +350,46 @@ class _BodyState extends State<Body> {
           icon: "assets/icons/Bill Icon.svg",
           press: () {},
         ),
+        ProfileMenu(
+          text: "Logout",
+          icon: "assets/icons/Bill Icon.svg",
+          press: () {
+            logOut(context);
+          },
+        ),
       ],
     );
+  }
+
+  logOut(BuildContext parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            backgroundColor: GBottomNav,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            children: [
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                  FirebaseService().signOut();
+                  Navigator.pushNamed(context, SignInScreen.routeName);
+                },
+                child: Text(
+                  'Log Out',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              Divider(),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        });
   }
 }
