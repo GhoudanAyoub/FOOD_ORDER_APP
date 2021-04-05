@@ -3,7 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mystore/components/default_button.dart';
 import 'package:mystore/components/form_error.dart';
 import 'package:mystore/components/text_form_builder.dart';
-import 'package:mystore/home/home_screen.dart';
+import 'package:mystore/home/home.dart';
 import 'package:mystore/services/auth_service.dart';
 import 'package:mystore/utils/validation.dart';
 
@@ -84,10 +84,8 @@ class _SignUpFormState extends State<SignUpForm> {
                         phone: _phone.text);
                     print(success);
                     if (success) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
                       Scaffold.of(context).showSnackBar(SnackBar(
                           content:
                               Text('Congratulation Your Account Created')));

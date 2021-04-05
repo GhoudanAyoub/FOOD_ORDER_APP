@@ -5,7 +5,7 @@ import 'package:mystore/components/form_error.dart';
 import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/forgot_password/forgot_password_screen.dart';
 import 'package:mystore/helper/keyboard.dart';
-import 'package:mystore/home/home_screen.dart';
+import 'package:mystore/home/home.dart';
 import 'package:mystore/services/auth_service.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:mystore/utils/validation.dart';
@@ -109,7 +109,7 @@ class _SignFormState extends State<SignForm> {
                   print(success);
                   if (success == firebaseAuth.currentUser.uid) {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                        MaterialPageRoute(builder: (context) => HomePage()));
                     Scaffold.of(context)
                         .showSnackBar(SnackBar(content: Text('Welcome Back')));
                   } else {

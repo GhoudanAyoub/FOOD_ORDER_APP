@@ -23,6 +23,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: SizeConfig.screenHeight,
+        width: SizeConfig.screenWidth,
         decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.bottomCenter,
@@ -46,7 +47,7 @@ class Body extends StatelessWidget {
                   children: [
                     SizedBox(height: SizeConfig.screenHeight * 0.35),
                     SignForm(),
-                    SizedBox(height: SizeConfig.screenHeight * 0.2),
+                    SizedBox(height: SizeConfig.screenHeight * 0.15),
                     Container(
                       child: Column(
                         children: [

@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Notification/notification.dart';
+import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/discover/discover_screen.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/profile/profile_screen.dart';
@@ -10,7 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'Conposante/body.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget with NavigationStates {
   static String routeName = "/home";
   @override
   _State createState() => _State();

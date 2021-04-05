@@ -1,13 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
+import 'package:mystore/models/User.dart';
+import 'package:mystore/utils/firebase.dart';
 
 import 'lmaida_card.dart';
 
-class Body extends StatefulWidget {
+class Body extends StatefulWidget with NavigationStates {
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
+  UserModel user1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,14 +21,31 @@ class _BodyState extends State<Body> {
         automaticallyImplyLeading: false,
         elevation: 0,
         actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(0),
-            onPressed: () {
-              chooseUpload(context);
+          StreamBuilder(
+            stream: usersRef.doc(firebaseAuth.currentUser.uid).snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasData) {
+                user1 = UserModel.fromJson(snapshot.data.data());
+                if (user1.msgToAll == true) {}
+                return IconButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    chooseUpload2(context);
+                  },
+                  iconSize: 21,
+                  icon: Icon(Icons.list),
+                );
+              }
+              return IconButton(
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  chooseUpload(context);
+                },
+                iconSize: 21,
+                icon: Icon(Icons.list),
+              );
             },
-            iconSize: 21,
-            icon: Icon(Icons.list),
-          )
+          ),
         ],
       ),
       body: ListView(
@@ -91,6 +114,159 @@ class _BodyState extends State<Body> {
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'Poppins')),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  chooseUpload2(BuildContext context) {
+    return showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50.0),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          alignment: Alignment.bottomCenter,
+          width: 200,
+          child: Container(
+            height: 500,
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            ),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.red[800],
+                      endIndent: 200,
+                      indent: 200,
+                      thickness: 4,
+                      height: 0,
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [clipsWidget2()],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget clipsWidget2() {
+    return Container(
+      height: 400,
+      width: 350,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<NavigationBloc>(context)
+                  .add(NavigationEvents.DashboardClickedEvent);
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Dashboard",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22.0,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<NavigationBloc>(context)
+                  .add(NavigationEvents.ShopClickedEvent);
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Manage Shops",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 18.0,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<NavigationBloc>(context)
+                  .add(NavigationEvents.AddProductClickedEvent);
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Add Products",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 18.0,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<NavigationBloc>(context)
+                  .add(NavigationEvents.CustomersClickedEvent);
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Manage Customers",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 18.0,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          Text(
+            "Reports",
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 18.0,
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            "Notifications",
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 18.0,
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            "Settings",
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 18.0,
+              color: Colors.grey,
             ),
           ),
         ],
