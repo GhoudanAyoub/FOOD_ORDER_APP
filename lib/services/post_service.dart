@@ -19,20 +19,29 @@ class PostService extends Service {
     });
   }
 
-  uploadPost(File image, String tags, String description) async {
-    String link = await uploadImage(posts, image);
-    DocumentSnapshot doc =
-        await usersRef.doc(firebaseAuth.currentUser.uid).get();
-    user = UserModel.fromJson(doc.data());
-    var ref = postRef.doc();
+  uploadPost(
+      {File image,
+      File image2,
+      File image3,
+      String product_name,
+      String price,
+      String description,
+      flavours}) async {
+    String link = await uploadImage(products, image);
+    String link2 = await uploadImage(products, image2);
+    String link3 = await uploadImage(products, image3);
+    var ref = productRef.doc();
     ref.set({
       "id": ref.id,
       "postId": ref.id,
-      "username": user.username,
       "ownerId": firebaseAuth.currentUser.uid,
+      "product_name": product_name,
+      "price": price,
       "mediaUrl": link,
+      "mediaUrl2": link2,
+      "mediaUrl3": link3,
+      "flavours": flavours,
       "description": description == null ? "" : description,
-      "tags": tags == null ? "" : tags,
       "timestamp": Timestamp.now(),
     }).catchError((e) {
       print(e);

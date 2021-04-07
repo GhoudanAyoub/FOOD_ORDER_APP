@@ -9,6 +9,7 @@ FirebaseStorage storage = FirebaseStorage.instance;
 final Uuid uuid = Uuid();
 
 // Collection refs
+CollectionReference productRef = firestore.collection('product');
 CollectionReference paymentRef = firestore.collection('Payment');
 CollectionReference reportRef = firestore.collection('report');
 CollectionReference usersRef = firestore.collection('users');
@@ -26,5 +27,6 @@ CollectionReference favUsersRef = firestore.collection('favoriteUsers');
 
 // Storage refs
 Reference profilePic = storage.ref().child('profilePic');
+Reference products = storage.ref().child('products');
 Reference posts = storage.ref().child('posts');
 Reference videos = storage.ref().child('videos');
