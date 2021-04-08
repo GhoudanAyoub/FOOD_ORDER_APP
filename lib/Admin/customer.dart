@@ -20,6 +20,7 @@ class _CustomersState extends State<Customers> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> users = [];
   List<DocumentSnapshot> filteredUsers = [];
+  List<UserModel> _list = [];
   bool loading = true;
   bool isFollowing = false;
 
@@ -50,54 +51,50 @@ class _CustomersState extends State<Customers> {
                   Colors.grey.withOpacity(0),
                 ]),
           ),
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: Container(
-                      height: 530.0,
-                      child: Card(
-                        elevation: 10.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          width: SizeConfig.screenWidth,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                CupertinoIcons.color_filter,
-                                color: Colors.red,
-                                size: 40,
-                              ),
-                              Container(
-                                  margin: EdgeInsets.fromLTRB(0, 60, 0, 0),
-                                  child: buildUsers())
-                            ],
-                          ),
-                        ),
-                      )),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 570, 10, 10),
-                  child: Container(
-                      height: 100.0,
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                child: Container(
+                    height: 600.0,
+                    child: Card(
+                      elevation: 10.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                       child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         width: SizeConfig.screenWidth,
-                        child: Text(
-                            "Click on Customers name to See \nmore details",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Poppins')),
-                      )),
-                ),
-              ],
-            ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              CupertinoIcons.color_filter,
+                              color: Colors.red,
+                              size: 40,
+                            ),
+                            buildUsers()
+                          ],
+                        ),
+                      ),
+                    )),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 650, 10, 10),
+                child: Container(
+                    height: 100.0,
+                    child: Container(
+                      width: SizeConfig.screenWidth,
+                      child: Text(
+                          "Click on Customers name to See \nmore details",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Poppins')),
+                    )),
+              ),
+            ],
           ),
         ));
   }
@@ -128,54 +125,45 @@ class _CustomersState extends State<Customers> {
           itemBuilder: (BuildContext context, int index) {
             DocumentSnapshot doc = filteredUsers[index];
             UserModel user = UserModel.fromJson(doc.data());
-            return Column(
-              children: [
-                ListTile(
-                  // onTap: () => showProfile(context, profileId: user?.id),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                  title: Text(user?.username,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  /* trailing: user.msgToAll == true || isFollowing == true
-                      ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Conversation(
-                                    userId: doc.id,
-                                    chatId: 'newChat',
-                                  ),
-                                ));
-                          },
-                          child: Icon(CupertinoIcons.chat_bubble_fill,
-                              color: Colors.black),
-                        )
-                      : Container(
-                          width: 1,
-                        ),*/
-                ),
-                Divider(),
-                Table(
-                  border: TableBorder.all(color: Colors.black),
-                  children: [
-                    TableRow(children: [
-                      Text('Cell 1',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      Text('Cell 2',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      Text('Cell 3',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ]),
-                  ],
-                ),
+            _list.add(user);
+            return DataTable(
+              columns: [
+                DataColumn(
+                    label: Text('Customers',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    tooltip: 'represents name of the user'),
+                DataColumn(
+                    label: Text('Subscribed',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    tooltip: 'represents is the user is  subscribed'),
+                DataColumn(
+                    label: Text('Oders',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    tooltip:
+                        'represents the number of orders that users makes'),
               ],
+              rows: _list
+                  .map((data) => DataRow(cells: [
+                        DataCell(
+                            Text(data.username,
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontWeight: FontWeight.normal)), onTap: () {
+                          print(data.username);
+                        }),
+                        DataCell(Text("Sub",
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.normal))),
+                        DataCell(Text("orders",
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.normal))),
+                      ]))
+                  .toList(),
             );
           },
         );
