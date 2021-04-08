@@ -31,6 +31,7 @@ class SocalCard extends StatelessWidget {
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Lato-Bold.ttf',
                   color: Colors.white),
             )
           ],

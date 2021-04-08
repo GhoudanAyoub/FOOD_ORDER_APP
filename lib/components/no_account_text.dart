@@ -9,13 +9,16 @@ class NoAccountText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          "Still Haven't an account? ",
-          style: TextStyle(fontSize: 16, color: Colors.white),
+          "Don't have an account? ",
+          style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'Lato-Regular.ttf',
+              color: Colors.white),
         ),
         SizedBox(
           height: 15,
@@ -23,9 +26,12 @@ class NoAccountText extends StatelessWidget {
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
           child: Text(
-            "Signup Here",
+            "Sign Up",
             style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 18,
+                fontFamily: 'Lato-Regular.ttf',
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
         ),
       ],

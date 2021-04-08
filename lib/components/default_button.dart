@@ -32,6 +32,7 @@ class DefaultButton extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontSize: 16,
+                  fontFamily: 'Lato-Regular.ttf',
                   color: Colors.white,
                 ),
               ),

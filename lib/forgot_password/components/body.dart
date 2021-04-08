@@ -31,19 +31,27 @@ class Body extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: SizeConfig.screenHeight * 0.35),
+                  SizedBox(height: SizeConfig.screenHeight * 0.40),
                   Text(
                     "Forgot Password",
                     style: TextStyle(
                       fontSize: 24,
                       color: Colors.white,
+                      fontFamily: 'Lato-Bold.ttf',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     "Please enter your email and we will send \nyou a link to return to your account",
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontFamily: 'Lato-Thin.ttf',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(height: 20),
                   ForgotPassForm(),
@@ -73,19 +81,22 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
         children: [
           buildEmailFormField(),
           SizedBox(height: 20),
-          DefaultButton(
-            text: "Reset",
-            submitted: submitted,
-            press: () {
-              if (_formKey.currentState.validate()) {
-                submitted = true;
-                final auth = FirebaseService();
-                auth.sendPasswordResetEmail(_emailContoller.text);
-                Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        'A password reset link has been sent to ${_emailContoller.text}')));
-              }
-            },
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: DefaultButton(
+              text: "Reset",
+              submitted: submitted,
+              press: () {
+                if (_formKey.currentState.validate()) {
+                  submitted = true;
+                  final auth = FirebaseService();
+                  auth.sendPasswordResetEmail(_emailContoller.text);
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          'A password reset link has been sent to ${_emailContoller.text}')));
+                }
+              },
+            ),
           ),
         ],
       ),

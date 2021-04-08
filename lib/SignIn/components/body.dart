@@ -54,8 +54,11 @@ class Body extends StatelessWidget {
                           NoAccountText(),
                           SizedBox(height: 20),
                           Text(
-                            "Or Signup using",
-                            style: TextStyle(fontSize: 14, color: Colors.white),
+                            "OR",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.white),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
