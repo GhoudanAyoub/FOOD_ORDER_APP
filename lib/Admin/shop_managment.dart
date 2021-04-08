@@ -10,6 +10,21 @@ class Shop extends StatefulWidget with NavigationStates {
 }
 
 class _ShopState extends State<Shop> {
+  /*
+  Shops shop;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<DocumentSnapshot> shop = [];
+  List<DocumentSnapshot> filteredShops = [];
+  List<ShopModel> _list = [];
+  bool loading = true;
+  bool isFollowing = false;
+
+  @override
+  void initState() {
+    getShops();
+    super.initState();
+  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,4 +93,81 @@ class _ShopState extends State<Shop> {
           ),
         ));
   }
+/*
+  getShops() async {
+    QuerySnapshot snap = await shopRef.get();
+    List<DocumentSnapshot> doc = snap.docs;
+    shops = doc;
+    filteredShps = doc;
+    setState(() {
+      loading = false;
+    });
+  }
+
+  buildShops() {
+    if (!loading) {
+      if (filteredShps.isEmpty) {
+        return Center(
+          child: Text("No User Found",
+              style:
+              TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        );
+      } else {
+        return ListView.builder(
+          itemCount: filteredShps.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            DocumentSnapshot doc = filteredShps[index];
+            ShopsModel user = ShopsModel.fromJson(doc.data());
+            _list.add(user);
+            return DataTable(
+              columns: [
+                DataColumn(
+                    label: Text('Customers',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    tooltip: 'represents name of the user'),
+                DataColumn(
+                    label: Text('Subscribed',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    tooltip: 'represents is the user is  subscribed'),
+                DataColumn(
+                    label: Text('Oders',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    tooltip:
+                    'represents the number of orders that users makes'),
+              ],
+              rows: _list
+                  .map((data) => DataRow(cells: [
+                DataCell(
+                    Text(data.username,
+                        style: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.normal)), onTap: () {
+                  print(data.username);
+                }),
+                DataCell(Text("Sub",
+                    style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.normal))),
+                DataCell(Text("orders",
+                    style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.normal))),
+              ]))
+                  .toList(),
+            );
+          },
+        );
+      }
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
+  }*/
+
 }
