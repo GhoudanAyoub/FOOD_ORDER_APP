@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:mystore/components/default_button.dart';
+import 'package:mystore/SizeConfig.dart';
 import 'package:mystore/components/form_error.dart';
 import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/forgot_password/forgot_password_screen.dart';
@@ -25,7 +25,7 @@ class _SignFormState extends State<SignForm> {
   final List<String> errors = [];
 
   var submitted = false;
-  var buttonText = "LOGIN";
+  var buttonText = "Sign In";
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -68,39 +68,39 @@ class _SignFormState extends State<SignForm> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildEmailFormField(),
-          SizedBox(height: 5),
-          buildPasswordFormField(),
-          SizedBox(height: 10),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(
-                    context, ForgotPasswordScreen.routeName),
-                child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Lato-Thin.ttf',
-                      color: Colors.white),
-                ),
-              )
-            ],
-          ),
           SizedBox(height: 10),
           Container(
             margin: EdgeInsets.fromLTRB(0, 0, 13, 0),
-            child: DefaultButton(
-              text: buttonText,
-              submitted: submitted,
-              press: () async {
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.pushNamed(context, ForgotPasswordScreen.routeName),
+              child: Text(
+                "Forgot Password?",
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Lato-Thin.ttf',
+                    color: Colors.white),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          buildPasswordFormField(),
+          SizedBox(height: 40),
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            width: SizeConfig.screenWidth,
+            height: 45,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Colors.orange,
+              disabledColor: Colors.grey[400],
+              disabledTextColor: Colors.white60,
+              onPressed: () async {
                 AuthService auth = AuthService();
                 if (_formKey.currentState.validate()) {
                   submitted = true;
@@ -131,6 +131,23 @@ class _SignFormState extends State<SignForm> {
                   }
                 }
               },
+              child: submitted
+                  ? SizedBox(
+                      height: 15,
+                      width: 15,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Text(
+                      buttonText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Lato-Regular.ttf',
+                        color: Colors.white,
+                      ),
+                    ),
             ),
           ),
           FormError(errors: errors),

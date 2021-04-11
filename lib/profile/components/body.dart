@@ -53,7 +53,7 @@ class _BodyState extends State<Body> {
             pinned: true,
             floating: false,
             toolbarHeight: 4.0,
-            collapsedHeight: 5.0,
+            collapsedHeight: 6.0,
             expandedHeight: SizeConfig.screenHeight,
             flexibleSpace: FlexibleSpaceBar(
               background: StreamBuilder(
@@ -244,29 +244,7 @@ class _BodyState extends State<Body> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: getProportionateScreenHeight(30)),
-        Container(
-            width: SizeConfig.screenWidth,
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: getProportionateScreenWidth(260),
-                    height: getProportionateScreenHeight(10),
-                  ),
-                  widget.profileId == firebaseAuth.currentUser.uid
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.list,
-                            color: Colors.red[900],
-                          ),
-                          onPressed: () {})
-                      : Container(),
-                  SizedBox(width: getProportionateScreenWidth(10))
-                ],
-              ),
-            )),
+        SizedBox(height: 40),
         StreamBuilder(
           stream: usersRef.doc(widget.profileId).snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -275,13 +253,13 @@ class _BodyState extends State<Body> {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(width: 30.0),
+                  SizedBox(width: 60.0),
                   ProfilePic(
                     image: firebaseAuth.currentUser.uid == user.id
                         ? auth.getProfileImage()
                         : user.photoUrl,
                   ),
-                  SizedBox(width: 20.0),
+                  SizedBox(width: 10.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -310,7 +288,7 @@ class _BodyState extends State<Body> {
             return Container();
           },
         ),
-        SizedBox(height: 40.0),
+        SizedBox(height: 20),
         ProfileMenu(
           text: "Edit Profile",
           icon: "assets/icons/User Icon.svg",

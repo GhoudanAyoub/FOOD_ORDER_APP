@@ -11,7 +11,7 @@ import 'package:mystore/models/User.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../Conposante/menu_item.dart';
+import 'menu_item.dart';
 
 class SideBar extends StatefulWidget {
   @override

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mystore/components/custom_card.dart';
 import 'package:mystore/components/no_account_text.dart';
 import 'package:mystore/components/socal_card.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
@@ -21,71 +23,131 @@ class Body extends StatelessWidget {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: SizeConfig.screenHeight,
-        width: SizeConfig.screenWidth,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                Colors.black.withOpacity(0.8),
-                Colors.grey.withOpacity(0),
-              ]),
-          image: DecorationImage(
-            image: ExactAssetImage('assets/images/logo.png'),
-            fit: BoxFit.cover,
+    return SingleChildScrollView(
+      child: Container(
+          height: SizeConfig.screenHeight,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black.withOpacity(0.8),
+                  Colors.grey.withOpacity(0),
+                ]),
+            image: DecorationImage(
+              image: ExactAssetImage('assets/images/logo.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: SizedBox(
-            width: double.infinity,
-            height: SizeConfig.screenHeight,
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.screenHeight * 0.35),
-                    SignForm(),
-                    SizedBox(height: SizeConfig.screenHeight * 0.15),
-                    Container(
-                      child: Column(
-                        children: [
-                          NoAccountText(),
-                          SizedBox(height: 20),
-                          Text(
-                            "OR",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.white),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SocalCard(
-                                icon: "assets/icons/facebook-2.svg",
-                                Name: "Facebook",
-                                press: () {
-                                  handleLogin(context);
-                                },
-                              ),
-                              SocalCard(
-                                icon: "assets/icons/google-icon.svg",
-                                Name: "Gmail",
-                                press: () async {
-                                  await signInWithGoogle(context);
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-          ),
-        ));
+          child: SafeArea(
+            child: SizedBox(
+              width: double.infinity,
+              height: SizeConfig.screenHeight,
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    children: [
+                      SizedBox(height: SizeConfig.screenHeight * 0.35),
+                      SignForm(),
+                      SizedBox(height: 60),
+                      Container(
+                        child: Column(
+                          children: [
+                            NoAccountText(),
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 150,
+                                  height: 1,
+                                  child: Container(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Divider(
+                                  indent: 5,
+                                  endIndent: 5,
+                                ),
+                                Text(
+                                  "OR",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.white),
+                                ),
+                                Divider(
+                                  indent: 5,
+                                  endIndent: 5,
+                                ),
+                                SizedBox(
+                                  width: 150,
+                                  height: 1,
+                                  child: Container(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Card(
+                                    elevation: 10.0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    color: Colors.blue[900],
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        handleLogin(context);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                        height: 40,
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                "assets/icons/fb.svg"),
+                                            Text(
+                                              "Join with facebook",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Lato-Bold.ttf',
+                                                  color: Colors.white),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                CustomCard(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: SocalCard(
+                                    icon: "assets/icons/google-icon.svg",
+                                    Name: "Join with Google",
+                                    press: () async {
+                                      await signInWithGoogle(context);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          )),
+    );
   }
 
   /*

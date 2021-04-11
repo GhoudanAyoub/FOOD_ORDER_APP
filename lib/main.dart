@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
         providers: providers,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'mystore',
+          title: 'SURESTS',
           theme: theme(),
           initialRoute: SplashScreen.routeName,
           routes: routes,
