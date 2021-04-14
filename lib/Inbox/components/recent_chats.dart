@@ -14,6 +14,7 @@ class Chats extends StatelessWidget {
         Provider.of<UserViewModel>(context, listen: false);
     viewModel.setUser();
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: StreamBuilder(
           stream: userChatsStream('${viewModel.user.uid ?? ""}'),
           builder: (context, snapshot) {

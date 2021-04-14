@@ -11,7 +11,7 @@ class Body extends StatelessWidget {
           height: SizeConfig.screenHeight,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: ExactAssetImage('assets/images/logo.png'),
+              image: ExactAssetImage('assets/images/pg.png'),
               fit: BoxFit.cover,
             ),
           ),

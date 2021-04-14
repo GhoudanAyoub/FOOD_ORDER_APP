@@ -85,14 +85,16 @@ class _SideBarState extends State<SideBar>
                       FutureBuilder(
                         future:
                             usersRef.doc(firebaseAuth.currentUser.uid).get(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
                           if (snapshot.hasError) {
                             return Text("Something went wrong");
                           }
 
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
+                            UserModel user =
+                                UserModel.fromJson(snapshot.data.data());
                             print(firebaseAuth.currentUser.photoURL);
                             return ListTile(
                               leading: CircleAvatar(
@@ -103,7 +105,7 @@ class _SideBarState extends State<SideBar>
                                         FirebaseService().getProfileImage()),
                               ),
                               title: Text(
-                                firebaseAuth.currentUser.displayName ?? 'X',
+                                user.username ?? 'X',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
@@ -111,7 +113,7 @@ class _SideBarState extends State<SideBar>
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                firebaseAuth.currentUser.email ?? '',
+                                user.email ?? firebaseAuth.currentUser.email,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,

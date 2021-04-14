@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +5,11 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mystore/Inbox/components/conversation_view_model.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/constants.dart';
+import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/models/enum/message_type.dart';
 import 'package:mystore/models/new_message_system.dart';
 import 'package:mystore/profile/components/user_view_model.dart';
-import 'package:mystore/profile/profile_screen.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -71,18 +70,33 @@ class _ConversationState extends State<Conversation> {
     return Consumer<ConversationViewModel>(
         builder: (BuildContext context, viewModel, Widget child) {
       return Scaffold(
+        backgroundColor: Colors.transparent,
         key: viewModel.scaffoldKey,
         appBar: AppBar(
           leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(Icons.keyboard_backspace)),
-          elevation: 0.0,
+              child: Icon(
+                CupertinoIcons.back,
+                color: Colors.black,
+              )),
+          elevation: 4.0,
           titleSpacing: 0,
           title: buildUserName(),
         ),
         body: Container(
+          decoration: new BoxDecoration(
+            gradient: new LinearGradient(
+                colors: [
+                  Colors.white,
+                  Colors.red[900],
+                ],
+                begin: const FractionalOffset(0.3, 0.4),
+                end: const FractionalOffset(0.5, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp),
+          ),
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
@@ -120,10 +134,10 @@ class _ConversationState extends State<Conversation> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BottomAppBar(
-                  color: GBottomNav.withOpacity(0.2),
-                  elevation: 10.0,
+                  color: Colors.red[700],
+                  elevation: 12.0,
                   child: Container(
-                    constraints: BoxConstraints(maxHeight: 100.0),
+                    constraints: BoxConstraints(maxHeight: 120.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -139,8 +153,8 @@ class _ConversationState extends State<Conversation> {
                             controller: messageController,
                             focusNode: focusNode,
                             style: TextStyle(
-                              fontSize: 15.0,
-                              color: white,
+                              fontSize: 16.0,
+                              color: Colors.white,
                             ),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10.0),
@@ -208,9 +222,9 @@ class _ConversationState extends State<Conversation> {
                     tag: user.email,
                     child: CircleAvatar(
                       radius: 25.0,
-                      backgroundImage: CachedNetworkImageProvider(
-                        '${user.photoUrl}',
-                      ),
+                      backgroundImage: NetworkImage(
+                          firebaseAuth.currentUser.photoURL ??
+                              FirebaseService().getProfileImage()),
                     ),
                   ),
                 ),
@@ -253,7 +267,7 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
               ],
-            ),
+            ), /*
             onTap: () {
               Navigator.push(
                   context,
@@ -262,7 +276,7 @@ class _ConversationState extends State<Conversation> {
                       profileUID: user.id,
                     ),
                   ));
-            },
+            },*/
           );
         } else {
           return Center(child: CircularProgressIndicator());
@@ -273,7 +287,7 @@ class _ConversationState extends State<Conversation> {
 
   showPhotoOptions(ConversationViewModel viewModel, var user) {
     showModalBottomSheet(
-      backgroundColor: GBottomNav,
+      backgroundColor: Colors.redAccent,
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

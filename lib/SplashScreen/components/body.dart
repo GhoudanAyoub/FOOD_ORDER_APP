@@ -26,7 +26,7 @@ class _BodyState extends State<Body> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: ExactAssetImage('assets/images/logo.png'),
+          image: ExactAssetImage('assets/images/pg.png'),
           fit: BoxFit.cover,
         ),
       ),

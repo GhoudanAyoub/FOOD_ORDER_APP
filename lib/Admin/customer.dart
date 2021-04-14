@@ -61,19 +61,21 @@ class _CustomersState extends State<Customers> {
                       elevation: 10.0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        width: SizeConfig.screenWidth,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              CupertinoIcons.color_filter,
-                              color: Colors.red,
-                              size: 40,
-                            ),
-                            buildUsers()
-                          ],
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          width: SizeConfig.screenWidth,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                CupertinoIcons.color_filter,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                              buildUsers()
+                            ],
+                          ),
                         ),
                       ),
                     )),
@@ -104,6 +106,11 @@ class _CustomersState extends State<Customers> {
     List<DocumentSnapshot> doc = snap.docs;
     users = doc;
     filteredUsers = doc;
+
+    for (var fl in filteredUsers) {
+      DocumentSnapshot doc1 = fl;
+      _list.add(UserModel.fromJson(doc1.data()));
+    }
     setState(() {
       loading = false;
     });
@@ -119,13 +126,10 @@ class _CustomersState extends State<Customers> {
         );
       } else {
         return ListView.builder(
-          itemCount: filteredUsers.length,
+          itemCount: 1,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            DocumentSnapshot doc = filteredUsers[index];
-            UserModel user = UserModel.fromJson(doc.data());
-            _list.add(user);
             return DataTable(
               columns: [
                 DataColumn(
@@ -154,11 +158,11 @@ class _CustomersState extends State<Customers> {
                                     fontWeight: FontWeight.normal)), onTap: () {
                           print(data.username);
                         }),
-                        DataCell(Text("Sub",
+                        DataCell(Text(data.sub == true ? "Yes" : "No",
                             style: TextStyle(
                                 color: Colors.grey[700],
                                 fontWeight: FontWeight.normal))),
-                        DataCell(Text("orders",
+                        DataCell(Text(data.orders.toString(),
                             style: TextStyle(
                                 color: Colors.grey[700],
                                 fontWeight: FontWeight.normal))),

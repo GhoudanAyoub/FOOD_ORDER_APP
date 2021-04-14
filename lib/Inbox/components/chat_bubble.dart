@@ -23,26 +23,6 @@ class ChatBubble extends StatefulWidget {
 }
 
 class _ChatBubbleState extends State<ChatBubble> {
-  Color chatBubbleColor() {
-    if (widget.isMe) {
-      return Theme.of(context).accentColor;
-    } else {
-      if (Theme.of(context).brightness == Brightness.dark) {
-        return Colors.grey[800];
-      } else {
-        return Colors.grey[200];
-      }
-    }
-  }
-
-  Color chatBubbleReplyColor() {
-    if (Theme.of(context).brightness == Brightness.dark) {
-      return Colors.grey[600];
-    } else {
-      return Colors.grey[50];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final align =
@@ -65,7 +45,6 @@ class _ChatBubbleState extends State<ChatBubble> {
           margin: const EdgeInsets.all(3.0),
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
-            color: chatBubbleColor(),
             borderRadius: radius,
           ),
           constraints: BoxConstraints(
@@ -80,14 +59,33 @@ class _ChatBubbleState extends State<ChatBubble> {
                 padding:
                     EdgeInsets.all(widget.type == MessageType.TEXT ? 5 : 0),
                 child: widget.type == MessageType.TEXT
-                    ? Text(
-                        widget.message,
-                        style: TextStyle(
-                          color: widget.isMe
-                              ? Colors.white
-                              : Theme.of(context).textTheme.headline6.color,
-                        ),
-                      )
+                    ? widget.isMe
+                        ? Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 3,
+                            color: Colors.white,
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Text(
+                                widget.message,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ))
+                        : Card(
+                            color: Colors.red[700],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 4,
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Text(
+                                widget.message,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ))
                     : CachedNetworkImage(
                         imageUrl: "${widget.message}",
                         height: 200,
@@ -112,7 +110,7 @@ class _ChatBubbleState extends State<ChatBubble> {
             child: Text(
               timeago.format(widget.time.toDate()),
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 10.0,
               ),
             ),

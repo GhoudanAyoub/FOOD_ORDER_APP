@@ -35,7 +35,7 @@ class Body extends StatelessWidget {
                   Colors.grey.withOpacity(0),
                 ]),
             image: DecorationImage(
-              image: ExactAssetImage('assets/images/logo.png'),
+              image: ExactAssetImage('assets/images/pg.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -44,7 +44,8 @@ class Body extends StatelessWidget {
               width: double.infinity,
               height: SizeConfig.screenHeight,
               child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(30)),
                   child: Column(
                     children: [
                       SizedBox(height: SizeConfig.screenHeight * 0.35),
@@ -104,8 +105,8 @@ class Body extends StatelessWidget {
                                         handleLogin(context);
                                       },
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 10),
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 5),
                                         padding:
                                             EdgeInsets.fromLTRB(0, 10, 0, 10),
                                         height: 40,
@@ -126,7 +127,7 @@ class Body extends StatelessWidget {
                                       ),
                                     )),
                                 SizedBox(
-                                  width: 20,
+                                  width: 10,
                                 ),
                                 CustomCard(
                                   borderRadius: BorderRadius.circular(20.0),

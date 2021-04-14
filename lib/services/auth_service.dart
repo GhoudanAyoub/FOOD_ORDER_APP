@@ -38,7 +38,9 @@ class AuthService {
       'phone': phone,
       'country': country,
       'photoUrl': user.photoURL ?? '',
-      'msgToAll': true
+      'msgToAll': false,
+      'sub': false,
+      'orders': 0
     });
   }
 

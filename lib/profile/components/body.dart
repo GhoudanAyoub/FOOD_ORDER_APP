@@ -46,6 +46,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -241,93 +242,107 @@ class _BodyState extends State<Body> {
   }
 
   Widget displayUserInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 40),
-        StreamBuilder(
-          stream: usersRef.doc(widget.profileId).snapshots(),
-          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasData) {
-              UserModel user = UserModel.fromJson(snapshot.data.data());
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(width: 60.0),
-                  ProfilePic(
-                    image: firebaseAuth.currentUser.uid == user.id
-                        ? auth.getProfileImage()
-                        : user.photoUrl,
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+            colors: [
+              Colors.white,
+              Colors.red[900],
+            ],
+            begin: const FractionalOffset(0.3, 0.4),
+            end: const FractionalOffset(0.5, 1.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 40),
+          StreamBuilder(
+            stream: usersRef.doc(widget.profileId).snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasData) {
+                UserModel user = UserModel.fromJson(snapshot.data.data());
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(width: 20.0),
+                    ProfilePic(
+                      image: firebaseAuth.currentUser.uid == user.id
+                          ? auth.getProfileImage()
+                          : user.photoUrl,
+                    ),
+                    SizedBox(width: 10.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 5),
+                        Text("${user.username ?? 'Anonymous'}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: "SFProDisplay-Bold",
+                              fontWeight: FontWeight.bold,
+                            )),
+                        SizedBox(height: 5),
+                        Text("${user.country.isEmpty ? '' : user.country}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontFamily: "SFProDisplay-Light",
+                              fontWeight: FontWeight.normal,
+                            )),
+                      ],
+                    ),
+                  ],
+                );
+              }
+              return Container();
+            },
+          ),
+          SizedBox(height: 20),
+          ProfileMenu(
+            text: "Edit Profile",
+            icon: "assets/icons/User Icon.svg",
+            press: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => EditProfile(
+                    user: user1,
                   ),
-                  SizedBox(width: 10.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 5),
-                      Text("${user.username ?? 'Anonymous'}",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontFamily: "SFProDisplay-Bold",
-                            fontWeight: FontWeight.bold,
-                          )),
-                      SizedBox(height: 5),
-                      Text("${user.country.isEmpty ? '' : user.country}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontFamily: "SFProDisplay-Light",
-                            fontWeight: FontWeight.normal,
-                          )),
-                    ],
-                  ),
-                ],
-              );
-            }
-            return Container();
-          },
-        ),
-        SizedBox(height: 20),
-        ProfileMenu(
-          text: "Edit Profile",
-          icon: "assets/icons/User Icon.svg",
-          press: () => {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => EditProfile(
-                  user: user1,
                 ),
-              ),
-            )
-          },
-        ),
-        ProfileMenu(
-          text: "My orders",
-          icon: "assets/icons/Shop Icon.svg",
-          press: () {},
-        ),
-        ProfileMenu(
-          text: "Purchasing History",
-          icon: "assets/icons/Parcel.svg",
-          press: () {},
-        ),
-        ProfileMenu(
-          text: "Recently viewed",
-          icon: "assets/icons/Question mark.svg",
-          press: () {},
-        ),
-        ProfileMenu(
-          text: "To be reviewed",
-          icon: "assets/icons/Plus Icon.svg",
-          press: () {},
-        ),
-        ProfileMenu(
-          text: "Unpaid Orders",
-          icon: "assets/icons/Bill Icon.svg",
-          press: () {},
-        ),
-      ],
+              )
+            },
+          ),
+          ProfileMenu(
+            text: "My orders",
+            icon: "assets/icons/Shop Icon.svg",
+            press: () {},
+          ),
+          ProfileMenu(
+            text: "Purchasing History",
+            icon: "assets/icons/Parcel.svg",
+            press: () {},
+          ),
+          ProfileMenu(
+            text: "Recently viewed",
+            icon: "assets/icons/Question mark.svg",
+            press: () {},
+          ),
+          ProfileMenu(
+            text: "To be reviewed",
+            icon: "assets/icons/Plus Icon.svg",
+            press: () {},
+          ),
+          ProfileMenu(
+            text: "Unpaid Orders",
+            icon: "assets/icons/Bill Icon.svg",
+            press: () {},
+          ),
+        ],
+      ),
     );
   }
 }

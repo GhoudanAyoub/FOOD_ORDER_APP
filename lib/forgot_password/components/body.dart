@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:mystore/components/default_button.dart';
 import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/utils/validation.dart';
@@ -21,7 +20,7 @@ class Body extends StatelessWidget {
                 Colors.grey.withOpacity(0),
               ]),
           image: DecorationImage(
-            image: ExactAssetImage('assets/images/logo.png'),
+            image: ExactAssetImage('assets/images/pg.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -53,7 +52,7 @@ class Body extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   ForgotPassForm(),
                 ],
               ),
@@ -82,11 +81,16 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
           buildEmailFormField(),
           SizedBox(height: 20),
           Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: DefaultButton(
-              text: "Reset",
-              submitted: submitted,
-              press: () {
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            width: getProportionateScreenWidth(100),
+            height: 45,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Colors.orange,
+              disabledColor: Colors.grey[400],
+              disabledTextColor: Colors.white60,
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   submitted = true;
                   final auth = FirebaseService();
@@ -96,6 +100,23 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                           'A password reset link has been sent to ${_emailContoller.text}')));
                 }
               },
+              child: submitted
+                  ? SizedBox(
+                      height: 15,
+                      width: 15,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Text(
+                      "Reset",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Lato-Regular.ttf',
+                        color: Colors.white,
+                      ),
+                    ),
             ),
           ),
         ],

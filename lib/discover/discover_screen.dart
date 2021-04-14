@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:mystore/Inbox/components/conversation.dart';
 import 'package:mystore/SizeConfig.dart';
 import 'package:mystore/components/indicators.dart';
+import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/FakeRepository.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/profile/components/body.dart';
@@ -28,7 +29,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   List<DocumentSnapshot> users = [];
   List<DocumentSnapshot> filteredUsers = [];
   bool loading = true;
-  bool isFollowing = false;
 
   currentUserId() {
     return firebaseAuth.currentUser.uid;
@@ -79,51 +79,65 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return ResponsiveBuilder(builder: (context, sizingInformation) {
       return SafeArea(
           child: Scaffold(
-        body: Padding(
-            padding: EdgeInsets.only(left: 20.0, right: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.0, right: 15.0),
-                  child: Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(50.0),
-                    child: TextFormField(
-                        cursorColor: black,
-                        controller: searchController,
-                        onChanged: (query) {
-                          search(query);
-                        },
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search,
-                                color: GBottomNav, size: 30.0),
-                            contentPadding:
-                                EdgeInsets.only(left: 15.0, top: 15.0),
-                            hintText: 'Search',
-                            hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'SFProDisplay-Black'))),
+        backgroundColor: Colors.transparent,
+        body: Container(
+          decoration: new BoxDecoration(
+            gradient: new LinearGradient(
+                colors: [
+                  Colors.white,
+                  Colors.red[900],
+                ],
+                begin: const FractionalOffset(0.3, 0.4),
+                end: const FractionalOffset(0.5, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp),
+          ),
+          child: Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text('Search Results',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                    margin: EdgeInsets.fromLTRB(0, 60, 0, 0),
-                    child: buildUsers())
-              ],
-            )),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.0, right: 15.0),
+                    child: Material(
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: TextFormField(
+                          cursorColor: black,
+                          controller: searchController,
+                          onChanged: (query) {
+                            search(query);
+                          },
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.search,
+                                  color: GBottomNav, size: 30.0),
+                              contentPadding:
+                                  EdgeInsets.only(left: 15.0, top: 15.0),
+                              hintText: 'Search',
+                              hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'SFProDisplay-Black'))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text('Search Results',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: buildUsers())
+                ],
+              )),
+        ),
       ));
     });
   }
@@ -152,42 +166,45 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 });
               });
             }
-            return Column(
-              children: [
-                ListTile(
-                  onTap: () => showProfile(context, profileId: user?.id),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 25.0),
-                  leading: CircleAvatar(
-                    radius: 35.0,
-                    backgroundImage: NetworkImage(user?.photoUrl),
+            return Card(
+              elevation: 4,
+              child: Column(
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 25.0),
+                    leading: CircleAvatar(
+                      radius: 35.0,
+                      backgroundImage: NetworkImage(
+                          firebaseAuth.currentUser.photoURL ??
+                              FirebaseService().getProfileImage()),
+                    ),
+                    title: Text(user?.username,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    subtitle: Text(user?.email,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    trailing: user.msgToAll == true
+                        ? GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => Conversation(
+                                      userId: doc.id,
+                                      chatId: 'newChat',
+                                    ),
+                                  ));
+                            },
+                            child: Icon(CupertinoIcons.chat_bubble_fill,
+                                color: Colors.black),
+                          )
+                        : Container(
+                            width: 1,
+                          ),
                   ),
-                  title: Text(user?.username,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  subtitle: Text(user?.email,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  trailing: user.msgToAll == true || isFollowing == true
-                      ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Conversation(
-                                    userId: doc.id,
-                                    chatId: 'newChat',
-                                  ),
-                                ));
-                          },
-                          child: Icon(CupertinoIcons.chat_bubble_fill,
-                              color: Colors.black),
-                        )
-                      : Container(
-                          width: 1,
-                        ),
-                ),
-                Divider(),
-              ],
+                ],
+              ),
             );
           },
         );
@@ -213,9 +230,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         .collection('userFollowers')
         .doc(currentUserId())
         .get();
-    setState(() {
-      isFollowing = doc.exists;
-    });
   }
 
   Widget buildText(String text) => Center(

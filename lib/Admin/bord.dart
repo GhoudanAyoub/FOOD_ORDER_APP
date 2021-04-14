@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/components/default_button.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../SizeConfig.dart';
 
@@ -11,6 +12,16 @@ class AdminBord extends StatefulWidget with NavigationStates {
 }
 
 class _AdminBordState extends State<AdminBord> {
+  Map<String, double> dataMap = {
+    'Daily Total': 680,
+    'Completed Orders ': 330,
+    'New Registrations': 200
+  };
+  List<Color> colorList = [
+    Colors.greenAccent,
+    Colors.purpleAccent,
+    Colors.blueAccent
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,63 +49,46 @@ class _AdminBordState extends State<AdminBord> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Container(
-                      height: 180.0,
+                      height: 200.0,
                       child: Card(
                         elevation: 10.0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          width: SizeConfig.screenWidth,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                children: [
-                                  Text(
-                                    "Daily Total",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
+                            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            width: SizeConfig.screenWidth,
+                            child: PieChart(
+                              chartType: ChartType.ring,
+                              ringStrokeWidth: 24,
+                              dataMap: dataMap,
+                              animationDuration: Duration(milliseconds: 1000),
+                              chartLegendSpacing: 64,
+                              chartRadius:
+                                  MediaQuery.of(context).size.width / 3.2,
+                              colorList: colorList,
+                              initialAngleInDegree: 0,
+                              legendOptions: LegendOptions(
+                                showLegendsInRow: false,
+                                legendPosition: LegendPosition.right,
+                                showLegends: true,
+                                legendShape: BoxShape.circle,
+                                legendTextStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "Order Completion \nRate",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
+                              chartValuesOptions: ChartValuesOptions(
+                                showChartValueBackground: true,
+                                showChartValues: true,
+                                showChartValuesInPercentage: false,
+                                showChartValuesOutside: false,
+                                decimalPlaces: 1,
                               ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "New \nRegistrations",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
+                            )),
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 200, 10, 10),
+                  padding: EdgeInsets.fromLTRB(10, 220, 10, 10),
                   child: Container(
                       height: 350.0,
                       child: Card(

@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
+import 'package:mystore/components/indicators.dart';
+import 'package:mystore/models/shop.dart';
+import 'package:mystore/utils/firebase.dart';
 
 import '../SizeConfig.dart';
 
@@ -10,11 +15,10 @@ class Shop extends StatefulWidget with NavigationStates {
 }
 
 class _ShopState extends State<Shop> {
-  /*
-  Shops shop;
+  ShopModel shop;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<DocumentSnapshot> shop = [];
+  List<DocumentSnapshot> shoplist = [];
   List<DocumentSnapshot> filteredShops = [];
   List<ShopModel> _list = [];
   bool loading = true;
@@ -24,7 +28,8 @@ class _ShopState extends State<Shop> {
   void initState() {
     getShops();
     super.initState();
-  }*/
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +55,7 @@ class _ShopState extends State<Shop> {
             child: Stack(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
                   child: Container(
                       height: 530.0,
                       child: Card(
@@ -63,11 +68,26 @@ class _ShopState extends State<Shop> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                CupertinoIcons.color_filter,
-                                color: Colors.red,
-                                size: 40,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.color_filter,
+                                    color: Colors.red,
+                                    size: 30,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: Icon(
+                                      CupertinoIcons.add_circled,
+                                      color: Colors.red,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
                               ),
+                              buildShops()
                             ],
                           ),
                         ),
@@ -93,12 +113,17 @@ class _ShopState extends State<Shop> {
           ),
         ));
   }
-/*
+
   getShops() async {
     QuerySnapshot snap = await shopRef.get();
     List<DocumentSnapshot> doc = snap.docs;
-    shops = doc;
-    filteredShps = doc;
+    shoplist = doc;
+    filteredShops = doc;
+
+    for (var fl in filteredShops) {
+      DocumentSnapshot doc1 = fl;
+      _list.add(ShopModel.fromJson(doc1.data()));
+    }
     setState(() {
       loading = false;
     });
@@ -106,58 +131,54 @@ class _ShopState extends State<Shop> {
 
   buildShops() {
     if (!loading) {
-      if (filteredShps.isEmpty) {
+      if (filteredShops.isEmpty) {
         return Center(
-          child: Text("No User Found",
+          child: Text("No Shop Found",
               style:
-              TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         );
       } else {
         return ListView.builder(
-          itemCount: filteredShps.length,
+          itemCount: 1,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            DocumentSnapshot doc = filteredShps[index];
-            ShopsModel user = ShopsModel.fromJson(doc.data());
-            _list.add(user);
             return DataTable(
               columns: [
                 DataColumn(
-                    label: Text('Customers',
+                    label: Text('Registered Shops',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
-                    tooltip: 'represents name of the user'),
+                    tooltip: 'represents name of the Shops'),
                 DataColumn(
-                    label: Text('Subscribed',
+                    label: Text('Status',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
-                    tooltip: 'represents is the user is  subscribed'),
+                    tooltip: 'represents is the Shops Status'),
                 DataColumn(
-                    label: Text('Oders',
+                    label: Text('Oder Completion Rate',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
-                    tooltip:
-                    'represents the number of orders that users makes'),
+                    tooltip: 'represents the number of orders completed'),
               ],
               rows: _list
                   .map((data) => DataRow(cells: [
-                DataCell(
-                    Text(data.username,
-                        style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.normal)), onTap: () {
-                  print(data.username);
-                }),
-                DataCell(Text("Sub",
-                    style: TextStyle(
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.normal))),
-                DataCell(Text("orders",
-                    style: TextStyle(
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.normal))),
-              ]))
+                        DataCell(
+                            Text(data.name,
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontWeight: FontWeight.normal)), onTap: () {
+                          print(data.name);
+                        }),
+                        DataCell(Text(data.status == true ? "Active" : "Paused",
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.normal))),
+                        DataCell(Text("${CountRate(data).toString()}%",
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.normal))),
+                      ]))
                   .toList(),
             );
           },
@@ -168,6 +189,9 @@ class _ShopState extends State<Shop> {
         child: circularProgress(context),
       );
     }
-  }*/
+  }
 
+  double CountRate(ShopModel data) {
+    double rate = (data.completedOrders.length * 100) / data.orders.length;
+  }
 }
