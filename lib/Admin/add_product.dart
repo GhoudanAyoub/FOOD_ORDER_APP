@@ -304,12 +304,6 @@ class _AddProductState extends State<AddProduct> {
                                           prefix: Feather.user,
                                           initialValue: viewModel.product_name,
                                           textInputType: TextInputType.name,
-                                          onChange: (val) =>
-                                              viewModel.setProductName(
-                                                  _nameContoller.text),
-                                          onSaved: (val) =>
-                                              viewModel.setProductName(
-                                                  _nameContoller.text),
                                           controller: _nameContoller,
                                           hintText: "Product Name",
                                           textInputAction: TextInputAction.next,
@@ -322,12 +316,6 @@ class _AddProductState extends State<AddProduct> {
                                           initialValue: viewModel.description,
                                           textInputType:
                                               TextInputType.multiline,
-                                          onChange: (val) =>
-                                              viewModel.setDescription(
-                                                  _descContoller.text),
-                                          onSaved: (val) =>
-                                              viewModel.setDescription(
-                                                  _descContoller.text),
                                           controller: _descContoller,
                                           hintText: "Description",
                                           textInputAction: TextInputAction.next,
@@ -339,10 +327,6 @@ class _AddProductState extends State<AddProduct> {
                                           prefix: Feather.dollar_sign,
                                           initialValue: viewModel.price,
                                           textInputType: TextInputType.number,
-                                          onChange: (val) => viewModel
-                                              .setBPrice(_priceContoller.text),
-                                          onSaved: (val) => viewModel
-                                              .setBPrice(_priceContoller.text),
                                           controller: _priceContoller,
                                           hintText: "Price",
                                           textInputAction: TextInputAction.next,
@@ -416,6 +400,12 @@ class _AddProductState extends State<AddProduct> {
                                         DefaultButton(
                                           text: "Done",
                                           press: () async {
+                                            viewModel.setProductName(
+                                                _nameContoller.text);
+                                            viewModel.setBPrice(
+                                                _priceContoller.text);
+                                            viewModel.setDescription(
+                                                _descContoller.text);
                                             if (_formKey.currentState
                                                 .validate()) {
                                               await viewModel.uploadPosts();

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:mystore/Inbox/components/conversation.dart';
 import 'package:mystore/SizeConfig.dart';
 import 'package:mystore/components/indicators.dart';
-import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/FakeRepository.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/profile/components/body.dart';
@@ -158,7 +157,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           itemBuilder: (BuildContext context, int index) {
             DocumentSnapshot doc = filteredUsers[index];
             UserModel user = UserModel.fromJson(doc.data());
-            if (doc.id == currentUserId()) {
+            if (firebaseAuth.currentUser != null && doc.id == currentUserId()) {
               checkIfFollowing(user.id);
               Timer(Duration(milliseconds: 50), () {
                 setState(() {
@@ -174,9 +173,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     contentPadding: EdgeInsets.symmetric(horizontal: 25.0),
                     leading: CircleAvatar(
                       radius: 35.0,
-                      backgroundImage: NetworkImage(
-                          firebaseAuth.currentUser.photoURL ??
-                              FirebaseService().getProfileImage()),
+                      backgroundImage: NetworkImage(user.photoUrl != null
+                          ? user.photoUrl
+                          : "https://images.unsplash.com/photo-1571741140674-8949ca7df2a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"),
                     ),
                     title: Text(user?.username,
                         style: TextStyle(

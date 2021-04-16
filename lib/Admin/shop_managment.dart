@@ -8,6 +8,7 @@ import 'package:mystore/models/shop.dart';
 import 'package:mystore/utils/firebase.dart';
 
 import '../SizeConfig.dart';
+import 'add_store.dart';
 
 class Shop extends StatefulWidget with NavigationStates {
   @override
@@ -78,7 +79,13 @@ class _ShopState extends State<Shop> {
                                     size: 30,
                                   ),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => AddStore(),
+                                          ));
+                                    },
                                     child: Icon(
                                       CupertinoIcons.add_circled,
                                       color: Colors.red,
@@ -138,7 +145,8 @@ class _ShopState extends State<Shop> {
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         );
       } else {
-        return ListView.builder(
+        return Flexible(
+            child: ListView.builder(
           itemCount: 1,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
@@ -146,9 +154,14 @@ class _ShopState extends State<Shop> {
             return DataTable(
               columns: [
                 DataColumn(
-                    label: Text('Registered Shops',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    label: Flexible(
+                      child: Text('Registered Shops',
+                          overflow: TextOverflow.fade,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                    ),
                     tooltip: 'represents name of the Shops'),
                 DataColumn(
                     label: Text('Status',
@@ -156,9 +169,14 @@ class _ShopState extends State<Shop> {
                             color: Colors.black, fontWeight: FontWeight.bold)),
                     tooltip: 'represents is the Shops Status'),
                 DataColumn(
-                    label: Text('Oder Completion Rate',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    label: Flexible(
+                      child: Text('Oder Completion Rate',
+                          overflow: TextOverflow.fade,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                    ),
                     tooltip: 'represents the number of orders completed'),
               ],
               rows: _list
@@ -174,7 +192,8 @@ class _ShopState extends State<Shop> {
                             style: TextStyle(
                                 color: Colors.grey[700],
                                 fontWeight: FontWeight.normal))),
-                        DataCell(Text("${CountRate(data).toString()}%",
+                        DataCell(Text(
+                            "${CountRate(data) != null ? CountRate(data).toString() : 0}%",
                             style: TextStyle(
                                 color: Colors.grey[700],
                                 fontWeight: FontWeight.normal))),
@@ -182,7 +201,7 @@ class _ShopState extends State<Shop> {
                   .toList(),
             );
           },
-        );
+        ));
       }
     } else {
       return Center(
@@ -192,6 +211,7 @@ class _ShopState extends State<Shop> {
   }
 
   double CountRate(ShopModel data) {
-    double rate = (data.completedOrders.length * 100) / data.orders.length;
+    if (data.completedOrders != null)
+      double rate = (data.completedOrders.length * 100) / data.orders.length;
   }
 }

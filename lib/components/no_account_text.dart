@@ -31,7 +31,7 @@ class NoAccountText extends StatelessWidget {
                 fontSize: 18,
                 fontFamily: 'Lato-Regular.ttf',
                 fontWeight: FontWeight.bold,
-                color: Colors.deepOrangeAccent),
+                color: Colors.orange),
           ),
         ),
       ],

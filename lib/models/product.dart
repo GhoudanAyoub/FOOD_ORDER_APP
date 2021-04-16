@@ -12,20 +12,21 @@ class Product {
   String mediaUrl3;
   List flavours;
   Timestamp timestamp;
+  String type;
 
-  Product({
-    this.id,
-    this.postId,
-    this.ownerId,
-    this.price,
-    this.description,
-    this.mediaUrl,
-    this.mediaUrl2,
-    this.mediaUrl3,
-    this.product_name,
-    this.flavours,
-    this.timestamp,
-  });
+  Product(
+      {this.id,
+      this.postId,
+      this.ownerId,
+      this.price,
+      this.description,
+      this.mediaUrl,
+      this.mediaUrl2,
+      this.mediaUrl3,
+      this.product_name,
+      this.flavours,
+      this.timestamp,
+      this.type});
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     postId = json['postId'];
@@ -38,5 +39,6 @@ class Product {
     mediaUrl3 = json['mediaUrl3'];
     flavours = json['flavours'];
     timestamp = json['timestamp'];
+    type = json['type'];
   }
 }

@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/home/home.dart';
 
 class Body extends StatefulWidget {
@@ -12,12 +10,8 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     new Future.delayed(Duration(seconds: 3), () {
-      if (FirebaseAuth.instance.currentUser == null) {
-        Navigator.pushNamed(context, SignInScreen.routeName);
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-      }
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     });
   }
 

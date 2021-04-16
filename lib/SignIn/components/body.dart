@@ -39,191 +39,109 @@ class Body extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          child: SafeArea(
-            child: SizedBox(
-              width: double.infinity,
-              height: SizeConfig.screenHeight,
-              child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(30)),
-                  child: Column(
-                    children: [
-                      SizedBox(height: SizeConfig.screenHeight * 0.35),
-                      SignForm(),
-                      SizedBox(height: 60),
-                      Container(
-                        child: Column(
+          child: SingleChildScrollView(
+            child: SafeArea(
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(30)),
+                    child: Column(
+                      children: [
+                        SizedBox(height: SizeConfig.screenHeight * 0.35),
+                        SignForm(),
+                        SizedBox(height: 40),
+                        NoAccountText(),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            NoAccountText(),
-                            SizedBox(height: 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  height: 1,
-                                  child: Container(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Divider(
-                                  indent: 5,
-                                  endIndent: 5,
-                                ),
-                                Text(
-                                  "OR",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.white),
-                                ),
-                                Divider(
-                                  indent: 5,
-                                  endIndent: 5,
-                                ),
-                                SizedBox(
-                                  width: 150,
-                                  height: 1,
-                                  child: Container(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                            SizedBox(
+                              width: 150,
+                              height: 1,
+                              child: Container(
+                                color: Colors.white,
+                              ),
                             ),
-                            SizedBox(height: 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Card(
-                                    elevation: 10.0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    color: Colors.blue[900],
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        handleLogin(context);
-                                      },
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.symmetric(horizontal: 5),
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                        height: 40,
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                "assets/icons/fb.svg"),
-                                            Text(
-                                              "Join with facebook",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Lato-Bold.ttf',
-                                                  color: Colors.white),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                CustomCard(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child: SocalCard(
-                                    icon: "assets/icons/google-icon.svg",
-                                    Name: "Join with Google",
-                                    press: () async {
-                                      await signInWithGoogle(context);
-                                    },
-                                  ),
-                                ),
-                              ],
+                            Divider(
+                              indent: 5,
+                              endIndent: 5,
+                            ),
+                            Text(
+                              "OR",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.white),
+                            ),
+                            Divider(
+                              indent: 5,
+                              endIndent: 5,
+                            ),
+                            SizedBox(
+                              width: 150,
+                              height: 1,
+                              child: Container(
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
-                      )
-                    ],
-                  )),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Card(
+                                elevation: 10.0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: Colors.blue[900],
+                                child: GestureDetector(
+                                  onTap: () {
+                                    handleLogin(context);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 5),
+                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    height: 40,
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset("assets/icons/fb.svg"),
+                                        Text(
+                                          "Join with facebook",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Lato-Bold.ttf',
+                                              color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            CustomCard(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: SocalCard(
+                                icon: "assets/icons/google-icon.svg",
+                                Name: "Join with Google",
+                                press: () async {
+                                  await signInWithGoogle(context);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+              ),
             ),
           )),
     );
   }
 
-  /*
-  *
-  *
-  *Container(
-          height: SizeConfig.screenHeight,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: ExactAssetImage('assets/images/logo.png'),
-              fit: BoxFit.cover,
-            ),
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.black45,
-                  Colors.grey.withOpacity(0.2),
-                ]),
-          ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Align(alignment: Alignment(0, 20), child: SignForm()),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          NoAccountText(),
-                          SizedBox(height: getProportionateScreenHeight(10)),
-                          Text(
-                            "Or Signup using",
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SocalCard(
-                                icon: "assets/icons/google-icon.svg",
-                                press: () async {
-                                  await signInWithGoogle(context);
-                                },
-                              ),
-                              SocalCard(
-                                icon: "assets/icons/facebook-2.svg",
-                                press: () {
-                                  handleLogin(context);
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-            ],
-          ))
-          *
-            Positioned(
-              left: 0.0,
-              bottom: 0.0,
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                      Colors.black45.withOpacity(1),
-                      Colors.black45.withOpacity(0.2),
-                    ])),
-              ),
-            ),
-  * */
   Future<void> signInWithGoogle(context) async {
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text("Checking Your Account..")));

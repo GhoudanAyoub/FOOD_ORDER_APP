@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
+import 'package:mystore/components/indicators.dart';
 import 'package:mystore/models/User.dart';
+import 'package:mystore/models/product.dart';
+import 'package:mystore/utils/firebase.dart';
 
+import 'item_list.dart';
 import 'lmaida_card.dart';
 
 class Body extends StatefulWidget with NavigationStates {
@@ -11,83 +16,258 @@ class Body extends StatefulWidget with NavigationStates {
 
 class _BodyState extends State<Body> {
   UserModel user1;
+  List<DocumentSnapshot> foodList = [];
+  List<Product> _list = [];
+  bool loading = true;
+
+  @override
+  void initState() {
+    getProducts();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
-      body: ListView(
-        children: [
-          deals1('', onViewMore: () {}, items: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                margin: EdgeInsets.only(right: 20, left: 20),
-                child: LmaidaCard(
-                  onTap: () => {},
-                  imagePath:
-                      'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg', //'imagePaths[index]',
+      body: Container(
+        height: double.infinity,
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                Colors.white,
+                Colors.red[900],
+              ],
+              begin: const FractionalOffset(0.3, 0.4),
+              end: const FractionalOffset(0.5, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: ListView(
+          children: [
+            deals1('', onViewMore: () {}, items: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  margin: EdgeInsets.only(right: 20, left: 20),
+                  child: LmaidaCard(
+                    onTap: () => {},
+                    imagePath:
+                        'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg', //'imagePaths[index]',
+                  ),
                 ),
               ),
-            ),
-          ]),
-          SizedBox(height: 10),
-          Container(
-            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            height: 80.0,
-            child: Card(
+            ]),
+            SizedBox(height: 10),
+            Card(
               elevation: 8,
               color: Colors.white,
+              margin: EdgeInsets.only(right: 20, left: 20),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              child: Expanded(
+              child: Flexible(
                   child: Container(
-                padding: const EdgeInsets.all(5),
-                color: Colors.white,
+                padding: const EdgeInsets.all(10),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                        "Lorem Ipsum is simply dummy text of the\n"
-                        " printing and typesetting industry.  \nstandard dummy text ever since the 15",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                        ))
+                    Flexible(
+                        child: Text(
+                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                            overflow: TextOverflow.fade,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ))),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 25,
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Colors.red[700],
+                        onPressed: () {},
+                        child: Text(
+                          "SEE MORE",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Lato-Regular.ttf',
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               )),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 10),
-            child: Center(
-              child: Text("Categories",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Poppins')),
+            Container(
+              margin: EdgeInsets.only(left: 15, top: 10),
+              child: Center(
+                child: Text("Categories",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins')),
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 10),
-            child: Center(
-              child: Text("Recently Searched",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Poppins')),
+            Container(
+              margin: EdgeInsets.only(left: 15, top: 10),
+              child: ItemList(),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.only(left: 15, top: 10),
+              child: Center(
+                child: Text("Recently Searched",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins')),
+              ),
+            ),
+            _buildPopularList(),
+          ],
+        ),
       ),
     );
+  }
+
+  getProducts() async {
+    QuerySnapshot snap = await productRef.get();
+    List<DocumentSnapshot> doc = snap.docs;
+    foodList = doc;
+
+    for (var fl in foodList) {
+      DocumentSnapshot doc1 = fl;
+      _list.add(Product.fromJson(doc1.data()));
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Widget _buildPopularList() {
+    if (!loading) {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+        itemCount: foodList.length,
+        padding: EdgeInsets.only(
+          left: 40,
+          bottom: 16,
+          top: 20,
+        ),
+        itemBuilder: (context, index) {
+          return Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: <Widget>[
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    width: 150,
+                    height: 100,
+                    child: Card(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          _list[index].mediaUrl,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Flexible(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          "${_list[index].product_name}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "\$${_list[index].price}",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "${_list[index].description}",
+                      overflow: TextOverflow.fade,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SizedBox(
+                      width: 100,
+                      height: 25,
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Colors.white,
+                        disabledColor: Colors.grey[400],
+                        disabledTextColor: Colors.white60,
+                        onPressed: () {},
+                        child: Text(
+                          "SEE MORE",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Lato-Regular.ttf',
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
   }
 
   Widget sectionHeader(String headerTitle, {onViewMore}) {

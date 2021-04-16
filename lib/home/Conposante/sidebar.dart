@@ -82,49 +82,55 @@ class _SideBarState extends State<SideBar>
                       SizedBox(
                         height: 50,
                       ),
-                      FutureBuilder(
-                        future:
-                            usersRef.doc(firebaseAuth.currentUser.uid).get(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<DocumentSnapshot> snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("Something went wrong");
-                          }
+                      firebaseAuth.currentUser != null
+                          ? FutureBuilder(
+                              future: usersRef
+                                  .doc(firebaseAuth.currentUser.uid)
+                                  .get(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text("Something went wrong");
+                                }
 
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            UserModel user =
-                                UserModel.fromJson(snapshot.data.data());
-                            print(firebaseAuth.currentUser.photoURL);
-                            return ListTile(
-                              leading: CircleAvatar(
-                                radius: 30.0,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: NetworkImage(
-                                    firebaseAuth.currentUser.photoURL ??
-                                        FirebaseService().getProfileImage()),
-                              ),
-                              title: Text(
-                                user.username ?? 'X',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontFamily: 'Lato-Bold.ttf',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                user.email ?? firebaseAuth.currentUser.email,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontFamily: 'Lato-Thin.ttf',
-                                ),
-                              ),
-                            );
-                          }
-                          return Text("loading");
-                        },
-                      ),
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  UserModel user =
+                                      UserModel.fromJson(snapshot.data.data());
+                                  print(firebaseAuth.currentUser.photoURL);
+                                  return ListTile(
+                                    leading: CircleAvatar(
+                                      radius: 30.0,
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage: NetworkImage(firebaseAuth
+                                              .currentUser.photoURL ??
+                                          FirebaseService().getProfileImage()),
+                                    ),
+                                    title: Text(
+                                      user.username ?? 'X',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontFamily: 'Lato-Bold.ttf',
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    subtitle: Text(
+                                      user.email ??
+                                          firebaseAuth.currentUser.email,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontFamily: 'Lato-Thin.ttf',
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return Text("loading");
+                              },
+                            )
+                          : Container(
+                              height: 10,
+                            ),
                       Divider(
                         height: 30,
                         thickness: 0.5,
@@ -155,64 +161,75 @@ class _SideBarState extends State<SideBar>
                           onIconPressed();
                         },
                       ),
-                      StreamBuilder(
-                        stream: usersRef
-                            .doc(firebaseAuth.currentUser.uid)
-                            .snapshots(),
-                        builder: (context,
-                            AsyncSnapshot<DocumentSnapshot> snapshot) {
-                          if (snapshot.hasData) {
-                            user1 = UserModel.fromJson(snapshot.data.data());
-                            if (user1.msgToAll == true) {}
-                            return Column(
-                              children: [
-                                MenuItem(
-                                  icon: CupertinoIcons.chart_bar_circle,
-                                  title: "Dashboard",
-                                  onTap: () {
-                                    onIconPressed();
-                                    BlocProvider.of<NavigationBloc>(context)
-                                        .add(NavigationEvents
-                                            .DashboardClickedEvent);
-                                  },
-                                ),
-                                MenuItem(
-                                  icon: CupertinoIcons.bag,
-                                  title: "Manage Shops",
-                                  onTap: () {
-                                    onIconPressed();
-                                    BlocProvider.of<NavigationBloc>(context)
-                                        .add(NavigationEvents.ShopClickedEvent);
-                                  },
-                                ),
-                                MenuItem(
-                                  icon: Icons.add_circle_outline,
-                                  title: "Add Products",
-                                  onTap: () {
-                                    onIconPressed();
-                                    BlocProvider.of<NavigationBloc>(context)
-                                        .add(NavigationEvents
-                                            .AddProductClickedEvent);
-                                  },
-                                ),
-                                MenuItem(
-                                  icon: Icons.supervised_user_circle_outlined,
-                                  title: "Manage Customers",
-                                  onTap: () {
-                                    onIconPressed();
-                                    BlocProvider.of<NavigationBloc>(context)
-                                        .add(NavigationEvents
-                                            .CustomersClickedEvent);
-                                  },
-                                ),
-                              ],
-                            );
-                          }
-                          return Container(
-                            height: 0,
-                          );
-                        },
-                      ),
+                      firebaseAuth.currentUser != null
+                          ? StreamBuilder(
+                              stream: usersRef
+                                  .doc(firebaseAuth.currentUser.uid)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  user1 =
+                                      UserModel.fromJson(snapshot.data.data());
+                                  if (user1.msgToAll == true) {}
+                                  return Column(
+                                    children: [
+                                      MenuItem(
+                                        icon: CupertinoIcons.chart_bar_circle,
+                                        title: "Dashboard",
+                                        onTap: () {
+                                          onIconPressed();
+                                          BlocProvider.of<NavigationBloc>(
+                                                  context)
+                                              .add(NavigationEvents
+                                                  .DashboardClickedEvent);
+                                        },
+                                      ),
+                                      MenuItem(
+                                        icon: CupertinoIcons.bag,
+                                        title: "Manage Shops",
+                                        onTap: () {
+                                          onIconPressed();
+                                          BlocProvider.of<NavigationBloc>(
+                                                  context)
+                                              .add(NavigationEvents
+                                                  .ShopClickedEvent);
+                                        },
+                                      ),
+                                      MenuItem(
+                                        icon: Icons.add_circle_outline,
+                                        title: "Add Products",
+                                        onTap: () {
+                                          onIconPressed();
+                                          BlocProvider.of<NavigationBloc>(
+                                                  context)
+                                              .add(NavigationEvents
+                                                  .AddProductClickedEvent);
+                                        },
+                                      ),
+                                      MenuItem(
+                                        icon: Icons
+                                            .supervised_user_circle_outlined,
+                                        title: "Manage Customers",
+                                        onTap: () {
+                                          onIconPressed();
+                                          BlocProvider.of<NavigationBloc>(
+                                                  context)
+                                              .add(NavigationEvents
+                                                  .CustomersClickedEvent);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return Container(
+                                  height: 0,
+                                );
+                              },
+                            )
+                          : Container(
+                              height: 10,
+                            ),
                       Divider(
                         height: 30,
                         thickness: 0.5,
@@ -227,13 +244,17 @@ class _SideBarState extends State<SideBar>
                           onIconPressed();
                         },
                       ),
-                      MenuItem(
-                        icon: Icons.exit_to_app,
-                        title: "Logout",
-                        onTap: () {
-                          logOut(context);
-                        },
-                      ),
+                      firebaseAuth.currentUser != null
+                          ? MenuItem(
+                              icon: Icons.exit_to_app,
+                              title: "Logout",
+                              onTap: () {
+                                logOut(context);
+                              },
+                            )
+                          : Container(
+                              height: 10,
+                            ),
                     ],
                   ),
                 ),

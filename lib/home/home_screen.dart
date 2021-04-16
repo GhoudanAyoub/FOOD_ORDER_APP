@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Notification/notification.dart';
+import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/discover/discover_screen.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
@@ -78,10 +79,12 @@ class _State extends State<HomeScreen> {
       children: [
         Body(),
         DiscoverScreen(),
-        Activities(),
-        ProfileScreen(
-          profileUID: firebaseAuth.currentUser.uid,
-        ),
+        firebaseAuth.currentUser == null ? SignInScreen() : Activities(),
+        firebaseAuth.currentUser == null
+            ? SignInScreen()
+            : ProfileScreen(
+                profileUID: firebaseAuth.currentUser.uid,
+              ),
       ],
     );
   }

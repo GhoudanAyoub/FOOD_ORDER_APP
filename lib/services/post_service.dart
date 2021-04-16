@@ -96,4 +96,21 @@ class PostService extends Service {
       "timestamp": Timestamp.now(),
     });
   }
+
+  uploadStore({File image, String store_name}) async {
+    String link = await uploadImage(products, image);
+    var ref = shopRef.doc();
+    ref.set({
+      "id": ref.id,
+      "name": store_name,
+      "mediaUrl": link,
+      "status": false,
+      "productList": null,
+      "orders": null,
+      "completedOrders": null,
+      "canceledOrders": null,
+    }).catchError((e) {
+      print(e);
+    });
+  }
 }
