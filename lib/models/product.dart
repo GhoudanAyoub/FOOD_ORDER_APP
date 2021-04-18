@@ -10,6 +10,7 @@ class Product {
   String mediaUrl;
   String mediaUrl2;
   String mediaUrl3;
+  String categories;
   List flavours;
   Timestamp timestamp;
   String type;
@@ -26,6 +27,7 @@ class Product {
       this.product_name,
       this.flavours,
       this.timestamp,
+      this.categories,
       this.type});
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -39,6 +41,7 @@ class Product {
     mediaUrl3 = json['mediaUrl3'];
     flavours = json['flavours'];
     timestamp = json['timestamp'];
+    categories = json['categories'];
     type = json['type'];
   }
 }

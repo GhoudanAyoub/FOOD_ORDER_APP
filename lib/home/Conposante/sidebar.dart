@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../home.dart';
 import 'menu_item.dart';
 
 class SideBar extends StatefulWidget {
@@ -302,7 +302,8 @@ class _SideBarState extends State<SideBar>
                 onPressed: () {
                   Navigator.pop(context);
                   FirebaseService().signOut();
-                  Navigator.pushNamed(context, SignInScreen.routeName);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 child: Text(
                   'Log Out',

@@ -1,13 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import 'indicators.dart';
 
 class ItemCard extends StatelessWidget {
-  final String title, shopName, svgSrc;
+  final String title, svgSrc;
   final Function press;
   const ItemCard({
     Key key,
     this.title,
-    this.shopName,
     this.svgSrc,
     this.press,
   }) : super(key: key);
@@ -17,7 +18,7 @@ class ItemCard extends StatelessWidget {
     // This size provide you the total height and width of the screen
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+      margin: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -44,10 +45,14 @@ class ItemCard extends StatelessWidget {
                     color: Color(0xFFFFC61F).withOpacity(0.13),
                     shape: BoxShape.circle,
                   ),
-                  child: SvgPicture.asset(
-                    svgSrc,
-                    width: size.width * 0.18,
-                    // size.width * 0.18 means it use 18% of total width
+                  child: CachedNetworkImage(
+                    imageUrl: svgSrc,
+                    fit: BoxFit.cover,
+                    width: 30,
+                    fadeInDuration: Duration(milliseconds: 500),
+                    fadeInCurve: Curves.easeIn,
+                    placeholder: (context, progressText) =>
+                        Center(child: circularProgress(context)),
                   ),
                 ),
                 Text(
@@ -57,11 +62,6 @@ class ItemCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  shopName,
-                  style: TextStyle(color: Colors.black, fontSize: 12),
                 ),
               ],
             ),

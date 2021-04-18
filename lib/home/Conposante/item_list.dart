@@ -15,7 +15,6 @@ class ItemList extends StatelessWidget {
           ItemCard(
             svgSrc: "assets/icons/burger_beer.svg",
             title: "Burger & Beer",
-            shopName: "MacDonald's",
             press: () {
               /*
               Navigator.push(
@@ -31,13 +30,11 @@ class ItemList extends StatelessWidget {
           ItemCard(
             svgSrc: "assets/icons/chinese_noodles.svg",
             title: "Chinese & Noodles",
-            shopName: "Wendys",
             press: () {},
           ),
           ItemCard(
             svgSrc: "assets/icons/burger_beer.svg",
             title: "Burger & Beer",
-            shopName: "MacDonald's",
             press: () {},
           )
         ],

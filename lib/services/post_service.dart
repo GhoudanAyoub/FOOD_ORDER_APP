@@ -113,4 +113,15 @@ class PostService extends Service {
       print(e);
     });
   }
+
+  uploadCat({String image, String name}) async {
+    var ref = catRef.doc();
+    ref.set({
+      "id": ref.id,
+      "name": name,
+      "picture": image,
+    }).catchError((e) {
+      print(e);
+    });
+  }
 }

@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/components/indicators.dart';
+import 'package:mystore/components/item_card.dart';
 import 'package:mystore/models/User.dart';
+import 'package:mystore/models/categorie_model.dart';
 import 'package:mystore/models/product.dart';
+import 'package:mystore/services/post_service.dart';
 import 'package:mystore/utils/firebase.dart';
 
-import 'item_list.dart';
 import 'lmaida_card.dart';
 
 class Body extends StatefulWidget with NavigationStates {
@@ -17,12 +19,18 @@ class Body extends StatefulWidget with NavigationStates {
 class _BodyState extends State<Body> {
   UserModel user1;
   List<DocumentSnapshot> foodList = [];
+  List<DocumentSnapshot> catList = [];
   List<Product> _list = [];
+  List<CategorieModel> _listCat = [];
   bool loading = true;
+  var fetCatResult;
+  PostService postService = PostService();
 
   @override
   void initState() {
     getProducts();
+    getCats();
+
     super.initState();
   }
 
@@ -122,8 +130,10 @@ class _BodyState extends State<Body> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 15, top: 10),
-              child: ItemList(),
+              margin: EdgeInsets.only(left: 15, top: 5),
+              child: Expanded(
+                child: _buildCatList(),
+              ),
             ),
             Container(
               margin: EdgeInsets.only(left: 15, top: 10),
@@ -155,6 +165,74 @@ class _BodyState extends State<Body> {
     setState(() {
       loading = false;
     });
+  }
+
+  getCats() async {
+    QuerySnapshot snap = await catRef.get();
+    List<DocumentSnapshot> doc = snap.docs;
+    catList = doc;
+
+    for (var fl in catList) {
+      DocumentSnapshot doc1 = fl;
+      _listCat.add(CategorieModel.fromJson(doc1.data()));
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Widget sectionHeader(String headerTitle, {onViewMore}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(left: 15, top: 10),
+          child: Text(headerTitle,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins')),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 15, top: 2),
+          child: FlatButton(
+            onPressed: onViewMore,
+            child: Text('Voir plus ›',
+                style: TextStyle(color: Colors.black, fontFamily: 'Poppins')),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget deals1(String dealTitle, {onViewMore, List<Widget> items}) {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            height: 200,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: (items != null)
+                  ? items
+                  : <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(left: 15),
+                        child: Text('No items available at this moment.',
+                            style: TextStyle(
+                                color: Colors.black, fontFamily: 'Poppins')),
+                      )
+                    ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildPopularList() {
@@ -270,57 +348,39 @@ class _BodyState extends State<Body> {
     }
   }
 
-  Widget sectionHeader(String headerTitle, {onViewMore}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 15, top: 10),
-          child: Text(headerTitle,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Poppins')),
+  Widget _buildCatList() {
+    if (!loading) {
+      return Container(
+        height: 180,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          itemCount: catList.length,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.all(5),
+          itemBuilder: (context, index) {
+            return ItemCard(
+              svgSrc: _listCat[index].picture,
+              title: _listCat[index].name,
+              press: () {
+                /*
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return DetailsScreen();
+                  },
+                ),
+              );*/
+              },
+            );
+          },
         ),
-        Container(
-          margin: EdgeInsets.only(left: 15, top: 2),
-          child: FlatButton(
-            onPressed: onViewMore,
-            child: Text('Voir plus ›',
-                style: TextStyle(color: Colors.black, fontFamily: 'Poppins')),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget deals1(String dealTitle, {onViewMore, List<Widget> items}) {
-    return Container(
-      margin: EdgeInsets.only(top: 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            height: 200,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: (items != null)
-                  ? items
-                  : <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 15),
-                        child: Text('No items available at this moment.',
-                            style: TextStyle(
-                                color: Colors.black, fontFamily: 'Poppins')),
-                      )
-                    ],
-            ),
-          )
-        ],
-      ),
-    );
+      );
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
   }
 }
