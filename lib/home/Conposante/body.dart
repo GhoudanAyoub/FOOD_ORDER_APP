@@ -30,7 +30,6 @@ class _BodyState extends State<Body> {
   void initState() {
     getProducts();
     getCats();
-
     super.initState();
   }
 
@@ -47,8 +46,8 @@ class _BodyState extends State<Body> {
         decoration: new BoxDecoration(
           gradient: new LinearGradient(
               colors: [
-                Colors.white,
-                Colors.red[900],
+                Colors.white70,
+                Colors.white60,
               ],
               begin: const FractionalOffset(0.3, 0.4),
               end: const FractionalOffset(0.5, 1.0),
@@ -70,7 +69,9 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ]),
+            /*
             SizedBox(height: 10),
+
             Card(
               elevation: 8,
               color: Colors.white,
@@ -102,7 +103,7 @@ class _BodyState extends State<Body> {
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        color: Colors.red[700],
+                        color: Colors.redAccent,
                         onPressed: () {},
                         child: Text(
                           "SEE MORE",
@@ -117,16 +118,28 @@ class _BodyState extends State<Body> {
                   ],
                 ),
               )),
-            ),
+            ),*/
             Container(
-              margin: EdgeInsets.only(left: 15, top: 10),
-              child: Center(
-                child: Text("Categories",
-                    style: TextStyle(
+              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Categories",
+                      style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins')),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text("See all",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                        )),
+                  )
+                ],
               ),
             ),
             Container(
@@ -136,14 +149,26 @@ class _BodyState extends State<Body> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 15, top: 10),
-              child: Center(
-                child: Text("Recently Searched",
-                    style: TextStyle(
+              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Top Food ",
+                      style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins')),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text("See all",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                        )),
+                  )
+                ],
               ),
             ),
             _buildPopularList(),
@@ -181,32 +206,6 @@ class _BodyState extends State<Body> {
     });
   }
 
-  Widget sectionHeader(String headerTitle, {onViewMore}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 15, top: 10),
-          child: Text(headerTitle,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Poppins')),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 15, top: 2),
-          child: FlatButton(
-            onPressed: onViewMore,
-            child: Text('Voir plus ›',
-                style: TextStyle(color: Colors.black, fontFamily: 'Poppins')),
-          ),
-        )
-      ],
-    );
-  }
-
   Widget deals1(String dealTitle, {onViewMore, List<Widget> items}) {
     return Container(
       margin: EdgeInsets.only(top: 5),
@@ -237,109 +236,19 @@ class _BodyState extends State<Body> {
 
   Widget _buildPopularList() {
     if (!loading) {
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        itemCount: foodList.length,
-        padding: EdgeInsets.only(
-          left: 40,
-          bottom: 16,
-          top: 20,
+      return Container(
+        height: 300,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          itemCount: foodList.length,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.all(5),
+          itemBuilder: (context, index) {
+            return card(_list[index].mediaUrl, _list[index].product_name,
+                _list[index].description, _list[index].price, index);
+          },
         ),
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                bottomLeft: Radius.circular(12),
-              ),
-            ),
-            child: Row(
-              children: <Widget>[
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    width: 150,
-                    height: 100,
-                    child: Card(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          _list[index].mediaUrl,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Flexible(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "${_list[index].product_name}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "\$${_list[index].price}",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      "${_list[index].description}",
-                      overflow: TextOverflow.fade,
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    SizedBox(
-                      width: 100,
-                      height: 25,
-                      child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: Colors.white,
-                        disabledColor: Colors.grey[400],
-                        disabledTextColor: Colors.white60,
-                        onPressed: () {},
-                        child: Text(
-                          "SEE MORE",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Lato-Regular.ttf',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    )
-                  ],
-                ))
-              ],
-            ),
-          );
-        },
       );
     } else {
       return Center(
@@ -351,7 +260,7 @@ class _BodyState extends State<Body> {
   Widget _buildCatList() {
     if (!loading) {
       return Container(
-        height: 180,
+        height: 100,
         child: ListView.builder(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
@@ -382,5 +291,103 @@ class _BodyState extends State<Body> {
         child: circularProgress(context),
       );
     }
+  }
+
+  Widget card(mediaUrl, product_name, description, price, int type) {
+    return Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(10),
+        width: 200,
+        decoration: BoxDecoration(
+          color: type.isOdd ? Colors.white : Colors.redAccent,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 4),
+              blurRadius: 20,
+              color: Color(0xFFB0CCE1).withOpacity(0.32),
+            ),
+          ],
+        ),
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () {},
+              child: Container(
+                height: 100,
+                child: Card(
+                  elevation: 2.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      mediaUrl,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            Flexible(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "${product_name}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: type.isOdd ? Colors.black : Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "${description}",
+                  overflow: TextOverflow.fade,
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                      color: type.isOdd ? Colors.black : Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      "\$${price}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: type.isOdd ? Colors.redAccent : Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      color: type.isOdd
+                          ? Colors.redAccent
+                          : Colors.grey.withOpacity(0.5),
+                      onPressed: () {},
+                      child: Text(
+                        "Order",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Lato-Regular.ttf',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ))
+          ],
+        ));
   }
 }

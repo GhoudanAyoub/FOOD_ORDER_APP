@@ -20,7 +20,7 @@ const MaterialColor white = const MaterialColor(
 ThemeData theme() {
   return ThemeData(
     scaffoldBackgroundColor: white,
-    fontFamily: "SFProDisplay-Regular",
+    fontFamily: "Lato-Regular.ttf",
     appBarTheme: appBarTheme(),
     primarySwatch: white,
     textTheme: textTheme(),

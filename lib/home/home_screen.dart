@@ -137,7 +137,7 @@ class _State extends State<HomeScreen> {
                       Navigator.pushNamed(context, SignInScreen.routeName);
                     },
                     child: Text(
-                      "Sign Up",
+                      "Sign In",
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Lato-Regular.ttf',
@@ -201,7 +201,7 @@ class _State extends State<HomeScreen> {
                     Navigator.pushNamed(context, SignInScreen.routeName);
                   },
                   child: Text(
-                    "Sign Up",
+                    "Sign In",
                     style: TextStyle(
                       fontSize: 18,
                       fontFamily: 'Lato-Regular.ttf',

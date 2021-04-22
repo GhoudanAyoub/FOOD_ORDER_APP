@@ -3,6 +3,7 @@ import 'package:mystore/Admin/add_product.dart';
 import 'package:mystore/Admin/bord.dart';
 import 'package:mystore/Admin/customer.dart';
 import 'package:mystore/Admin/shop_managment.dart';
+import 'package:mystore/Store/store_home.dart';
 import 'package:mystore/home/home_screen.dart';
 
 enum NavigationEvents {
@@ -10,7 +11,8 @@ enum NavigationEvents {
   DashboardClickedEvent,
   ShopClickedEvent,
   CustomersClickedEvent,
-  AddProductClickedEvent
+  AddProductClickedEvent,
+  StoreListClickEvent
 }
 
 abstract class NavigationStates {}
@@ -39,6 +41,10 @@ class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
 
       case NavigationEvents.AddProductClickedEvent:
         yield AddProduct();
+        break;
+
+      case NavigationEvents.StoreListClickEvent:
+        yield StoreHome();
         break;
     }
   }

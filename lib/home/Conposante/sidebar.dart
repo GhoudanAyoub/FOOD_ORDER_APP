@@ -152,6 +152,8 @@ class _SideBarState extends State<SideBar>
                         title: "Shops",
                         onTap: () {
                           onIconPressed();
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.StoreListClickEvent);
                         },
                       ),
                       MenuItem(
