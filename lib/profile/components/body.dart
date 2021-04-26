@@ -248,7 +248,7 @@ class _BodyState extends State<Body> {
         gradient: new LinearGradient(
             colors: [
               Colors.white,
-              Colors.red[900],
+              Colors.white,
             ],
             begin: const FractionalOffset(0.3, 0.4),
             end: const FractionalOffset(0.5, 1.0),
@@ -324,11 +324,6 @@ class _BodyState extends State<Body> {
           ProfileMenu(
             text: "Purchasing History",
             icon: "assets/icons/Parcel.svg",
-            press: () {},
-          ),
-          ProfileMenu(
-            text: "Recently viewed",
-            icon: "assets/icons/Question mark.svg",
             press: () {},
           ),
           ProfileMenu(

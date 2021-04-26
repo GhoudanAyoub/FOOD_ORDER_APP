@@ -157,7 +157,8 @@ class Body extends StatelessWidget {
       print("Error===>" + e.toString());
     });
     FirebaseService.addUsers(userdata.user);
-    Navigator.pushNamed(context, HomeScreen.routeName);
+    Navigator.pop(context);
+    //Navigator.pushNamed(context, HomeScreen.routeName);
   }
 
   Future<void> handleLogin(context) async {

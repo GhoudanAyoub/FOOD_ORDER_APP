@@ -5,6 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:mystore/VM/posts_view_model.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
+import 'package:mystore/components/custom_card.dart';
 import 'package:mystore/components/custom_image.dart';
 import 'package:mystore/components/default_button.dart';
 import 'package:mystore/components/indicators.dart';
@@ -27,11 +28,10 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController _priceContoller = TextEditingController();
   var submitted = false;
   List<DocumentSnapshot> shoplist = [];
-  Set<int> selectedValues, flaveSelectedValues;
-  List<MultiSelectDialogItem<int>> multiItem = List();
-  List<MultiSelectDialogItem<int>> multiItem2 = List();
-
-  Map<double, String> dataMap = {1: 'chocolate ', 2: 'vanilla ', 3: 'banana'};
+  Set<String> selectedValues = null;
+  List<MultiSelectDialogItem<String>> multiItem = List();
+  String dropdownValue = 'Lunch';
+  String dropdownValueFlavour = 'cool';
 
   @override
   void initState() {
@@ -71,7 +71,7 @@ class _AddProductState extends State<AddProduct> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(20, 20, 10, 10),
                       child: Container(
-                          height: SizeConfig.screenHeight * 0.8,
+                          height: SizeConfig.screenHeight * 0.85,
                           child: Card(
                             elevation: 10.0,
                             shape: RoundedRectangleBorder(
@@ -334,63 +334,214 @@ class _AddProductState extends State<AddProduct> {
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Column(
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Food Type :",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomCard(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10.0),
+                                                      child: Theme(
+                                                        data: ThemeData(
+                                                          primaryColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                          accentColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                        ),
+                                                        child: DropdownButton<
+                                                                String>(
+                                                            value:
+                                                                dropdownValue ??
+                                                                    dropdownValue,
+                                                            icon: Icon(Icons
+                                                                .arrow_drop_down),
+                                                            iconSize: 32,
+                                                            underline:
+                                                                SizedBox(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                dropdownValue =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                            items: <String>[
+                                                              'Lunch',
+                                                              'Desserts',
+                                                              'Beverages',
+                                                            ].map<
+                                                                DropdownMenuItem<
+                                                                    String>>((String
+                                                                value) {
+                                                              return DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              );
+                                                            }).toList()),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Food Flavours :",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomCard(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10.0),
+                                                      child: Theme(
+                                                        data: ThemeData(
+                                                          primaryColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                          accentColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                        ),
+                                                        child: DropdownButton<
+                                                                String>(
+                                                            value: dropdownValueFlavour ??
+                                                                dropdownValueFlavour,
+                                                            icon: Icon(Icons
+                                                                .arrow_drop_down),
+                                                            iconSize: 32,
+                                                            underline:
+                                                                SizedBox(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                dropdownValueFlavour =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                            items: <String>[
+                                                              'sweet',
+                                                              'bitter',
+                                                              'sour',
+                                                              'salty',
+                                                              'meaty ',
+                                                              'cool',
+                                                              'hot',
+                                                            ].map<
+                                                                DropdownMenuItem<
+                                                                    String>>((String
+                                                                value) {
+                                                              return DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              );
+                                                            }).toList()),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Shops And Flavours",
+                                              "Shops :",
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 16,
                                                 color: Colors.black,
-                                                fontWeight: FontWeight.bold,
+                                                fontWeight: FontWeight.normal,
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 10,
+                                              width: 10,
                                             ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                    width: 50,
-                                                    height: 50,
-                                                    child: FloatingActionButton(
-                                                      shape: CircleBorder(),
-                                                      onPressed: () {
-                                                        _showMultiSelect(
-                                                            context);
-                                                      },
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      child: Icon(
-                                                          CupertinoIcons
-                                                              .shopping_cart,
-                                                          size: 30,
-                                                          color: Colors.black),
-                                                    )),
-                                                SizedBox(
-                                                  width: 20,
+                                            CustomCard(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 5, 20, 5),
+                                                child: Theme(
+                                                  data: ThemeData(
+                                                    primaryColor:
+                                                        Theme.of(context)
+                                                            .accentColor,
+                                                    accentColor:
+                                                        Theme.of(context)
+                                                            .accentColor,
+                                                  ),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      _showMultiSelect(context);
+                                                    },
+                                                    child: Icon(
+                                                        CupertinoIcons
+                                                            .shopping_cart,
+                                                        size: 20,
+                                                        color: Colors.black),
+                                                  ),
                                                 ),
-                                                Container(
-                                                    width: 50,
-                                                    height: 50,
-                                                    child: FloatingActionButton(
-                                                      shape: CircleBorder(),
-                                                      onPressed: () {
-                                                        _showMultiSelect2(
-                                                            context);
-                                                      },
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      child: Icon(
-                                                          CupertinoIcons
-                                                              .pin_fill,
-                                                          size: 20,
-                                                          color: Colors.black),
-                                                    )),
-                                              ],
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -427,35 +578,15 @@ class _AddProductState extends State<AddProduct> {
   }
 
   void _showMultiSelect(BuildContext context) async {
-    selectedValues = await showDialog<Set<int>>(
+    selectedValues = await showDialog<Set<String>>(
       context: context,
       builder: (BuildContext context) {
         return MultiSelectDialog(
           items: multiItem,
-          initialSelectedValues: [
-            1,
-          ].toSet(),
         );
       },
     );
-    print(
-        '****>${selectedValues.isNotEmpty ? selectedValues.join(",") : "1"} ');
-  }
-
-  void _showMultiSelect2(BuildContext context) async {
-    flaveSelectedValues = await showDialog<Set<int>>(
-      context: context,
-      builder: (BuildContext context) {
-        return MultiSelectDialog(
-          items: multiItem2,
-          initialSelectedValues: [
-            1,
-          ].toSet(),
-        );
-      },
-    );
-    print(
-        '****>${selectedValues.isNotEmpty ? selectedValues.join(",") : "1"} ');
+    print('****>${selectedValues != null ? selectedValues.join(",") : "1"} ');
   }
 
   showImageChoices(BuildContext context, ProductViewModel viewModel) {
@@ -630,13 +761,11 @@ class _AddProductState extends State<AddProduct> {
     QuerySnapshot snap = await shopRef.get();
     List<DocumentSnapshot> doc = snap.docs;
     shoplist = doc;
-
     for (var fl in shoplist) {
       DocumentSnapshot doc1 = fl;
       ShopModel u = ShopModel.fromJson(doc1.data());
       multiItem.add(MultiSelectDialogItem(u.id, u.name));
     }
-    //dataMap.map((key, value) =>{ print(value);});
   }
 }
 
@@ -691,7 +820,14 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Select :'),
+      title: Center(
+        child: Text('Store Selection',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.redAccent,
+              fontWeight: FontWeight.normal,
+            )),
+      ),
       contentPadding: EdgeInsets.only(top: 5.0),
       content: SingleChildScrollView(
         child: ListTileTheme(
@@ -702,11 +838,23 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text('CANCEL'),
+          color: Colors.grey,
+          child: Text('CANCEL',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              )),
           onPressed: _onCancelTap,
         ),
         FlatButton(
-          child: Text('OK'),
+          color: Colors.redAccent,
+          child: Text('OK',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              )),
           onPressed: _onSubmitTap,
         )
       ],
@@ -717,6 +865,7 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
     final checked = _selectedValues.contains(item.value);
     return CheckboxListTile(
       value: checked,
+      checkColor: Colors.redAccent,
       title: Text(item.label),
       controlAffinity: ListTileControlAffinity.leading,
       onChanged: (checked) => _onItemCheckedChange(item.value, checked),

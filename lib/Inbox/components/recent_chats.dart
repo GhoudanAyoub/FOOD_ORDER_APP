@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/components/chat_item.dart';
 import 'package:mystore/components/indicators.dart';
@@ -65,10 +66,28 @@ class Chats extends StatelessWidget {
                 );
               } else {
                 return Center(
-                    child: Text(
-                  'No Chats',
-                  style: TextStyle(color: Colors.black),
-                ));
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        CupertinoIcons.mail,
+                        color: Colors.grey,
+                        size: 50,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Message Will appear here",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
               }
             } else {
               return Center(

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/firebaseService/FirebaseService.dart';
 import 'package:mystore/models/User.dart';
@@ -175,55 +176,59 @@ class _SideBarState extends State<SideBar>
                                 if (snapshot.hasData) {
                                   user1 =
                                       UserModel.fromJson(snapshot.data.data());
-                                  if (user1.msgToAll == true) {}
-                                  return Column(
-                                    children: [
-                                      MenuItem(
-                                        icon: CupertinoIcons.chart_bar_circle,
-                                        title: "Dashboard",
-                                        onTap: () {
-                                          onIconPressed();
-                                          BlocProvider.of<NavigationBloc>(
-                                                  context)
-                                              .add(NavigationEvents
-                                                  .DashboardClickedEvent);
-                                        },
-                                      ),
-                                      MenuItem(
-                                        icon: CupertinoIcons.bag,
-                                        title: "Manage Shops",
-                                        onTap: () {
-                                          onIconPressed();
-                                          BlocProvider.of<NavigationBloc>(
-                                                  context)
-                                              .add(NavigationEvents
-                                                  .ShopClickedEvent);
-                                        },
-                                      ),
-                                      MenuItem(
-                                        icon: Icons.add_circle_outline,
-                                        title: "Add Products",
-                                        onTap: () {
-                                          onIconPressed();
-                                          BlocProvider.of<NavigationBloc>(
-                                                  context)
-                                              .add(NavigationEvents
-                                                  .AddProductClickedEvent);
-                                        },
-                                      ),
-                                      MenuItem(
-                                        icon: Icons
-                                            .supervised_user_circle_outlined,
-                                        title: "Manage Customers",
-                                        onTap: () {
-                                          onIconPressed();
-                                          BlocProvider.of<NavigationBloc>(
-                                                  context)
-                                              .add(NavigationEvents
-                                                  .CustomersClickedEvent);
-                                        },
-                                      ),
-                                    ],
+                                  if (user1.msgToAll == true) {
+                                    return Column(
+                                      children: [
+                                        MenuItem(
+                                          icon: CupertinoIcons.chart_bar_circle,
+                                          title: "Dashboard",
+                                          onTap: () {
+                                            onIconPressed();
+                                            BlocProvider.of<NavigationBloc>(
+                                                    context)
+                                                .add(NavigationEvents
+                                                    .DashboardClickedEvent);
+                                          },
+                                        ),
+                                        MenuItem(
+                                          icon: CupertinoIcons.bag,
+                                          title: "Manage Shops",
+                                          onTap: () {
+                                            onIconPressed();
+                                            BlocProvider.of<NavigationBloc>(
+                                                    context)
+                                                .add(NavigationEvents
+                                                    .ShopClickedEvent);
+                                          },
+                                        ),
+                                        MenuItem(
+                                          icon: Icons.add_circle_outline,
+                                          title: "Add Products",
+                                          onTap: () {
+                                            onIconPressed();
+                                            BlocProvider.of<NavigationBloc>(
+                                                    context)
+                                                .add(NavigationEvents
+                                                    .AddProductClickedEvent);
+                                          },
+                                        ),
+                                        MenuItem(
+                                          icon: Icons
+                                              .supervised_user_circle_outlined,
+                                          title: "Manage Customers",
+                                          onTap: () {
+                                            onIconPressed();
+                                            BlocProvider.of<NavigationBloc>(
+                                                    context)
+                                                .add(NavigationEvents
+                                                    .CustomersClickedEvent);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Container(
+                                    height: 0,
                                   );
                                 }
                                 return Container(
@@ -256,9 +261,17 @@ class _SideBarState extends State<SideBar>
                                 logOut(context);
                               },
                             )
-                          : Container(
-                              height: 10,
-                            ),
+                          : MenuItem(
+                              icon: CupertinoIcons.hexagon_fill,
+                              title: "Log In",
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignInScreen()));
+                              },
+                            )
                     ],
                   ),
                 ),

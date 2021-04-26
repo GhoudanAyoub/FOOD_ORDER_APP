@@ -64,7 +64,12 @@ class FirebaseService {
         'bio': "",
         'country': "",
         'photoUrl': user.photoURL ?? '',
-        'msgToAll': true
+        'msgToAll': true,
+        'phone': user.phoneNumber,
+        'country': "",
+        'msgToAll': false,
+        'sub': false,
+        'orders': 0
       });
     }
   }

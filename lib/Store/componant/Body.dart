@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mystore/Store/store_details.dart';
 import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
+import 'package:mystore/components/rating_stars.dart';
 import 'package:mystore/models/shop.dart';
 import 'package:mystore/utils/firebase.dart';
 
@@ -23,6 +24,7 @@ class _BodyState extends State<Body> {
   List<DocumentSnapshot> filteredShops = [];
   List<ShopModel> _list = [];
   bool loading = true;
+  double rating = 3.5;
 
   getShops() async {
     QuerySnapshot snap = await shopRef.get();
@@ -234,6 +236,10 @@ class _BodyState extends State<Body> {
                       fontWeight: FontWeight.w400,
                     )),
                 SizedBox(height: 4),
+                StarRating(
+                  rating: rating,
+                  color: Colors.yellow[700],
+                ),
                 Row(
                   children: [
                     GestureDetector(

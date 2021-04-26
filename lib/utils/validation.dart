@@ -7,6 +7,14 @@ class Validations {
     return null;
   }
 
+  static String validateAddress(String value) {
+    if (value.isEmpty) return 'Address is Required.';
+    final RegExp nameExp = new RegExp(r'^[A-za-zğüşöçİĞÜŞÖÇ ]+$');
+    if (!nameExp.hasMatch(value))
+      return 'Please enter only alphabetical characters.';
+    return null;
+  }
+
   static String validateEmail(String value, [bool isRequried = true]) {
     if (value.isEmpty && isRequried) return 'Email is required.';
     final RegExp nameExp = new RegExp(

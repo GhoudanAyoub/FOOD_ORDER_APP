@@ -73,6 +73,7 @@ class _ActivitiesState extends State<Activities> {
           automaticallyImplyLeading: false,
           toolbarHeight: 60,
           titleSpacing: 60,
+          elevation: 1,
           title: Text(
             "Message ",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -83,7 +84,7 @@ class _ActivitiesState extends State<Activities> {
             gradient: new LinearGradient(
                 colors: [
                   Colors.white,
-                  Colors.red[900],
+                  Colors.white,
                 ],
                 begin: const FractionalOffset(0.3, 0.4),
                 end: const FractionalOffset(0.5, 1.0),

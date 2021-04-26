@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mystore/Store/product_detail.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/components/cached_image.dart';
@@ -133,7 +134,10 @@ class _BodyState extends State<Body> {
                         fontWeight: FontWeight.w600,
                       )),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      BlocProvider.of<NavigationBloc>(context)
+                          .add(NavigationEvents.CategoriesClickedEvent);
+                    },
                     child: Text("See all",
                         style: TextStyle(
                           color: Colors.black,
@@ -271,7 +275,7 @@ class _BodyState extends State<Body> {
         child: ListView.builder(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
-          itemCount: catList.length,
+          itemCount: 8,
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.all(5),
           itemBuilder: (context, index) {
