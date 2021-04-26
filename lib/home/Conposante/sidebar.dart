@@ -161,6 +161,8 @@ class _SideBarState extends State<SideBar>
                         title: "Categories",
                         onTap: () {
                           onIconPressed();
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.CategoriesClickedEvent);
                         },
                       ),
                       firebaseAuth.currentUser != null

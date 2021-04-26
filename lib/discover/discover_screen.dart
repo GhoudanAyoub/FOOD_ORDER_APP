@@ -5,9 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Inbox/components/conversation.dart';
-import 'package:mystore/SizeConfig.dart';
+import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/components/indicators.dart';
-import 'package:mystore/models/FakeRepository.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/profile/components/body.dart';
 import 'package:mystore/utils/firebase.dart';
@@ -84,7 +83,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             gradient: new LinearGradient(
                 colors: [
                   Colors.white,
-                  Colors.red[900],
+                  Colors.white,
                 ],
                 begin: const FractionalOffset(0.3, 0.4),
                 end: const FractionalOffset(0.5, 1.0),
@@ -131,8 +130,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(25, 0, 10, 0),
+                    child: Text('Users',
+                        style: TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.normal)),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: buildUsers())
                 ],
               )),
@@ -170,33 +178,34 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               child: Column(
                 children: [
                   ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 25.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 25.0, vertical: 5),
                     leading: CircleAvatar(
-                      radius: 35.0,
-                      backgroundImage: NetworkImage(user.photoUrl != null
+                      radius: 25.0,
+                      backgroundImage: NetworkImage(user.photoUrl != null &&
+                              user.photoUrl != ""
                           ? user.photoUrl
                           : "https://images.unsplash.com/photo-1571741140674-8949ca7df2a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"),
                     ),
                     title: Text(user?.username,
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold)),
-                    subtitle: Text(user?.email,
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
                     trailing: user.msgToAll == true
                         ? GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => Conversation(
-                                      userId: doc.id,
-                                      chatId: 'newChat',
-                                    ),
-                                  ));
+                              firebaseAuth.currentUser == null
+                                  ? SignInForMessage(context)
+                                  : Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Conversation(
+                                          userId: doc.id,
+                                          chatId: 'newChat',
+                                        ),
+                                      ));
                             },
                             child: Icon(CupertinoIcons.chat_bubble_fill,
-                                color: Colors.black),
+                                color: Colors.redAccent),
                           )
                         : Container(
                             width: 1,
@@ -213,6 +222,37 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         child: circularProgress(context),
       );
     }
+  }
+
+  SignInForMessage(BuildContext parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            backgroundColor: Colors.red[800],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            children: [
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, SignInScreen.routeName);
+                },
+                child: Text(
+                  'Sign In',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              Divider(),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        });
   }
 
   showProfile(BuildContext context, {String profileId}) {
@@ -237,76 +277,4 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
       );
-
-  Container _buildListView() {
-    return Container(
-      height: 180,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: FakeRepository.assetData.length,
-          itemBuilder: (_, index) {
-            return Padding(
-              padding: const EdgeInsets.all(4),
-              child: Container(
-                child: Image.asset(FakeRepository.assetData[index]),
-              ),
-            );
-          }),
-    );
-  }
-
-  Container _buildTrendHeading(SizingInformation sizingInformation,
-      {String title, String descrition, String range}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Container(
-            width: getProportionateScreenWidth(30),
-            height: getProportionateScreenHeight(40),
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(50))),
-            child: Text(
-              "#",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: sizingInformation.localWidgetSize.width * 0.80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text(descrition,
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
 }

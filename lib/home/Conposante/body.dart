@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mystore/Store/product_detail.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
+import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/components/item_card.dart';
 import 'package:mystore/models/User.dart';
@@ -20,10 +22,10 @@ class _BodyState extends State<Body> {
   UserModel user1;
   List<DocumentSnapshot> foodList = [];
   List<DocumentSnapshot> catList = [];
-  List<Product> _list = [];
   List<CategorieModel> _listCat = [];
   bool loading = true;
   var fetCatResult;
+  List<Product> _list = [];
   PostService postService = PostService();
 
   @override
@@ -245,8 +247,13 @@ class _BodyState extends State<Body> {
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.all(5),
           itemBuilder: (context, index) {
-            return card(_list[index].mediaUrl, _list[index].product_name,
-                _list[index].description, _list[index].price, index);
+            return card(
+                _list[index].mediaUrl,
+                _list[index].product_name,
+                _list[index].description,
+                _list[index].price,
+                index,
+                _list[index]);
           },
         ),
       );
@@ -293,13 +300,14 @@ class _BodyState extends State<Body> {
     }
   }
 
-  Widget card(mediaUrl, product_name, description, price, int type) {
+  Widget card(
+      mediaUrl, product_name, description, price, int type, Product product) {
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
         width: 200,
         decoration: BoxDecoration(
-          color: type.isOdd ? Colors.white : Colors.redAccent,
+          color: type.isEven ? Colors.white : Colors.redAccent,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -315,6 +323,7 @@ class _BodyState extends State<Body> {
               onTap: () {},
               child: Container(
                 height: 100,
+                width: 180,
                 child: Card(
                   elevation: 2.0,
                   shape: RoundedRectangleBorder(
@@ -322,11 +331,13 @@ class _BodyState extends State<Body> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
+                    child: cachedNetworkImage(mediaUrl),
+                    /*
+                    Image.network(
                       mediaUrl,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
-                    ),
+                    ),*/
                   ),
                 ),
               ),
@@ -340,7 +351,7 @@ class _BodyState extends State<Body> {
                   "${product_name}",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: type.isOdd ? Colors.black : Colors.white,
+                    color: type.isEven ? Colors.black : Colors.white,
                     fontSize: 16,
                   ),
                 ),
@@ -350,7 +361,7 @@ class _BodyState extends State<Body> {
                   overflow: TextOverflow.fade,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                      color: type.isOdd ? Colors.black : Colors.white,
+                      color: type.isEven ? Colors.black : Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w300),
                 ),
@@ -363,17 +374,24 @@ class _BodyState extends State<Body> {
                       "\$${price}",
                       style: TextStyle(
                         fontSize: 16,
-                        color: type.isOdd ? Colors.redAccent : Colors.white,
+                        color: type.isEven ? Colors.redAccent : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      color: type.isOdd
+                      color: type.isEven
                           ? Colors.redAccent
                           : Colors.grey.withOpacity(0.5),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductDetails(
+                                      product: product,
+                                    )));
+                      },
                       child: Text(
                         "Order",
                         style: TextStyle(

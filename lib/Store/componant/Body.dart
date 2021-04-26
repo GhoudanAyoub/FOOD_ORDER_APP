@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mystore/Store/store_details.dart';
+import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/models/shop.dart';
 import 'package:mystore/utils/firebase.dart';
@@ -69,7 +71,7 @@ class _BodyState extends State<Body> {
           gradient: new LinearGradient(
               colors: [
                 Colors.white70,
-                Colors.white60,
+                Colors.redAccent,
               ],
               begin: const FractionalOffset(0.3, 0.4),
               end: const FractionalOffset(0.5, 1.0),
@@ -166,11 +168,11 @@ class _BodyState extends State<Body> {
 
   ShopsCard(ShopModel shops) {
     return Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.fromLTRB(10, 15, 10, 15),
+        padding: EdgeInsets.fromLTRB(0, 2, 20, 2),
         width: 200,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.white.withOpacity(0.5),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -188,17 +190,19 @@ class _BodyState extends State<Body> {
                 height: 120,
                 width: 180,
                 child: Card(
-                  elevation: 2.0,
+                  elevation: 3.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
+                    child: cachedNetworkImage(shops.mediaUrl),
+                    /*
+                    Image.network(
                       shops.mediaUrl,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
-                    ),
+                    ),*/
                   ),
                 ),
               ),
@@ -233,7 +237,14 @@ class _BodyState extends State<Body> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StoreDetail(
+                                      shopModel: shops,
+                                    )));
+                      },
                       child: Card(
                           elevation: 4.0,
                           color: Colors.redAccent,
