@@ -190,7 +190,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           child: Text("No Shop Found",
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        )d;
+        );
       } else {
         return GridView.count(
           crossAxisCount: 2,
