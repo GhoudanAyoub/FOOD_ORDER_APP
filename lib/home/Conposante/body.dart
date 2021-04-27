@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mystore/Categories/components/cat_food.dart';
 import 'package:mystore/Store/product_detail.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/components/cached_image.dart';
@@ -283,15 +284,16 @@ class _BodyState extends State<Body> {
               svgSrc: _listCat[index].picture,
               title: _listCat[index].name,
               press: () {
-                /*
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return DetailsScreen();
-                  },
-                ),
-              );*/
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return CategoriesFood(
+                        name: _listCat[index].name,
+                      );
+                    },
+                  ),
+                );
               },
             );
           },

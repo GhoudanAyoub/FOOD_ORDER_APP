@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mystore/Categories/components/cat_food.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/components/item_card.dart';
 import 'package:mystore/models/categorie_model.dart';
@@ -70,31 +71,28 @@ class _BodyCategState extends State<BodyCateg> {
         );
       } else {
         return Container(
-          child: ListView.builder(
-            itemCount: filteredCat.length,
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: ClampingScrollPhysics(),
-            padding: EdgeInsets.all(10),
-            itemBuilder: (context, index) {
-              return ItemCard(
-                svgSrc: _listCat[index].picture,
-                title: _listCat[index].name,
-                press: () {
-                  /*
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return DetailsScreen();
+            height: 600,
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: List.generate(filteredCat.length, (index) {
+                return ItemCard(
+                  svgSrc: _listCat[index].picture,
+                  title: _listCat[index].name,
+                  press: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CategoriesFood(
+                            name: _listCat[index].name,
+                          );
+                        },
+                      ),
+                    );
                   },
-                ),
-              );*/
-                },
-              );
-            },
-          ),
-        );
+                );
+              }),
+            ));
       }
     } else {
       return Center(
@@ -131,7 +129,7 @@ class _BodyCategState extends State<BodyCateg> {
                 )),
           ),
           Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+              margin: EdgeInsets.fromLTRB(20, 30, 20, 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
