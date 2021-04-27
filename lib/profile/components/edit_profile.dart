@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:mystore/components/custom_card.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/models/User.dart';
@@ -22,7 +23,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   UserModel user;
-  bool valuesecond;
+  bool valuesecond = false;
 
   String currentUid() {
     return firebaseAuth.currentUser.uid;
@@ -44,9 +45,17 @@ class _EditProfileState extends State<EditProfile> {
       child: Scaffold(
         key: viewModel.scaffoldKey,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           elevation: 1,
           centerTitle: true,
-          title: Text("Edit Profile"),
+          title: Text(
+            "EDIT PROFILE",
+            style: TextStyle(
+              fontWeight: FontWeight.w900,
+              fontSize: 18.0,
+              color: Colors.redAccent,
+            ),
+          ),
           actions: [
             Center(
               child: Padding(
@@ -58,7 +67,7 @@ class _EditProfileState extends State<EditProfile> {
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 15.0,
-                      color: Theme.of(context).accentColor,
+                      color: Colors.redAccent,
                     ),
                   ),
                 ),
@@ -146,45 +155,78 @@ class _EditProfileState extends State<EditProfile> {
               },
             ),
             SizedBox(height: 10.0),
-            Text(
-              "Bio",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextFormField(
-              maxLines: null,
-              style: TextStyle(color: Colors.white),
+            TextFormBuilder(
+              enabled: !viewModel.loading,
               initialValue: widget.user.bio,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (String value) {
-                if (value.length > 1000) {
-                  return 'Bio must be short';
-                }
-                return null;
-              },
+              prefix: Feather.info,
+              hintText: "Bio",
+              textInputAction: TextInputAction.next,
+              validateFunction: Validations.validateField,
               onSaved: (String val) {
                 viewModel.setBio(val);
               },
-              onChanged: (String val) {
-                viewModel.setBio(val);
+            ),
+            SizedBox(height: 10.0),
+            TextFormBuilder(
+              enabled: !viewModel.loading,
+              initialValue: widget.user.country,
+              prefix: Feather.map,
+              hintText: "Country",
+              textInputAction: TextInputAction.next,
+              validateFunction: Validations.validateAddress,
+              onSaved: (String val) {
+                viewModel.setCountry(val);
               },
             ),
             SizedBox(height: 10.0),
             Row(
               children: [
-                Checkbox(
-                    value: this.valuesecond,
-                    onChanged: (bool value) {
-                      setState(() {
-                        this.valuesecond = value;
-                        viewModel.setMsgAll(this.valuesecond);
-                      });
-                    }),
-                Text(
-                  "Receive Message From All",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomCard(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Container(
+                          width: 350,
+                          child: Theme(
+                              data: ThemeData(
+                                primaryColor: Theme.of(context).accentColor,
+                                accentColor: Theme.of(context).accentColor,
+                              ),
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                          value: this.valuesecond,
+                                          checkColor: Colors.redAccent,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              this.valuesecond = value;
+                                              viewModel
+                                                  .setMsgAll(this.valuesecond);
+                                            });
+                                          }),
+                                      SizedBox(height: 5.0),
+                                      Text(
+                                        "Receive Message From All",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  ))),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
+            SizedBox(height: 10.0),
           ],
         ),
       ),

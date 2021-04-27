@@ -6,8 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Inbox/components/conversation.dart';
 import 'package:mystore/SignIn/sign_in_screen.dart';
+import 'package:mystore/Store/store_details.dart';
+import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
+import 'package:mystore/components/rating_stars.dart';
 import 'package:mystore/models/User.dart';
+import 'package:mystore/models/shop.dart';
 import 'package:mystore/profile/components/body.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -26,7 +30,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> users = [];
   List<DocumentSnapshot> filteredUsers = [];
+  List<DocumentSnapshot> shoplist = [];
+  List<DocumentSnapshot> filteredShops = [];
   bool loading = true;
+  double rating = 3.5;
 
   currentUserId() {
     return firebaseAuth.currentUser.uid;
@@ -37,6 +44,16 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     List<DocumentSnapshot> doc = snap.docs;
     users = doc;
     filteredUsers = doc;
+    setState(() {
+      loading = false;
+    });
+  }
+
+  getShops() async {
+    QuerySnapshot snap = await shopRef.get();
+    List<DocumentSnapshot> doc = snap.docs;
+    shoplist = doc;
+    filteredShops = doc;
     setState(() {
       loading = false;
     });
@@ -55,6 +72,16 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       setState(() {
         filteredUsers = userSearch;
       });
+
+      List shopSearch = shoplist.where((userSnap) {
+        Map user = userSnap.data();
+        String userName = user['name'];
+        return userName.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+
+      setState(() {
+        filteredShops = shopSearch;
+      });
     }
   }
 
@@ -65,6 +92,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   @override
   void initState() {
     getUsers();
+    getShops();
     super.initState();
   }
 
@@ -81,12 +109,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         body: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
-                colors: [
-                  Colors.white,
-                  Colors.white,
-                ],
+                colors: [Colors.white, Colors.redAccent],
                 begin: const FractionalOffset(0.3, 0.4),
-                end: const FractionalOffset(0.5, 1.0),
+                end: const FractionalOffset(0.2, 1.0),
                 stops: [0.0, 1.0],
                 tileMode: TileMode.clamp),
           ),
@@ -141,12 +166,171 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   ),
                   Container(
                       margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: buildUsers())
+                      child: buildUsers()),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(25, 15, 10, 0),
+                    child: Text('Shops',
+                        style: TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.normal)),
+                  ),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: buildShops())
                 ],
               )),
         ),
       ));
     });
+  }
+
+  buildShops() {
+    if (!loading) {
+      if (filteredShops.isEmpty) {
+        return Center(
+          child: Text("No Shop Found",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        )d;
+      } else {
+        return GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          childAspectRatio: 0.7,
+          physics: ClampingScrollPhysics(),
+          children: List.generate(filteredShops.length, (index) {
+            DocumentSnapshot doc = filteredShops[index];
+            ShopModel shops = ShopModel.fromJson(doc.data());
+            return ShopsCard(shops);
+          }),
+        );
+        /*
+        Container(
+            child: ListView.builder(
+          itemCount: filteredShops.length,
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          physics: ClampingScrollPhysics(),
+          padding: EdgeInsets.all(10),
+          itemBuilder: (BuildContext context, int index) {
+            DocumentSnapshot doc = filteredShops[index];
+            ShopModel shops = ShopModel.fromJson(doc.data());
+            return ShopsCard(shops);
+          },
+        ));*/
+      }
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
+  }
+
+  ShopsCard(ShopModel shops) {
+    return Container(
+        margin: EdgeInsets.fromLTRB(10, 10, 5, 10),
+        padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+        width: 200,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(1, 4),
+              blurRadius: 5,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            InkWell(
+              onTap: () {},
+              child: Container(
+                height: 120,
+                width: 180,
+                child: Card(
+                  elevation: 3.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: cachedNetworkImage(shops.mediaUrl),
+                    /*
+                    Image.network(
+                      shops.mediaUrl,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                    ),*/
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              "${shops.name}",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                )),
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                StarRating(
+                  rating: rating,
+                  color: Colors.yellow[700],
+                )
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StoreDetail(
+                              shopModel: shops,
+                            )));
+              },
+              child: Card(
+                  elevation: 4.0,
+                  color: Colors.redAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "View",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Lato-Regular.ttf',
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Icon(Icons.arrow_forward_ios,
+                            color: Colors.white70, size: 15.0)
+                      ],
+                    ),
+                  )),
+            ),
+          ],
+        ));
   }
 
   buildUsers() {

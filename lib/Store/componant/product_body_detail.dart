@@ -135,36 +135,40 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                     SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         setState(() {
                           seemore = !seemore;
                         });
                       },
-                      child: Card(
-                          elevation: 4.0,
-                          color: Colors.redAccent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "See more",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'Lato-Regular.ttf',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Icon(Icons.arrow_forward_ios,
-                                    color: Colors.white70, size: 15.0)
-                              ],
-                            ),
-                          )),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Card(
+                            elevation: 4.0,
+                            color: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "See more",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Lato-Regular.ttf',
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Icon(Icons.arrow_forward_ios,
+                                      color: Colors.white70, size: 15.0)
+                                ],
+                              ),
+                            )),
+                      ),
                     ),
                   ],
                 )

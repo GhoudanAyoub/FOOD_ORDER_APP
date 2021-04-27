@@ -67,11 +67,7 @@ class _CategoriesFoodState extends State<CategoriesFood> {
               stops: [0.0, 1.0],
               tileMode: TileMode.clamp),
         ),
-        child: ListView(
-          children: [
-            _buildPopularList(),
-          ],
-        ),
+        child: _buildPopularList(),
       ),
     );
   }
@@ -88,22 +84,21 @@ class _CategoriesFoodState extends State<CategoriesFood> {
           ),
         );
       } else {
-        return Container(
-            height: 600,
-            child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              children: List.generate(_list.length, (index) {
-                return card(
-                    _list[index].mediaUrl,
-                    _list[index].product_name,
-                    _list[index].description,
-                    _list[index].price,
-                    index,
-                    _list[index]);
-              }),
-            ));
+        return GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          childAspectRatio: 0.8,
+          physics: ClampingScrollPhysics(),
+          children: List.generate(_list.length, (index) {
+            return card(
+                _list[index].mediaUrl,
+                _list[index].product_name,
+                _list[index].description,
+                _list[index].price,
+                index,
+                _list[index]);
+          }),
+        );
       }
     } else {
       return Center(
@@ -112,37 +107,11 @@ class _CategoriesFoodState extends State<CategoriesFood> {
     }
   }
 
-/*
-*
-*
-
-        Container(
-        height: 300,
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          itemCount: _list.length,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.all(5),
-          itemBuilder: (context, index) {
-            return card(
-                _list[index].mediaUrl,
-                _list[index].product_name,
-                _list[index].description,
-                _list[index].price,
-                index,
-                _list[index]);
-          },
-        ),
-      );
-*
-* */
   Widget card(
       mediaUrl, product_name, description, price, int type, Product product) {
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
-        width: 200,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -154,94 +123,79 @@ class _CategoriesFoodState extends State<CategoriesFood> {
             ),
           ],
         ),
-        child: Column(
+        child: ListView(
+          shrinkWrap: false,
           children: <Widget>[
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 100,
-                width: 180,
-                child: Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: cachedNetworkImage(mediaUrl),
-                    /*
-                    Image.network(
-                      mediaUrl,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ),*/
-                  ),
+            Container(
+              height: 100,
+              width: 180,
+              child: Card(
+                elevation: 2.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: cachedNetworkImage(mediaUrl),
                 ),
               ),
             ),
             SizedBox(height: 5),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+            Center(
+              child: Text(
+                "${product_name}",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              "${description}",
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w300),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
                 Text(
-                  "${product_name}",
+                  "\$${price}",
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
                     fontSize: 16,
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  "${description}",
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        "\$${price}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.redAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: Colors.redAccent,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProductDetails(
-                                        product: product,
-                                      )));
-                        },
-                        child: Text(
-                          "Order",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Lato-Regular.ttf',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: Colors.redAccent,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductDetails(
+                                  product: product,
+                                )));
+                  },
+                  child: Text(
+                    "Order",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Lato-Regular.ttf',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
-                )
+                ),
               ],
-            ))
+            )
           ],
         ));
   }

@@ -299,7 +299,7 @@ class _BodyState extends State<Body> {
                               fontWeight: FontWeight.bold,
                             )),
                         SizedBox(height: 5),
-                        Text("${user.country.isEmpty ? '' : user.country}",
+                        Text("${user.country == null ? '' : user.country}",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,

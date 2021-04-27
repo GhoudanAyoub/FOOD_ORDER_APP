@@ -22,7 +22,6 @@ class _BodyState extends State<Body> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> shoplist = [];
   List<DocumentSnapshot> filteredShops = [];
-  List<ShopModel> _list = [];
   bool loading = true;
   double rating = 3.5;
 
@@ -31,11 +30,6 @@ class _BodyState extends State<Body> {
     List<DocumentSnapshot> doc = snap.docs;
     shoplist = doc;
     filteredShops = doc;
-
-    for (var fl in filteredShops) {
-      DocumentSnapshot doc1 = fl;
-      _list.add(ShopModel.fromJson(doc1.data()));
-    }
     setState(() {
       loading = false;
     });

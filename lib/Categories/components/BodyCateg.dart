@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Categories/components/cat_food.dart';
 import 'package:mystore/components/indicators.dart';
-import 'package:mystore/components/item_card.dart';
 import 'package:mystore/models/categorie_model.dart';
 import 'package:mystore/utils/firebase.dart';
 
@@ -72,24 +72,76 @@ class _BodyCategState extends State<BodyCateg> {
       } else {
         return Container(
             height: 600,
+            margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
             child: GridView.count(
               crossAxisCount: 3,
               children: List.generate(filteredCat.length, (index) {
-                return ItemCard(
-                  svgSrc: _listCat[index].picture,
-                  title: _listCat[index].name,
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CategoriesFood(
-                            name: _listCat[index].name,
-                          );
-                        },
+                return Container(
+                  margin:
+                      EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 20,
+                        color: Color(0xFFB0CCE1).withOpacity(0.32),
                       ),
-                    );
-                  },
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(20),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CategoriesFood(
+                                name: _listCat[index].name,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: _listCat[index].picture,
+                                fit: BoxFit.cover,
+                                width: 30,
+                                fadeInDuration: Duration(milliseconds: 500),
+                                fadeInCurve: Curves.easeIn,
+                                placeholder: (context, progressText) =>
+                                    Center(child: circularProgress(context)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              _listCat[index].name,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 );
               }),
             ));
