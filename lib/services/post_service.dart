@@ -26,6 +26,9 @@ class PostService extends Service {
       String product_name,
       String price,
       String description,
+      String type,
+      String shops,
+      categories,
       flavours}) async {
     String link = await uploadImage(products, image);
     String link2 = await uploadImage(products, image2);
@@ -41,6 +44,9 @@ class PostService extends Service {
       "mediaUrl2": link2,
       "mediaUrl3": link3,
       "flavours": flavours,
+      "type": type,
+      "shops": shops,
+      "categories": categories,
       "description": description == null ? "" : description,
       "timestamp": Timestamp.now(),
     }).catchError((e) {

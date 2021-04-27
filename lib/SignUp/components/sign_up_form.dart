@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:mystore/components/default_button.dart';
 import 'package:mystore/components/form_error.dart';
 import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/home/home.dart';
@@ -69,34 +68,62 @@ class _SignUpFormState extends State<SignUpForm> {
             SizedBox(height: getProportionateScreenHeight(15)),
             FormError(errors: errors),
             SizedBox(height: getProportionateScreenHeight(15)),
-            DefaultButton(
-              text: "SIGN UP",
-              submitted: submitted,
-              press: () async {
-                try {
-                  if (_formKey.currentState.validate()) {
-                    submitted = true;
-                    bool success = await authService.createUser(
-                        name: _namentoller.text,
-                        email: _emailContoller.text,
-                        password: _passwordController.text,
-                        country: _countryContoller.text,
-                        phone: _phone.text);
-                    print(success);
-                    if (success) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Congratulation Your Account Created')));
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              width: SizeConfig.screenWidth,
+              height: 45,
+              child: FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                color: Colors.orange,
+                disabledColor: Colors.grey[400],
+                disabledTextColor: Colors.white60,
+                onPressed: () async {
+                  try {
+                    if (_formKey.currentState.validate()) {
+                      submitted = true;
+                      bool success = await authService.createUser(
+                          name: _namentoller.text,
+                          email: _emailContoller.text,
+                          password: _passwordController.text,
+                          country: _countryContoller.text,
+                          phone: _phone.text);
+                      print(success);
+                      if (success) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Congratulation Your Account Created')));
+                      }
                     }
+                  } catch (e) {
+                    print(e);
+                    showInSnackBar(
+                        '${authService.handleFirebaseAuthError(e.toString())}');
                   }
-                } catch (e) {
-                  print(e);
-                  showInSnackBar(
-                      '${authService.handleFirebaseAuthError(e.toString())}');
-                }
-              },
+                },
+                child: submitted
+                    ? SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(
+                        "SIGN UP",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Lato-Regular.ttf',
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
             ),
             SizedBox(height: 20),
           ],

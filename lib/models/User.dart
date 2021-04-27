@@ -13,6 +13,7 @@ class UserModel {
   bool isOnline;
   bool msgToAll;
   bool sub;
+  bool admin;
   int orders;
 
   UserModel(
@@ -28,7 +29,8 @@ class UserModel {
       this.phone,
       this.msgToAll,
       this.sub,
-      this.orders});
+      this.orders,
+      this.admin});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -44,5 +46,6 @@ class UserModel {
     msgToAll = json['msgToAll'];
     sub = json['sub'];
     orders = json['orders'];
+    admin = json['admin'];
   }
 }

@@ -68,6 +68,7 @@ class FirebaseService {
         'phone': user.phoneNumber,
         'country': "",
         'msgToAll': false,
+        'admin': false,
         'sub': false,
         'orders': 0
       });

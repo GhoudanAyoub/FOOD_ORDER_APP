@@ -32,6 +32,7 @@ class _AddProductState extends State<AddProduct> {
   List<MultiSelectDialogItem<String>> multiItem = List();
   String dropdownValue = 'Lunch';
   String dropdownValueFlavour = 'cool';
+  String dropdownValueCategories = 'Restaurant';
 
   @override
   void initState() {
@@ -302,7 +303,6 @@ class _AddProductState extends State<AddProduct> {
                                         ),
                                         TextFormBuilder(
                                           prefix: Feather.user,
-                                          initialValue: viewModel.product_name,
                                           textInputType: TextInputType.name,
                                           controller: _nameContoller,
                                           hintText: "Product Name",
@@ -313,7 +313,6 @@ class _AddProductState extends State<AddProduct> {
                                         ),
                                         TextFormBuilder(
                                           prefix: Feather.info,
-                                          initialValue: viewModel.description,
                                           textInputType:
                                               TextInputType.multiline,
                                           controller: _descContoller,
@@ -325,11 +324,98 @@ class _AddProductState extends State<AddProduct> {
                                         ),
                                         TextFormBuilder(
                                           prefix: Feather.dollar_sign,
-                                          initialValue: viewModel.price,
                                           textInputType: TextInputType.number,
                                           controller: _priceContoller,
                                           hintText: "Price",
                                           textInputAction: TextInputAction.next,
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Food Categories :",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomCard(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10.0),
+                                                      child: Theme(
+                                                        data: ThemeData(
+                                                          primaryColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                          accentColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                        ),
+                                                        child: DropdownButton<
+                                                                String>(
+                                                            value: dropdownValueCategories ??
+                                                                dropdownValueCategories,
+                                                            icon: Icon(Icons
+                                                                .arrow_drop_down),
+                                                            iconSize: 32,
+                                                            underline:
+                                                                SizedBox(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                dropdownValueCategories =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                            items: <String>[
+                                                              'Fast Food',
+                                                              'Restaurant',
+                                                              'Chinois',
+                                                              'Healthy',
+                                                              'Américain',
+                                                              'Snack',
+                                                              'Fait maison',
+                                                              'Burger',
+                                                              'Marocain',
+                                                              'Indien',
+                                                              'Français',
+                                                            ].map<
+                                                                DropdownMenuItem<
+                                                                    String>>((String
+                                                                value) {
+                                                              return DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              );
+                                                            }).toList()),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(
                                           height: 20,
@@ -557,8 +643,16 @@ class _AddProductState extends State<AddProduct> {
                                                 _priceContoller.text);
                                             viewModel.setDescription(
                                                 _descContoller.text);
+                                            viewModel.setSType(dropdownValue);
+                                            viewModel.setFlavours(
+                                                dropdownValueFlavour);
+                                            viewModel.setShops(
+                                                selectedValues.join(","));
+                                            viewModel.setCategories(
+                                                dropdownValueCategories);
                                             if (_formKey.currentState
-                                                .validate()) {
+                                                    .validate() &&
+                                                selectedValues != null) {
                                               await viewModel.uploadPosts();
                                               viewModel.resetPost();
                                             }

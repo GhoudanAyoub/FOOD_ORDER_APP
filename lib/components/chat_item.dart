@@ -41,7 +41,7 @@ class ChatItem extends StatelessWidget {
             elevation: 5,
             margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: ListTile(
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),

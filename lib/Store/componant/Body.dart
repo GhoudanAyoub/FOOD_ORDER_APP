@@ -284,14 +284,3 @@ class _BodyState extends State<Body> {
         ));
   }
 }
-/*Text(
-                          "See more",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Lato-Regular.ttf',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        )
-*
-*
-* */

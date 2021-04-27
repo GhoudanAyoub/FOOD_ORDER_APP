@@ -36,6 +36,7 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 1,
+        toolbarHeight: 10,
       ),
       body: Container(
         height: double.infinity,

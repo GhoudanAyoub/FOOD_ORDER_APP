@@ -315,9 +315,9 @@ class _BodyState extends State<Body> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, 4),
+              offset: Offset(5, 5),
               blurRadius: 20,
-              color: Color(0xFFB0CCE1).withOpacity(0.32),
+              color: Colors.grey.withOpacity(0.32),
             ),
           ],
         ),

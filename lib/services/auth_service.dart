@@ -40,6 +40,7 @@ class AuthService {
       'photoUrl': user.photoURL ?? '',
       'msgToAll': false,
       'sub': false,
+      'admin': false,
       'orders': 0
     });
   }

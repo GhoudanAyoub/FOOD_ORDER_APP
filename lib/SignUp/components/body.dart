@@ -15,30 +15,31 @@ class Body extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          child: SafeArea(
-            child: SizedBox(
-              width: double.infinity,
-              height: SizeConfig.screenHeight,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Text("SIGN UP",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Lato-Bold.ttf',
-                            color: Colors.red[900],
-                          )),
-                    ),
-                    SizedBox(height: 80),
-                    SignUpForm()
-                    /* Align(alignment: Alignment.center, child: GotAccountText()),*/
-                  ],
+          child: SingleChildScrollView(
+            child: SafeArea(
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Text("SIGN UP",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Lato-Bold.ttf',
+                              color: Colors.red[900],
+                            )),
+                      ),
+                      SizedBox(height: SizeConfig.screenHeight * 0.3),
+                      SignUpForm()
+                      /* Align(alignment: Alignment.center, child: GotAccountText()),*/
+                    ],
+                  ),
                 ),
               ),
             ),

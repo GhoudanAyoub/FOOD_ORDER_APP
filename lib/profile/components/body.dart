@@ -268,19 +268,32 @@ class _BodyState extends State<Body> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(width: 20.0),
-                    ProfilePic(
-                      image: firebaseAuth.currentUser.uid == user.id
-                          ? auth.getProfileImage()
-                          : user.photoUrl,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(5, 5),
+                            blurRadius: 20,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
+                      child: ProfilePic(
+                        image: firebaseAuth.currentUser.uid == user.id
+                            ? auth.getProfileImage()
+                            : user.photoUrl,
+                      ),
                     ),
-                    SizedBox(width: 10.0),
+                    SizedBox(width: 30.0),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 5),
                         Text("${user.username ?? 'Anonymous'}",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 22,
                               color: Colors.black,
                               fontFamily: "SFProDisplay-Bold",
                               fontWeight: FontWeight.bold,
@@ -290,7 +303,7 @@ class _BodyState extends State<Body> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.black,
+                              color: Colors.grey,
                               fontFamily: "SFProDisplay-Light",
                               fontWeight: FontWeight.normal,
                             )),

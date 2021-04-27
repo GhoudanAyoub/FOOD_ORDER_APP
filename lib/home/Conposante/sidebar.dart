@@ -176,7 +176,7 @@ class _SideBarState extends State<SideBar>
                                 if (snapshot.hasData) {
                                   user1 =
                                       UserModel.fromJson(snapshot.data.data());
-                                  if (user1.msgToAll == true) {
+                                  if (user1.admin == true) {
                                     return Column(
                                       children: [
                                         MenuItem(

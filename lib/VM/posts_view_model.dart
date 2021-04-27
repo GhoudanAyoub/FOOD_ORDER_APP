@@ -29,10 +29,13 @@ class ProductViewModel extends ChangeNotifier {
   String product_name;
   String price;
   String description;
+  String type;
+  String flavours;
+  String shpos;
+  String categories;
   File mediaUrl;
   File mediaUrl2;
   File mediaUrl3;
-  List flavours;
   Timestamp timestamp;
   bool edit = false;
 //controllers
@@ -77,6 +80,30 @@ class ProductViewModel extends ChangeNotifier {
   setBPrice(String val) {
     print('SetPrice $val');
     price = val;
+    notifyListeners();
+  }
+
+  setShops(String val) {
+    print('SetShops $val');
+    shpos = val;
+    notifyListeners();
+  }
+
+  setSType(String val) {
+    print('setSType $val');
+    type = val;
+    notifyListeners();
+  }
+
+  setFlavours(String val) {
+    print('setFlavours $val');
+    flavours = val;
+    notifyListeners();
+  }
+
+  setCategories(String val) {
+    print('setCategories $val');
+    categories = val;
     notifyListeners();
   }
 
@@ -203,7 +230,10 @@ class ProductViewModel extends ChangeNotifier {
           image3: mediaUrl3,
           image: mediaUrl,
           price: price,
-          product_name: product_name);
+          product_name: product_name,
+          shops: shpos,
+          type: type,
+          categories: categories);
       loading = false;
       resetPost();
       notifyListeners();
@@ -218,6 +248,8 @@ class ProductViewModel extends ChangeNotifier {
 
   resetPost() {
     mediaUrl = null;
+    mediaUrl2 = null;
+    mediaUrl3 = null;
     description = null;
     product_name = null;
     price = null;

@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/home/Conposante/lmaida_card.dart';
+import 'package:mystore/models/product.dart';
 import 'package:mystore/models/shop.dart';
+import 'package:mystore/utils/firebase.dart';
+
+import '../product_detail.dart';
 
 class StoreBodyDetails extends StatefulWidget {
   final ShopModel shopModel;
@@ -17,12 +21,37 @@ class StoreBodyDetails extends StatefulWidget {
 class _StoreBodyDetailsState extends State<StoreBodyDetails> {
   bool loading = true;
   List<DocumentSnapshot> foodList = [];
+  List<Product> _list = [];
+
+  @override
+  void initState() {
+    getProducts();
+    super.initState();
+  }
+
+  getProducts() async {
+    QuerySnapshot snap = await productRef.get();
+    List<DocumentSnapshot> doc = snap.docs;
+    foodList = doc;
+
+    for (var fl in foodList) {
+      DocumentSnapshot doc1 = fl;
+      Product p1 = Product.fromJson(doc1.data());
+      var p1list = p1.shops.split(',');
+      if (p1list.contains(widget.shopModel.id)) _list.add(p1);
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
+        toolbarHeight: 10,
       ),
       body: Container(
         height: double.infinity,
@@ -30,7 +59,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
           gradient: new LinearGradient(
               colors: [
                 Colors.white70,
-                Colors.white60,
+                Colors.redAccent,
               ],
               begin: const FractionalOffset(0.3, 0.4),
               end: const FractionalOffset(0.5, 1.0),
@@ -46,8 +75,9 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                   margin: EdgeInsets.only(right: 20, left: 20),
                   child: LmaidaCard(
                     onTap: () => {},
-                    imagePath:
-                        'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg', //'imagePaths[index]',
+                    imagePath: widget.shopModel.mediaUrl != null
+                        ? widget.shopModel.mediaUrl
+                        : 'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg', //'imagePaths[index]',
                   ),
                 ),
               ),
@@ -75,7 +105,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                 ],
               ),
             ),
-            _buildPopularList(),
+            _buildBeverages(),
             Container(
               margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
               child: Row(
@@ -99,6 +129,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                 ],
               ),
             ),
+            _buildLunch(),
             Container(
               margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
               child: Row(
@@ -122,15 +153,16 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                 ],
               ),
             ),
+            _buildDesserts()
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPopularList() {
+  Widget _buildBeverages() {
     if (!loading) {
-      if (widget.shopModel.productList == null) {
+      if (_list == null) {
         return Container(
           height: 300,
           child: Center(
@@ -145,16 +177,22 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
           child: ListView.builder(
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
-            itemCount: widget.shopModel.productList.length,
+            itemCount: _list.length,
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.all(5),
             itemBuilder: (context, index) {
-              return card(
-                  widget.shopModel.productList[index].mediaUrl,
-                  widget.shopModel.productList[index].product_name,
-                  widget.shopModel.productList[index].description,
-                  widget.shopModel.productList[index].price,
-                  index);
+              if (_list[index].type.contains("Beverages"))
+                return card(
+                    _list[index].mediaUrl,
+                    _list[index].product_name,
+                    _list[index].description,
+                    _list[index].price,
+                    index,
+                    _list[index]);
+              else
+                return Container(
+                  height: 0,
+                );
             },
           ),
         );
@@ -166,19 +204,108 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
     }
   }
 
-  Widget card(mediaUrl, product_name, description, price, int type) {
+  Widget _buildLunch() {
+    if (!loading) {
+      if (_list == null) {
+        return Container(
+          height: 300,
+          child: Center(
+            child: Text("No Product Found",
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold)),
+          ),
+        );
+      } else {
+        return Container(
+          height: 300,
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            itemCount: _list.length,
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.all(5),
+            itemBuilder: (context, index) {
+              if (_list[index].type.contains("Lunch"))
+                return card(
+                    _list[index].mediaUrl,
+                    _list[index].product_name,
+                    _list[index].description,
+                    _list[index].price,
+                    index,
+                    _list[index]);
+              else
+                return Container(
+                  height: 0,
+                );
+            },
+          ),
+        );
+      }
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
+  }
+
+  Widget _buildDesserts() {
+    if (!loading) {
+      if (_list == null) {
+        return Container(
+          height: 300,
+          child: Center(
+            child: Text("No Product Found",
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold)),
+          ),
+        );
+      } else {
+        return Container(
+          height: 300,
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            itemCount: _list.length,
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.all(5),
+            itemBuilder: (context, index) {
+              if (_list[index].type.contains("Desserts"))
+                return card(
+                    _list[index].mediaUrl,
+                    _list[index].product_name,
+                    _list[index].description,
+                    _list[index].price,
+                    index,
+                    _list[index]);
+              else
+                return Container(
+                  height: 0,
+                );
+            },
+          ),
+        );
+      }
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
+  }
+
+  Widget card(
+      mediaUrl, product_name, description, price, int type, Product product) {
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(5),
         margin: EdgeInsets.all(10),
         width: 200,
         decoration: BoxDecoration(
-          color: type.isEven ? Colors.white : Colors.redAccent,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, 4),
+              offset: Offset(0, 1),
               blurRadius: 20,
-              color: Color(0xFFB0CCE1).withOpacity(0.32),
+              color: Color(0xFFB0CCE1).withOpacity(0.8),
             ),
           ],
         ),
@@ -188,7 +315,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
               onTap: () {},
               child: Container(
                 height: 100,
-                width: 180,
+                width: 200,
                 child: Card(
                   elevation: 2.0,
                   shape: RoundedRectangleBorder(
@@ -204,13 +331,13 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
             SizedBox(height: 5),
             Flexible(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
                   "${product_name}",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: type.isEven ? Colors.black : Colors.white,
+                    color: Colors.black,
                     fontSize: 16,
                   ),
                 ),
@@ -220,7 +347,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                   overflow: TextOverflow.fade,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                      color: type.isEven ? Colors.black : Colors.white,
+                      color: Colors.black,
                       fontSize: 12,
                       fontWeight: FontWeight.w300),
                 ),
@@ -233,26 +360,43 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                       "\$${price}",
                       style: TextStyle(
                         fontSize: 16,
-                        color: type.isEven ? Colors.redAccent : Colors.white,
+                        color: Colors.redAccent,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      color: type.isEven
-                          ? Colors.redAccent
-                          : Colors.grey.withOpacity(0.5),
-                      onPressed: () {},
-                      child: Text(
-                        "Order",
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Lato-Regular.ttf',
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductDetails(
+                                      product: product,
+                                    )));
+                      },
+                      child: Card(
+                          elevation: 4.0,
+                          color: Colors.redAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "View",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Icon(Icons.arrow_forward_ios,
+                                    color: Colors.white70, size: 15.0)
+                              ],
+                            ),
+                          )),
+                    )
                   ],
                 )
               ],
