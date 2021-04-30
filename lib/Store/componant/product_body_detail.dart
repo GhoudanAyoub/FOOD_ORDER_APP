@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/SignUp/sign_up_screen.dart';
-import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/rating_stars.dart';
 import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/models/product.dart';
 import 'package:mystore/utils/validation.dart';
+
+import '../../SizeConfig.dart';
 
 class ProductDetailsBody extends StatefulWidget {
   final Product product;
@@ -40,6 +41,7 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
       ),
       body: Container(
         height: double.infinity,
+        width: SizeConfig.screenWidth,
         decoration: new BoxDecoration(
           gradient: new LinearGradient(
               colors: [
@@ -97,7 +99,11 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: cachedNetworkImage(shops.mediaUrl),
+                        child: Image.network(
+                          shops.mediaUrl,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        ),
                         /*
                     Image.network(
                       shops.mediaUrl,
@@ -117,17 +123,16 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                       height: 10,
                     ),
                     Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Flexible(
-                          child: Text(
-                            "${shops.product_name}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                        )),
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "${shops.product_name}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                     StarRating(
                       rating: rating,
                       color: Colors.yellow[700],

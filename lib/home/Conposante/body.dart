@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mystore/Categories/components/cat_food.dart';
 import 'package:mystore/Store/product_detail.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
-import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/components/item_card.dart';
 import 'package:mystore/models/User.dart';
@@ -150,11 +149,8 @@ class _BodyState extends State<Body> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 15, top: 5),
-              child: Expanded(
-                child: _buildCatList(),
-              ),
-            ),
+                margin: EdgeInsets.only(left: 15, top: 5),
+                child: _buildCatList()),
             Container(
               margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
               child: Row(
@@ -337,13 +333,11 @@ class _BodyState extends State<Body> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: cachedNetworkImage(mediaUrl),
-                    /*
-                    Image.network(
+                    child: Image.network(
                       mediaUrl,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
-                    ),*/
+                    ),
                   ),
                 ),
               ),

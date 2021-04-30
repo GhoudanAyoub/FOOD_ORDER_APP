@@ -265,7 +265,6 @@ class _SideBarState extends State<SideBar>
                               icon: CupertinoIcons.hexagon_fill,
                               title: "Log In",
                               onTap: () {
-                                Navigator.pop(context);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

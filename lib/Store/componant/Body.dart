@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Store/store_details.dart';
-import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/components/rating_stars.dart';
 import 'package:mystore/models/shop.dart';
@@ -192,13 +191,11 @@ class _BodyState extends State<Body> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: cachedNetworkImage(shops.mediaUrl),
-                    /*
-                    Image.network(
+                    child: Image.network(
                       shops.mediaUrl,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
-                    ),*/
+                    ),
                   ),
                 ),
               ),

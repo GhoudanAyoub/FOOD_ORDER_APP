@@ -1,7 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
-import 'indicators.dart';
 
 class ItemCard extends StatelessWidget {
   final String title, svgSrc;
@@ -42,14 +39,10 @@ class ItemCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: CachedNetworkImage(
-                        imageUrl: svgSrc,
-                        fit: BoxFit.cover,
+                      child: Image.network(
+                        svgSrc,
                         width: 30,
-                        fadeInDuration: Duration(milliseconds: 500),
-                        fadeInCurve: Curves.easeIn,
-                        placeholder: (context, progressText) =>
-                            Center(child: circularProgress(context)),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ],

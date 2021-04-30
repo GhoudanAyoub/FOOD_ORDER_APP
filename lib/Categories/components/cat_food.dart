@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mystore/Store/product_detail.dart';
-import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/models/product.dart';
 import 'package:mystore/utils/firebase.dart';
@@ -136,7 +135,11 @@ class _CategoriesFoodState extends State<CategoriesFood> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: cachedNetworkImage(mediaUrl),
+                  child: Image.network(
+                    mediaUrl,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

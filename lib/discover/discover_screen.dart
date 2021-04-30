@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:mystore/Inbox/components/conversation.dart';
 import 'package:mystore/SignIn/sign_in_screen.dart';
 import 'package:mystore/Store/store_details.dart';
-import 'package:mystore/components/cached_image.dart';
 import 'package:mystore/components/indicators.dart';
 import 'package:mystore/components/rating_stars.dart';
 import 'package:mystore/models/User.dart';
@@ -256,7 +255,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: cachedNetworkImage(shops.mediaUrl),
+                    child: Image.network(
+                      shops.mediaUrl,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                    ),
                     /*
                     Image.network(
                       shops.mediaUrl,

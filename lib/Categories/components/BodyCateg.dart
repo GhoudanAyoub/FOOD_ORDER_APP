@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,14 +115,10 @@ class _BodyCategState extends State<BodyCateg> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: CachedNetworkImage(
-                                imageUrl: _listCat[index].picture,
+                              child: Image.network(
+                                _listCat[index].picture,
+                                width: 45,
                                 fit: BoxFit.cover,
-                                width: 30,
-                                fadeInDuration: Duration(milliseconds: 500),
-                                fadeInCurve: Curves.easeIn,
-                                placeholder: (context, progressText) =>
-                                    Center(child: circularProgress(context)),
                               ),
                             ),
                             SizedBox(
@@ -131,12 +126,14 @@ class _BodyCategState extends State<BodyCateg> {
                             ),
                             Text(
                               _listCat[index].name,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                                 color: Colors.grey[700],
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),
