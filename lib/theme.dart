@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'constants.dart';
 
@@ -17,15 +18,15 @@ const MaterialColor white = const MaterialColor(
     900: const Color(0xFFFFFFFF),
   },
 );
+const Color kFadedScaffoldColor = Color.fromRGBO(243, 240, 237, 1);
 ThemeData theme() {
   return ThemeData(
-    scaffoldBackgroundColor: white,
     fontFamily: "Lato-Regular.ttf",
     appBarTheme: appBarTheme(),
-    primarySwatch: white,
-    textTheme: textTheme(),
-    inputDecorationTheme: inputDecorationTheme(),
+    scaffoldBackgroundColor: kFadedScaffoldColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    textTheme: GoogleFonts.poppinsTextTheme(),
+    inputDecorationTheme: inputDecorationTheme(),
   );
 }
 

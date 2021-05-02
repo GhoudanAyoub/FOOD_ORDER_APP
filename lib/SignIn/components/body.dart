@@ -21,6 +21,7 @@ class Body extends StatelessWidget {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

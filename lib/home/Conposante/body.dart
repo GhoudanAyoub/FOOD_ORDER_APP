@@ -1,6 +1,8 @@
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mystore/Categories/components/cat_food.dart';
 import 'package:mystore/Store/product_detail.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
@@ -12,7 +14,7 @@ import 'package:mystore/models/product.dart';
 import 'package:mystore/services/post_service.dart';
 import 'package:mystore/utils/firebase.dart';
 
-import 'lmaida_card.dart';
+import '../../constants.dart';
 
 class Body extends StatefulWidget with NavigationStates {
   @override
@@ -24,167 +26,318 @@ class _BodyState extends State<Body> {
   List<DocumentSnapshot> foodList = [];
   List<DocumentSnapshot> catList = [];
   List<CategorieModel> _listCat = [];
+  List<DocumentSnapshot> filtereProduct = [];
   bool loading = true;
   var fetCatResult;
   List<Product> _list = [];
   PostService postService = PostService();
+  int _activeTab = 0;
+  String CatName = "";
 
   @override
   void initState() {
     getProducts();
     getCats();
+    search("Fast food");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      ),
       body: Container(
-        height: double.infinity,
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [
-                Colors.white70,
-                Colors.white60,
-              ],
-              begin: const FractionalOffset(0.3, 0.4),
-              end: const FractionalOffset(0.5, 1.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        child: ListView(
+        child: Stack(
           children: [
-            deals1('', onViewMore: () {}, items: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
+            Positioned(
+              top: 0.0,
+              left: 100.0,
+              child: Opacity(
+                opacity: 0.1,
+                child: Image.asset(
+                  "assets/images/coffee2.png",
+                  width: 150.0,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0.0,
+              right: -180.0,
+              child: Image.asset(
+                "assets/images/square.png",
+              ),
+            ),
+            Positioned(
+              child: Image.asset(
+                "assets/images/drum.png",
+              ),
+              left: -70.0,
+              bottom: -40.0,
+            ),
+            SafeArea(
+              child: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(right: 20, left: 20),
-                  child: LmaidaCard(
-                    onTap: () => {},
-                    imagePath:
-                        'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg', //'imagePaths[index]',
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 20.0,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              FlutterIcons.keyboard_backspace_mdi,
+                            ),
+                          ),
+                          Badge(
+                            position: BadgePosition.bottomStart(
+                                bottom: -5.0, start: 4.0),
+                            badgeContent: Text(
+                              "3",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            badgeColor: kPrimaryColor,
+                            child: Image.asset(
+                              "assets/images/shopping_bag.png",
+                              width: 45.0,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      Text(
+                        "Top Food ",
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 24.0),
+                        height: 50,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          // Let's create a model for categories and populate with data.
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _activeTab = index;
+                                  CatName = _listCat[index].name;
+                                  search(CatName);
+                                });
+                              },
+                              // Little switch animation
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 450),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20.0,
+                                ),
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: _activeTab == index
+                                      ? kTextColor1
+                                      : kTextColor1.withOpacity(
+                                          .2,
+                                        ),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    _listCat[index].name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: _activeTab == index
+                                          ? Colors.white
+                                          : kTextColor1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              width: 15.0,
+                            );
+                          },
+                          itemCount: _listCat.length,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      // Lets make a dummy page switch
+                      AnimatedSwitcher(
+                        duration: Duration(
+                          milliseconds: 450,
+                        ),
+                        child: _buildPopularList(),
+                      )
+                    ],
                   ),
                 ),
               ),
-            ]),
-            /*
-            SizedBox(height: 10),
-
-            Card(
-              elevation: 8,
-              color: Colors.white,
-              margin: EdgeInsets.only(right: 20, left: 20),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              child: Flexible(
-                  child: Container(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                        child: Text(
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                            overflow: TextOverflow.fade,
-                            textAlign: TextAlign.justify,
+            ),
+            /*ListView(
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Categories",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          )),
+                      GestureDetector(
+                        onTap: () {
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.CategoriesClickedEvent);
+                        },
+                        child: Text("See all",
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ))),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    SizedBox(
-                      width: 100,
-                      height: 25,
-                      child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: Colors.redAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "SEE MORE",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Lato-Regular.ttf',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    )
-                  ],
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            )),
+                      )
+                    ],
+                  ),
                 ),
-              )),
-            ),*/
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Categories",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  GestureDetector(
-                    onTap: () {
-                      BlocProvider.of<NavigationBloc>(context)
-                          .add(NavigationEvents.CategoriesClickedEvent);
-                    },
-                    child: Text("See all",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        )),
-                  )
-                ],
-              ),
-            ),
-            Container(
-                margin: EdgeInsets.only(left: 15, top: 5),
-                child: _buildCatList()),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Top Food ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text("See all",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        )),
-                  )
-                ],
-              ),
-            ),
-            _buildPopularList(),
+                Container(
+                    margin: EdgeInsets.only(left: 15, top: 5),
+                    child: _buildCatList()),
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Top Food ",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          )),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text("See all",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+                _buildPopularList(),
+              ],
+            )*/
           ],
         ),
       ),
     );
   }
 
+  search(String query) {
+    if (query == "") {
+      filtereProduct = foodList;
+    } else {
+      List userSearch = foodList.where((userSnap) {
+        Map user = userSnap.data();
+        String userName = user['categories'];
+        return userName.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+
+      setState(() {
+        filtereProduct = userSearch;
+      });
+    }
+  }
+
+  Widget _buildPopularList() {
+    if (!loading) {
+      if (filtereProduct.isEmpty) {
+        return Container(
+          height: 200,
+          child: Center(
+            child: Text("No ${CatName} Food Found",
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold)),
+          ),
+        );
+      } else {
+        return Container(
+          child: StaggeredGridView.countBuilder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            // Lets create a coffee model and populate it
+            itemCount: filtereProduct.length,
+            crossAxisCount: 4,
+            itemBuilder: (BuildContext context, int index) {
+              DocumentSnapshot doc = filtereProduct[index];
+              Product p = Product.fromJson(doc.data());
+              if (p.categories == CatName)
+                return card(p.mediaUrl, p.product_name, p.description, p.price,
+                    index, p);
+              else
+                return Container(
+                  height: 20,
+                );
+            },
+            staggeredTileBuilder: (int index) => StaggeredTile.count(2, 3),
+            mainAxisSpacing: 8.0,
+            crossAxisSpacing: 8.0,
+          ),
+        );
+      }
+/*
+      Container(
+        height: 300,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          itemCount: foodList.length,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.all(5),
+          itemBuilder: (context, index) {
+            return card(
+                _list[index].mediaUrl,
+                _list[index].product_name,
+                _list[index].description,
+                _list[index].price,
+                index,
+                _list[index]);
+          },
+        ),
+      );*/
+    } else {
+      return Center(
+        child: circularProgress(context),
+      );
+    }
+  }
+
   getProducts() async {
     QuerySnapshot snap = await productRef.get();
     List<DocumentSnapshot> doc = snap.docs;
     foodList = doc;
+    filtereProduct = doc;
 
     for (var fl in foodList) {
       DocumentSnapshot doc1 = fl;
@@ -237,34 +390,6 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget _buildPopularList() {
-    if (!loading) {
-      return Container(
-        height: 300,
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          itemCount: foodList.length,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.all(5),
-          itemBuilder: (context, index) {
-            return card(
-                _list[index].mediaUrl,
-                _list[index].product_name,
-                _list[index].description,
-                _list[index].price,
-                index,
-                _list[index]);
-          },
-        ),
-      );
-    } else {
-      return Center(
-        child: circularProgress(context),
-      );
-    }
-  }
-
   Widget _buildCatList() {
     if (!loading) {
       return Container(
@@ -304,6 +429,98 @@ class _BodyState extends State<Body> {
 
   Widget card(
       mediaUrl, product_name, description, price, int type, Product product) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetails(
+                      product: product,
+                    )));
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white,
+                offset: Offset(1, 2),
+                blurRadius: 6.0,
+              )
+            ],
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  child: Image.network(
+                    mediaUrl,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${product_name}",
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      "${description}",
+                      style: TextStyle(
+                        fontSize: 13.0,
+                        color: kTextColor1,
+                      ),
+                    ),
+                    Divider(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "\$${price}",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Icon(
+                              FlutterIcons.add_circle_mdi,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+    /*
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
@@ -406,6 +623,6 @@ class _BodyState extends State<Body> {
               ],
             ))
           ],
-        ));
+        ));*/
   }
 }

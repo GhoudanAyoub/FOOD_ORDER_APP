@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'SizeConfig.dart';
 
+const Color kTextColor1 = Color.fromRGBO(168, 158, 146, 1);
+const Color kFadedScaffoldColor = Color.fromRGBO(243, 240, 237, 1);
 const appBgColor = Color(0xFF000000);
 const primary = Color(0xFFFC2D55);
 const secondary = Color(0xFF19D5F1);
