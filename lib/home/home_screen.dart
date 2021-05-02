@@ -92,80 +92,60 @@ class _State extends State<HomeScreen> {
 
   Widget SignInForProfile() {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 2,
-          title: Center(
-            child: Text("Profile",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black)),
-          ),
-        ),
         body: Container(
-          child: Align(
-            alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  CupertinoIcons.person,
-                  color: Colors.grey,
-                  size: 50,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Sign Up For An Account",
+      child: Align(
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              CupertinoIcons.person,
+              color: Colors.grey,
+              size: 50,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Sign Up For An Account",
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.grey),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: 300,
+              height: 45,
+              child: FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                color: Colors.redAccent,
+                onPressed: () {
+                  Navigator.pushNamed(context, SignInScreen.routeName);
+                },
+                child: Text(
+                  "Sign In",
                   style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: 300,
-                  height: 45,
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    color: Colors.redAccent,
-                    onPressed: () {
-                      Navigator.pushNamed(context, SignInScreen.routeName);
-                    },
-                    child: Text(
-                      "Sign In",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'Lato-Regular.ttf',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    fontSize: 18,
+                    fontFamily: 'Lato-Regular.ttf',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ));
+          ],
+        ),
+      ),
+    ));
   }
 
   Widget SignInForMessage() {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        title: Center(
-          child: Text("Message",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black)),
-        ),
-      ),
       body: Container(
         child: Align(
           alignment: Alignment.center,
