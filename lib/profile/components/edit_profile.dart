@@ -10,6 +10,7 @@ import 'package:mystore/utils/firebase.dart';
 import 'package:mystore/utils/validation.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants.dart';
 import 'edit_profile__model_view.dart';
 
 class EditProfile extends StatefulWidget {
@@ -48,12 +49,13 @@ class _EditProfileState extends State<EditProfile> {
           automaticallyImplyLeading: false,
           elevation: 1,
           centerTitle: true,
+          backgroundColor: kTextColor1.withOpacity(0.1),
           title: Text(
             "EDIT PROFILE",
             style: TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 18.0,
-              color: Colors.redAccent,
+              color: Colors.white,
             ),
           ),
           actions: [
@@ -67,7 +69,7 @@ class _EditProfileState extends State<EditProfile> {
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 15.0,
-                      color: Colors.redAccent,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -75,57 +77,87 @@ class _EditProfileState extends State<EditProfile> {
             ),
           ],
         ),
-        body: ListView(
+        body: Stack(
           children: [
-            SizedBox(height: 20.0),
-            Center(
-              child: GestureDetector(
-                onTap: () => viewModel.pickImage(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.transparent,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        offset: new Offset(0.0, 0.0),
-                        blurRadius: 2.0,
-                        spreadRadius: 0.0,
-                      ),
-                    ],
-                  ),
-                  child: viewModel.imgLink != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: CircleAvatar(
-                            radius: 65.0,
-                            backgroundImage: NetworkImage(viewModel.imgLink),
+            Positioned(
+              top: 0.0,
+              left: 100.0,
+              child: Opacity(
+                opacity: 0.1,
+                child: Image.asset(
+                  "assets/images/coffee2.png",
+                  width: 150.0,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0.0,
+              right: -180.0,
+              child: Image.asset(
+                "assets/images/square.png",
+              ),
+            ),
+            Positioned(
+              child: Image.asset(
+                "assets/images/drum.png",
+              ),
+              left: -70.0,
+              bottom: -40.0,
+            ),
+            ListView(
+              children: [
+                SizedBox(height: 20.0),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => viewModel.pickImage(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.transparent,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: new Offset(0.0, 0.0),
+                            blurRadius: 2.0,
+                            spreadRadius: 0.0,
                           ),
-                        )
-                      : viewModel.image == null
+                        ],
+                      ),
+                      child: viewModel.imgLink != null
                           ? Padding(
                               padding: const EdgeInsets.all(1.0),
                               child: CircleAvatar(
                                 radius: 65.0,
                                 backgroundImage:
-                                    NetworkImage(widget.user.photoUrl),
+                                    NetworkImage(viewModel.imgLink),
                               ),
                             )
-                          : Padding(
-                              padding: const EdgeInsets.all(1.0),
-                              child: CircleAvatar(
-                                radius: 65.0,
-                                backgroundImage: FileImage(viewModel.image),
-                              ),
-                            ),
+                          : viewModel.image == null
+                              ? Padding(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: CircleAvatar(
+                                    radius: 65.0,
+                                    backgroundImage:
+                                        NetworkImage(widget.user.photoUrl),
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: CircleAvatar(
+                                    radius: 65.0,
+                                    backgroundImage: FileImage(viewModel.image),
+                                  ),
+                                ),
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(height: 10.0),
+                buildForm(viewModel, context)
+              ],
             ),
-            SizedBox(height: 10.0),
-            buildForm(viewModel, context)
           ],
         ),
       ),
@@ -203,6 +235,7 @@ class _EditProfileState extends State<EditProfile> {
                                       Checkbox(
                                           value: this.valuesecond,
                                           checkColor: Colors.redAccent,
+                                          activeColor: Colors.white,
                                           onChanged: (bool value) {
                                             setState(() {
                                               this.valuesecond = value;

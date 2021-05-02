@@ -158,7 +158,7 @@ class _SideBarState extends State<SideBar>
                               .add(NavigationEvents.StoreListClickEvent);
                         },
                       ),
-                      MenuItem(
+                      /* MenuItem(
                         icon: CupertinoIcons.archivebox,
                         title: "Categories",
                         onTap: () {
@@ -166,7 +166,7 @@ class _SideBarState extends State<SideBar>
                           BlocProvider.of<NavigationBloc>(context)
                               .add(NavigationEvents.CategoriesClickedEvent);
                         },
-                      ),
+                      ),*/
                       firebaseAuth.currentUser != null
                           ? StreamBuilder(
                               stream: usersRef

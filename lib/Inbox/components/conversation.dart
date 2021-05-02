@@ -70,7 +70,6 @@ class _ConversationState extends State<Conversation> {
     return Consumer<ConversationViewModel>(
         builder: (BuildContext context, viewModel, Widget child) {
       return Scaffold(
-        backgroundColor: Colors.transparent,
         key: viewModel.scaffoldKey,
         appBar: AppBar(
           leading: GestureDetector(
@@ -86,103 +85,122 @@ class _ConversationState extends State<Conversation> {
           title: buildUserName(),
         ),
         body: Container(
-          decoration: new BoxDecoration(
-            gradient: new LinearGradient(
-                colors: [
-                  Colors.white,
-                  Colors.red[900],
-                ],
-                begin: const FractionalOffset(0.3, 0.4),
-                end: const FractionalOffset(0.5, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp),
-          ),
           height: MediaQuery.of(context).size.height,
-          child: Column(
+          child: Stack(
             children: [
-              Flexible(
-                child: StreamBuilder(
-                  stream: messageListStream(chatId),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      List messages = snapshot.data.documents;
-                      if (widget.chatId != 'newChat') {
-                        viewModel.setReadCount(
-                            widget.chatId, user, messages.length);
-                      }
-                      return ListView.builder(
-                        controller: scrollController,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        itemCount: messages.length,
-                        reverse: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          Message message = Message.fromJson(
-                              messages.reversed.toList()[index].data());
-                          return ChatBubble(
-                              message: '${message.content}',
-                              time: message?.time,
-                              isMe: message?.senderUid == user?.uid,
-                              type: message?.type);
-                        },
-                      );
-                    } else {
-                      return Center(child: circularProgress(context));
-                    }
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: BottomAppBar(
-                  color: Colors.red[700],
-                  elevation: 12.0,
-                  child: Container(
-                    constraints: BoxConstraints(maxHeight: 120.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            CupertinoIcons.photo_on_rectangle,
-                            color: white,
-                          ),
-                          onPressed: () => showPhotoOptions(viewModel, user),
-                        ),
-                        Flexible(
-                          child: TextField(
-                            controller: messageController,
-                            focusNode: focusNode,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              enabledBorder: InputBorder.none,
-                              border: InputBorder.none,
-                              hintText: "Type your message",
-                              hintStyle: TextStyle(
-                                color: white,
-                              ),
-                            ),
-                            maxLines: null,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Feather.send,
-                            color: white,
-                          ),
-                          onPressed: () {
-                            if (messageController.text.isNotEmpty) {
-                              sendMessage(viewModel, user);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+              Positioned(
+                top: 50.0,
+                left: 100.0,
+                child: Opacity(
+                  opacity: 0.1,
+                  child: Image.asset(
+                    "assets/images/coffee2.png",
+                    width: 150.0,
                   ),
                 ),
+              ),
+              Positioned(
+                top: 80.0,
+                right: -180.0,
+                child: Image.asset(
+                  "assets/images/square.png",
+                ),
+              ),
+              Positioned(
+                child: Image.asset(
+                  "assets/images/drum.png",
+                ),
+                left: -70.0,
+                bottom: -40.0,
+              ),
+              Column(
+                children: [
+                  Flexible(
+                    child: StreamBuilder(
+                      stream: messageListStream(chatId),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List messages = snapshot.data.documents;
+                          if (widget.chatId != 'newChat') {
+                            viewModel.setReadCount(
+                                widget.chatId, user, messages.length);
+                          }
+                          return ListView.builder(
+                            controller: scrollController,
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            itemCount: messages.length,
+                            reverse: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              Message message = Message.fromJson(
+                                  messages.reversed.toList()[index].data());
+                              return ChatBubble(
+                                  message: '${message.content}',
+                                  time: message?.time,
+                                  isMe: message?.senderUid == user?.uid,
+                                  type: message?.type);
+                            },
+                          );
+                        } else {
+                          return Center(child: circularProgress(context));
+                        }
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: BottomAppBar(
+                      color: kTextColor1.withOpacity(0.5),
+                      elevation: 15.0,
+                      child: Container(
+                        constraints: BoxConstraints(maxHeight: 120.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                CupertinoIcons.photo_on_rectangle,
+                                color: white,
+                              ),
+                              onPressed: () =>
+                                  showPhotoOptions(viewModel, user),
+                            ),
+                            Flexible(
+                              child: TextField(
+                                controller: messageController,
+                                focusNode: focusNode,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10.0),
+                                  enabledBorder: InputBorder.none,
+                                  border: InputBorder.none,
+                                  hintText: "Type your message",
+                                  hintStyle: TextStyle(
+                                    color: white,
+                                  ),
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Feather.send,
+                                color: white,
+                              ),
+                              onPressed: () {
+                                if (messageController.text.isNotEmpty) {
+                                  sendMessage(viewModel, user);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               )
             ],
           ),
@@ -287,7 +305,7 @@ class _ConversationState extends State<Conversation> {
 
   showPhotoOptions(ConversationViewModel viewModel, var user) {
     showModalBottomSheet(
-      backgroundColor: Colors.redAccent,
+      backgroundColor: kTextColor1.withOpacity(0.6),
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

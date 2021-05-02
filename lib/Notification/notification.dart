@@ -68,30 +68,38 @@ class _ActivitiesState extends State<Activities> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: 60,
-          titleSpacing: 60,
-          elevation: 1,
-          title: Text(
-            "Message ",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
         body: Container(
-          decoration: new BoxDecoration(
-            gradient: new LinearGradient(
-                colors: [
-                  Colors.white,
-                  Colors.white,
-                ],
-                begin: const FractionalOffset(0.3, 0.4),
-                end: const FractionalOffset(0.5, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp),
+          padding: EdgeInsets.fromLTRB(30, 20, 10, 10),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0.0,
+                left: 100.0,
+                child: Opacity(
+                  opacity: 0.1,
+                  child: Image.asset(
+                    "assets/images/coffee2.png",
+                    width: 150.0,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0.0,
+                right: -180.0,
+                child: Image.asset(
+                  "assets/images/square.png",
+                ),
+              ),
+              Positioned(
+                child: Image.asset(
+                  "assets/images/drum.png",
+                ),
+                left: -70.0,
+                bottom: -40.0,
+              ),
+              Chats(),
+            ],
           ),
-          child: Chats(),
         ),
       ),
     );

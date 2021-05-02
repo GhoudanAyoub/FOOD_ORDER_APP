@@ -8,7 +8,6 @@ import 'package:mystore/profile/components/profile_menu.dart';
 import 'package:mystore/profile/components/profile_pic.dart';
 import 'package:mystore/utils/firebase.dart';
 
-import '../../SizeConfig.dart';
 import '../../constants.dart';
 import 'edit_profile.dart';
 
@@ -46,31 +45,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            pinned: true,
-            floating: false,
-            toolbarHeight: 4.0,
-            collapsedHeight: 6.0,
-            expandedHeight: SizeConfig.screenHeight,
-            flexibleSpace: FlexibleSpaceBar(
-              background: StreamBuilder(
-                stream: usersRef.doc(widget.profileId).snapshots(),
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    user1 = UserModel.fromJson(snapshot.data.data());
-                    return displayUserInfo();
-                  }
-                  return Container();
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: displayUserInfo(),
     );
   }
 
@@ -244,110 +219,133 @@ class _BodyState extends State<Body> {
   Widget displayUserInfo() {
     return Container(
       padding: EdgeInsets.all(20),
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-            colors: [
-              Colors.white,
-              Colors.white,
-            ],
-            begin: const FractionalOffset(0.3, 0.4),
-            end: const FractionalOffset(0.5, 1.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          SizedBox(height: 40),
-          StreamBuilder(
-            stream: usersRef.doc(widget.profileId).snapshots(),
-            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.hasData) {
-                UserModel user = UserModel.fromJson(snapshot.data.data());
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(width: 20.0),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: Offset(5, 5),
-                            blurRadius: 20,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                      child: ProfilePic(
-                        image: firebaseAuth.currentUser.uid == user.id
-                            ? auth.getProfileImage()
-                            : user.photoUrl,
-                      ),
-                    ),
-                    SizedBox(width: 30.0),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          Positioned(
+            top: 0.0,
+            left: 100.0,
+            child: Opacity(
+              opacity: 0.1,
+              child: Image.asset(
+                "assets/images/coffee2.png",
+                width: 150.0,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 0.0,
+            right: -180.0,
+            child: Image.asset(
+              "assets/images/square.png",
+            ),
+          ),
+          Positioned(
+            child: Image.asset(
+              "assets/images/drum.png",
+            ),
+            left: -70.0,
+            bottom: -40.0,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 40),
+              StreamBuilder(
+                stream: usersRef.doc(widget.profileId).snapshots(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    UserModel user = UserModel.fromJson(snapshot.data.data());
+                    return Column(
                       children: [
-                        SizedBox(height: 5),
-                        Text("${user.username ?? 'Anonymous'}",
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.black,
-                              fontFamily: "SFProDisplay-Bold",
-                              fontWeight: FontWeight.bold,
-                            )),
-                        SizedBox(height: 5),
-                        Text("${user.country == null ? '' : user.country}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              fontFamily: "SFProDisplay-Light",
-                              fontWeight: FontWeight.normal,
-                            )),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(width: 20.0),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(5, 5),
+                                    blurRadius: 20,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              child: ProfilePic(
+                                image: firebaseAuth.currentUser.uid == user.id
+                                    ? auth.getProfileImage()
+                                    : user.photoUrl,
+                              ),
+                            ),
+                            SizedBox(width: 30.0),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5),
+                                Text("${user.username ?? 'Anonymous'}",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      color: Colors.black,
+                                      fontFamily: "SFProDisplay-Bold",
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                                SizedBox(height: 5),
+                                Text(
+                                    "${user.country == null ? '' : user.country}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                      fontFamily: "SFProDisplay-Light",
+                                      fontWeight: FontWeight.normal,
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        ProfileMenu(
+                          text: "Edit Profile",
+                          icon: "assets/icons/User Icon.svg",
+                          press: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => EditProfile(
+                                  user: user,
+                                ),
+                              ),
+                            )
+                          },
+                        ),
                       ],
-                    ),
-                  ],
-                );
-              }
-              return Container();
-            },
-          ),
-          SizedBox(height: 20),
-          ProfileMenu(
-            text: "Edit Profile",
-            icon: "assets/icons/User Icon.svg",
-            press: () => {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => EditProfile(
-                    user: user1,
-                  ),
-                ),
-              )
-            },
-          ),
-          ProfileMenu(
-            text: "My orders",
-            icon: "assets/icons/Shop Icon.svg",
-            press: () {},
-          ),
-          ProfileMenu(
-            text: "Purchasing History",
-            icon: "assets/icons/Parcel.svg",
-            press: () {},
-          ),
-          ProfileMenu(
-            text: "To be reviewed",
-            icon: "assets/icons/Plus Icon.svg",
-            press: () {},
-          ),
-          ProfileMenu(
-            text: "Unpaid Orders",
-            icon: "assets/icons/Bill Icon.svg",
-            press: () {},
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              ProfileMenu(
+                text: "My orders",
+                icon: "assets/icons/Shop Icon.svg",
+                press: () {},
+              ),
+              ProfileMenu(
+                text: "Purchasing History",
+                icon: "assets/icons/Parcel.svg",
+                press: () {},
+              ),
+              ProfileMenu(
+                text: "To be reviewed",
+                icon: "assets/icons/Plus Icon.svg",
+                press: () {},
+              ),
+              ProfileMenu(
+                text: "Unpaid Orders",
+                icon: "assets/icons/Bill Icon.svg",
+                press: () {},
+              ),
+            ],
           ),
         ],
       ),
