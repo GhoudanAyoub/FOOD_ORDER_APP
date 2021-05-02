@@ -10,6 +10,7 @@ import 'package:mystore/profile/profile_screen.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../constants.dart';
 import 'Conposante/body.dart';
 
 class HomeScreen extends StatefulWidget with NavigationStates {
@@ -37,9 +38,9 @@ class _State extends State<HomeScreen> {
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: pageIndex,
         showElevation: true,
-        backgroundColor: Colors.red[800],
+        backgroundColor: kTextColor1,
         itemCornerRadius: 24,
-        curve: Curves.easeIn,
+        curve: Curves.easeInCubic,
         onItemSelected: (index) => setState(() => pageIndex = index),
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(

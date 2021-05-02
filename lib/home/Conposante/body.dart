@@ -104,7 +104,7 @@ class _BodyState extends State<Body> {
                                 color: Colors.white,
                               ),
                             ),
-                            badgeColor: kPrimaryColor,
+                            badgeColor: black,
                             child: Image.asset(
                               "assets/images/shopping_bag.png",
                               width: 45.0,
@@ -118,7 +118,7 @@ class _BodyState extends State<Body> {
                       Text(
                         "Top Food ",
                         style: TextStyle(
-                          color: kPrimaryColor,
+                          color: black,
                           fontSize: 24.0,
                           fontWeight: FontWeight.w700,
                         ),

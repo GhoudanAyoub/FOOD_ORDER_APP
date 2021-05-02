@@ -11,6 +11,7 @@ import 'package:mystore/models/User.dart';
 import 'package:mystore/utils/firebase.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../constants.dart';
 import '../home.dart';
 import 'menu_item.dart';
 
@@ -77,7 +78,7 @@ class _SideBarState extends State<SideBar>
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: Colors.red[600],
+                  color: kTextColor1,
                   child: Column(
                     children: <Widget>[
                       SizedBox(
@@ -286,7 +287,7 @@ class _SideBarState extends State<SideBar>
                     child: Container(
                       width: 35,
                       height: 80,
-                      color: Colors.red[600],
+                      color: kTextColor1,
                       alignment: Alignment.centerLeft,
                       child: AnimatedIcon(
                         progress: _animationController.view,

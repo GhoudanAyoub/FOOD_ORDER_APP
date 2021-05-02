@@ -8,7 +8,7 @@ import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/models/product.dart';
 import 'package:mystore/utils/validation.dart';
 
-import '../../SizeConfig.dart';
+import '../../constants.dart';
 
 class ProductDetailsBody extends StatefulWidget {
   final Product product;
@@ -34,26 +34,356 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 1,
-        toolbarHeight: 10,
-      ),
       body: Container(
-        height: double.infinity,
-        width: SizeConfig.screenWidth,
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [
-                Colors.white70,
-                Colors.redAccent,
-              ],
-              begin: const FractionalOffset(0.3, 0.4),
-              end: const FractionalOffset(0.5, 1.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        child: ListView(
+          child: Stack(
+        children: [
+          Positioned(
+            top: 0.0,
+            left: 100.0,
+            child: Opacity(
+              opacity: 0.1,
+              child: Image.asset(
+                "assets/images/coffee2.png",
+                width: 150.0,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 0.0,
+            right: -180.0,
+            child: Image.asset(
+              "assets/images/square.png",
+            ),
+          ),
+          Positioned(
+            left: -70.0,
+            bottom: -40.0,
+            child: Image.asset(
+              "assets/images/drum.png",
+            ),
+          ),
+          Positioned(
+            top: 0.0,
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              height: 300.0,
+              width: double.infinity,
+              alignment: Alignment.topCenter,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.product.mediaUrl)),
+              ),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: kToolbarHeight,
+                  horizontal: 16.0,
+                ),
+                alignment: Alignment.topLeft,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    FlutterIcons.keyboard_backspace_mdi,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 280.0,
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Container(
+                height: 550,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 24.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: ListView(
+                  children: [
+                    Text(
+                      "${widget.product.product_name}",
+                      style: TextStyle(
+                        color: black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 22.0,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      "${widget.product.description}",
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: kTextColor1,
+                        height: 1.8,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Divider(),
+                    Text("Quantity",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 1),
+                              blurRadius: 8,
+                              color: Colors.grey,
+                            ),
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+
+                      // dropdown below..
+                      child: DropdownButton<String>(
+                          value: dropdownValue ?? dropdownValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 32,
+                          underline: SizedBox(),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          items: <String>[
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6',
+                            '7',
+                            '8',
+                            '9',
+                            '10'
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList()),
+                    ),
+                    Text("Flavour",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 10, 250, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _value = !_value;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(0, 1),
+                                    blurRadius: 15,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: _value
+                                    ? Icon(
+                                        Icons.check,
+                                        size: 15.0,
+                                        color: Colors.redAccent,
+                                      )
+                                    : Icon(
+                                        Icons.check_box_outline_blank,
+                                        size: 15.0,
+                                        color: Colors.white,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _value2 = !_value2;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(0, 1),
+                                    blurRadius: 15,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: _value2
+                                    ? Icon(
+                                        Icons.check,
+                                        size: 15.0,
+                                        color: Colors.redAccent,
+                                      )
+                                    : Icon(
+                                        Icons.check_box_outline_blank,
+                                        size: 15.0,
+                                        color: Colors.white,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _value3 = !_value3;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(0, 1),
+                                    blurRadius: 15,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: _value3
+                                    ? Icon(
+                                        Icons.check,
+                                        size: 15.0,
+                                        color: Colors.redAccent,
+                                      )
+                                    : Icon(
+                                        Icons.check_box_outline_blank,
+                                        size: 15.0,
+                                        color: Colors.white,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text("Delivery Option",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    CheckboxListTile(
+                      title: Text("PickUp"),
+                      value: PickUpcheckedValue, activeColor: white,
+                      onChanged: (newValue) {
+                        setState(() {
+                          PickUpcheckedValue = newValue;
+                          DeliverycheckedValue = !newValue;
+                        });
+                      },
+                      checkColor: Colors.redAccent,
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
+                    ),
+                    CheckboxListTile(
+                      title: Text("DoorStep Delivery"),
+                      value: DeliverycheckedValue, activeColor: white,
+                      onChanged: (newValue) {
+                        setState(() {
+                          DeliverycheckedValue = newValue;
+                          PickUpcheckedValue = !newValue;
+                        });
+                      },
+                      checkColor: Colors.redAccent,
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    DeliverycheckedValue == false
+                        ? Container(
+                            width: double.infinity,
+                            height: 50,
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                              color: kTextColor1,
+                              onPressed: () {
+                                //firebaseAuth.currentUser == null?
+
+                                logIn(context);
+
+                                /* Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoreDetail(
+                              shopModel: shops,
+                            )));*/
+                              },
+                              child: Text(
+                                "Add to my cart",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: 0,
+                          ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    DeliverycheckedValue == true
+                        ? AddressCard(widget.product)
+                        : Container(
+                            height: 0,
+                          ),
+                    Divider(),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      )
+
+          /*ListView(
           children: [
             Container(
               margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -72,7 +402,33 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                     height: 0,
                   ),
           ],
-        ),
+        ),*/
+          ),
+    );
+  }
+
+  Widget doubleColText(String textOne, String textTwo) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 12.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            textOne,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: black,
+            ),
+          ),
+          Text(
+            textTwo,
+            style: TextStyle(
+              color: black,
+            ),
+          ),
+        ],
       ),
     );
   }
