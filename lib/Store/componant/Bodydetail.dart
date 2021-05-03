@@ -116,123 +116,120 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
               ),
             ),
             Positioned(
-              top: 280.0,
+              top: 300.0,
               width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(10, 20, 5, 5),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0.0,
-                            left: 100.0,
-                            child: Opacity(
-                              opacity: 0.1,
-                              child: Image.asset(
-                                "assets/images/coffee2.png",
-                                width: 150.0,
+                    padding: EdgeInsets.fromLTRB(10, 20, 5, 5),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: 0.0,
+                          left: 100.0,
+                          child: Opacity(
+                            opacity: 0.1,
+                            child: Image.asset(
+                              "assets/images/coffee2.png",
+                              width: 150.0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 0.0,
+                          right: -180.0,
+                          child: Image.asset(
+                            "assets/images/square.png",
+                          ),
+                        ),
+                        Positioned(
+                          child: Image.asset(
+                            "assets/images/drum.png",
+                          ),
+                          left: -70.0,
+                          bottom: -40.0,
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Top Food ",
+                              style: TextStyle(
+                                color: black,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                          ),
-                          Positioned(
-                            top: 0.0,
-                            right: -180.0,
-                            child: Image.asset(
-                              "assets/images/square.png",
-                            ),
-                          ),
-                          Positioned(
-                            child: Image.asset(
-                              "assets/images/drum.png",
-                            ),
-                            left: -70.0,
-                            bottom: -40.0,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Top Food ",
-                                style: TextStyle(
-                                  color: black,
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(top: 24.0),
-                                height: 50,
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  // Let's create a model for categories and populate with data.
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          _activeTab = index;
-                                        });
-                                      },
-                                      // Little switch animation
-                                      child: AnimatedContainer(
-                                        duration: Duration(milliseconds: 450),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 20.0,
-                                        ),
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          color: _activeTab == index
-                                              ? kTextColor1
-                                              : kTextColor1.withOpacity(
-                                                  .2,
-                                                ),
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            categories[index].name,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: _activeTab == index
-                                                  ? Colors.white
-                                                  : kTextColor1,
-                                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 24.0),
+                              height: 50,
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                // Let's create a model for categories and populate with data.
+                                itemBuilder: (BuildContext context, int index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _activeTab = index;
+                                      });
+                                    },
+                                    // Little switch animation
+                                    child: AnimatedContainer(
+                                      duration: Duration(milliseconds: 450),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20.0,
+                                      ),
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: _activeTab == index
+                                            ? kTextColor1
+                                            : kTextColor1.withOpacity(
+                                                .2,
+                                              ),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          categories[index].name,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: _activeTab == index
+                                                ? Colors.white
+                                                : kTextColor1,
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return SizedBox(
-                                      width: 15.0,
-                                    );
-                                  },
-                                  itemCount: 3,
-                                ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(
+                                    width: 15.0,
+                                  );
+                                },
+                                itemCount: 3,
                               ),
-                              SizedBox(
-                                height: 20.0,
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            AnimatedSwitcher(
+                              duration: Duration(
+                                milliseconds: 450,
                               ),
-                              AnimatedSwitcher(
-                                duration: Duration(
-                                  milliseconds: 450,
-                                ),
-                                child: pages[_activeTab],
-                              )
-                            ],
-                          ),
-                        ],
-                      )),
-                ),
+                              child: pages[_activeTab],
+                            )
+                          ],
+                        ),
+                      ],
+                    )),
               ),
             ),
           ],
@@ -375,118 +372,96 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
 
   Widget card(
       mediaUrl, product_name, description, price, int type, Product product) {
-    return Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(10),
-        width: 200,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 1),
-              blurRadius: 20,
-              color: Color(0xFFB0CCE1).withOpacity(0.8),
-            ),
-          ],
-        ),
-        child: Column(
-          children: <Widget>[
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 100,
-                width: 200,
-                child: Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      mediaUrl,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetails(
+                      product: product,
+                    )));
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white,
+                offset: Offset(1, 2),
+                blurRadius: 6.0,
+              )
+            ],
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  child: Image.network(
+                    mediaUrl,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 5),
-            Flexible(
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "${product_name}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "${description}",
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "\$${price}",
+                      "${product_name}",
                       style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.redAccent,
+                        fontSize: 14.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductDetails(
-                                      product: product,
-                                    )));
-                      },
-                      child: Card(
-                          elevation: 4.0,
-                          color: Colors.redAccent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "View",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Icon(Icons.arrow_forward_ios,
-                                    color: Colors.white70, size: 15.0)
-                              ],
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      "${description}",
+                      style: TextStyle(
+                        fontSize: 13.0,
+                        color: kTextColor1,
+                      ),
+                    ),
+                    Divider(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "\$${price}",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                          )),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Icon(
+                              FlutterIcons.add_circle_mdi,
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   ],
-                )
-              ],
-            ))
-          ],
-        ));
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

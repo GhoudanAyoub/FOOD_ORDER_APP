@@ -33,72 +33,80 @@ class _CustomersState extends State<Customers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          actions: <Widget>[
-            Image.asset('assets/images/pl.png', width: 100, height: 100),
-          ],
-        ),
         body: Container(
-          height: SizeConfig.screenHeight,
-          width: SizeConfig.screenWidth,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.red[900],
-                  Colors.grey.withOpacity(0),
-                ]),
-          ),
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                child: Container(
-                    height: 600.0,
-                    child: Card(
-                      elevation: 10.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: SingleChildScrollView(
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          width: SizeConfig.screenWidth,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                CupertinoIcons.color_filter,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              buildUsers()
-                            ],
-                          ),
-                        ),
-                      ),
-                    )),
+      padding: EdgeInsets.fromLTRB(20, 80, 10, 5),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0.0,
+            left: 100.0,
+            child: Opacity(
+              opacity: 0.1,
+              child: Image.asset(
+                "assets/images/coffee2.png",
+                width: 150.0,
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 650, 10, 10),
-                child: Container(
-                    height: 100.0,
+            ),
+          ),
+          Positioned(
+            top: 0.0,
+            right: -180.0,
+            child: Image.asset(
+              "assets/images/square.png",
+            ),
+          ),
+          Positioned(
+            child: Image.asset(
+              "assets/images/drum.png",
+            ),
+            left: -70.0,
+            bottom: -40.0,
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+            child: Container(
+                height: 600.0,
+                child: Card(
+                  elevation: 10.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: SingleChildScrollView(
                     child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       width: SizeConfig.screenWidth,
-                      child: Text(
-                          "Click on Customers name to See \nmore details",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'Poppins')),
-                    )),
-              ),
-            ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            CupertinoIcons.color_filter,
+                            color: Colors.red,
+                            size: 30,
+                          ),
+                          buildUsers()
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
           ),
-        ));
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 650, 10, 10),
+            child: Container(
+                height: 100.0,
+                child: Container(
+                  width: SizeConfig.screenWidth,
+                  child: Text("Click on Customers name to See \nmore details",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Poppins')),
+                )),
+          ),
+        ],
+      ),
+    ));
   }
 
   getUsers() async {

@@ -25,121 +25,129 @@ class _AdminBordState extends State<AdminBord> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          actions: <Widget>[
-            Image.asset('assets/images/pl.png', width: 100, height: 100),
+        body: Container(
+      padding: EdgeInsets.fromLTRB(20, 80, 10, 5),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0.0,
+              left: 100.0,
+              child: Opacity(
+                opacity: 0.1,
+                child: Image.asset(
+                  "assets/images/coffee2.png",
+                  width: 150.0,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0.0,
+              right: -180.0,
+              child: Image.asset(
+                "assets/images/square.png",
+              ),
+            ),
+            Positioned(
+              child: Image.asset(
+                "assets/images/drum.png",
+              ),
+              left: -70.0,
+              bottom: -40.0,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Container(
+                  height: 200.0,
+                  child: Card(
+                    elevation: 10.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        width: SizeConfig.screenWidth,
+                        child: PieChart(
+                          chartType: ChartType.ring,
+                          ringStrokeWidth: 24,
+                          dataMap: dataMap,
+                          animationDuration: Duration(milliseconds: 1000),
+                          chartLegendSpacing: 64,
+                          chartRadius: MediaQuery.of(context).size.width / 3.2,
+                          colorList: colorList,
+                          initialAngleInDegree: 0,
+                          legendOptions: LegendOptions(
+                            showLegendsInRow: false,
+                            legendPosition: LegendPosition.right,
+                            showLegends: true,
+                            legendShape: BoxShape.circle,
+                            legendTextStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          chartValuesOptions: ChartValuesOptions(
+                            showChartValueBackground: true,
+                            showChartValues: true,
+                            showChartValuesInPercentage: false,
+                            showChartValuesOutside: false,
+                            decimalPlaces: 1,
+                          ),
+                        )),
+                  )),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 220, 10, 10),
+              child: Container(
+                  height: 350.0,
+                  child: Card(
+                    elevation: 10.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      width: SizeConfig.screenWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Icon(
+                            CupertinoIcons.color_filter,
+                            color: Colors.red,
+                            size: 40,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 570, 10, 10),
+              child: Container(
+                  height: 100.0,
+                  child: Container(
+                    width: SizeConfig.screenWidth,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        DefaultButton(
+                          text: "View Report",
+                          press: () {},
+                          submitted: false,
+                        ),
+                        DefaultButton(
+                          text: "Generate Report",
+                          press: () {
+                            Navigator.pop(context);
+                          },
+                          submitted: false,
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
           ],
         ),
-        body: Container(
-          height: SizeConfig.screenHeight,
-          width: SizeConfig.screenWidth,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.red[600],
-                  Colors.grey.withOpacity(0),
-                ]),
-          ),
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Container(
-                      height: 200.0,
-                      child: Card(
-                        elevation: 10.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Container(
-                            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            width: SizeConfig.screenWidth,
-                            child: PieChart(
-                              chartType: ChartType.ring,
-                              ringStrokeWidth: 24,
-                              dataMap: dataMap,
-                              animationDuration: Duration(milliseconds: 1000),
-                              chartLegendSpacing: 64,
-                              chartRadius:
-                                  MediaQuery.of(context).size.width / 3.2,
-                              colorList: colorList,
-                              initialAngleInDegree: 0,
-                              legendOptions: LegendOptions(
-                                showLegendsInRow: false,
-                                legendPosition: LegendPosition.right,
-                                showLegends: true,
-                                legendShape: BoxShape.circle,
-                                legendTextStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              chartValuesOptions: ChartValuesOptions(
-                                showChartValueBackground: true,
-                                showChartValues: true,
-                                showChartValuesInPercentage: false,
-                                showChartValuesOutside: false,
-                                decimalPlaces: 1,
-                              ),
-                            )),
-                      )),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 220, 10, 10),
-                  child: Container(
-                      height: 350.0,
-                      child: Card(
-                        elevation: 10.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          width: SizeConfig.screenWidth,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Icon(
-                                CupertinoIcons.color_filter,
-                                color: Colors.red,
-                                size: 40,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 570, 10, 10),
-                  child: Container(
-                      height: 100.0,
-                      child: Container(
-                        width: SizeConfig.screenWidth,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            DefaultButton(
-                              text: "View Report",
-                              press: () {},
-                              submitted: false,
-                            ),
-                            DefaultButton(
-                              text: "Generate Report",
-                              press: () {
-                                Navigator.pop(context);
-                              },
-                              submitted: false,
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
-              ],
-            ),
-          ),
-        ));
+      ),
+    ));
   }
 }

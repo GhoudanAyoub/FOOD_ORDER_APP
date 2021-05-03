@@ -32,13 +32,13 @@ class _BodyState extends State<Body> {
   List<Product> _list = [];
   PostService postService = PostService();
   int _activeTab = 0;
-  String CatName = "";
+  String CatName = "Restaurant";
 
   @override
   void initState() {
     getProducts();
     getCats();
-    search("Fast food");
+    search("Restaurant");
     super.initState();
   }
 
@@ -129,7 +129,6 @@ class _BodyState extends State<Body> {
                         child: ListView.separated(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          // Let's create a model for categories and populate with data.
                           itemBuilder: (BuildContext context, int index) {
                             return InkWell(
                               onTap: () {
@@ -139,7 +138,6 @@ class _BodyState extends State<Body> {
                                   search(CatName);
                                 });
                               },
-                              // Little switch animation
                               child: AnimatedContainer(
                                 duration: Duration(milliseconds: 450),
                                 padding: EdgeInsets.symmetric(
@@ -179,7 +177,6 @@ class _BodyState extends State<Body> {
                       SizedBox(
                         height: 20.0,
                       ),
-                      // Lets make a dummy page switch
                       AnimatedSwitcher(
                         duration: Duration(
                           milliseconds: 450,

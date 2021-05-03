@@ -48,27 +48,36 @@ class _AddProductState extends State<AddProduct> {
         inAsyncCall: viewModel.loading,
         child: Scaffold(
             key: viewModel.scaffoldKey,
-            appBar: AppBar(
-              elevation: 0,
-              actions: <Widget>[
-                Image.asset('assets/images/pl.png', width: 100, height: 100)
-              ],
-            ),
             body: Container(
-              height: SizeConfig.screenHeight,
-              width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.red[600],
-                      Colors.grey.withOpacity(0),
-                    ]),
-              ),
+              padding: EdgeInsets.fromLTRB(0, 60, 0, 5),
               child: SingleChildScrollView(
                 child: Stack(
                   children: [
+                    Positioned(
+                      top: 0.0,
+                      left: 100.0,
+                      child: Opacity(
+                        opacity: 0.1,
+                        child: Image.asset(
+                          "assets/images/coffee2.png",
+                          width: 150.0,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0.0,
+                      right: -180.0,
+                      child: Image.asset(
+                        "assets/images/square.png",
+                      ),
+                    ),
+                    Positioned(
+                      child: Image.asset(
+                        "assets/images/drum.png",
+                      ),
+                      left: -70.0,
+                      bottom: -40.0,
+                    ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(20, 20, 10, 10),
                       child: Container(
