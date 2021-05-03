@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mystore/components/indicators.dart';
-import 'package:mystore/home/Conposante/lmaida_card.dart';
+import 'package:mystore/models/category.dart';
 import 'package:mystore/models/product.dart';
 import 'package:mystore/models/shop.dart';
 import 'package:mystore/utils/firebase.dart';
 
+import '../../constants.dart';
+import '../componant/beverage_page.dart';
 import '../product_detail.dart';
 
 class StoreBodyDetails extends StatefulWidget {
@@ -20,8 +23,38 @@ class StoreBodyDetails extends StatefulWidget {
 class _StoreBodyDetailsState extends State<StoreBodyDetails> {
   bool loading = true;
   List<DocumentSnapshot> foodList = [];
-  List<Product> _list = [];
+  static List<Product> _list = [];
+  String CatName = "";
+  int _activeTab = 0;
+  List pages = [
+    BeveragePage(
+      list: _list,
+      type: "Beverages",
+    ),
+    BeveragePage(
+      list: _list,
+      type: "Lunch",
+    ),
+    BeveragePage(
+      list: _list,
+      type: "Desserts",
+    ),
+  ];
 
+  static final List<Category> categories = [
+    Category(
+      id: 1,
+      name: "Beverages",
+    ),
+    Category(
+      id: 2,
+      name: "Lunch",
+    ),
+    Category(
+      id: 3,
+      name: "Desserts",
+    ),
+  ];
   @override
   void initState() {
     getProducts();
@@ -47,112 +80,161 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        toolbarHeight: 10,
-      ),
       body: Container(
-        height: double.infinity,
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [
-                Colors.white70,
-                Colors.redAccent,
-              ],
-              begin: const FractionalOffset(0.3, 0.4),
-              end: const FractionalOffset(0.5, 1.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        child: ListView(
+        child: Stack(
           children: [
-            deals1(widget.shopModel.name, onViewMore: () {}, items: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
+            Positioned(
+              top: 0.0,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                height: 300.0,
+                width: double.infinity,
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(widget.shopModel.mediaUrl != null
+                          ? widget.shopModel.mediaUrl
+                          : 'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg')),
+                ),
                 child: Container(
-                  margin: EdgeInsets.only(right: 20, left: 20),
-                  child: LmaidaCard(
-                    onTap: () => {},
-                    imagePath: widget.shopModel.mediaUrl != null
-                        ? widget.shopModel.mediaUrl
-                        : 'https://static3.depositphotos.com/1003631/209/i/950/depositphotos_2099183-stock-photo-fine-table-setting-in-gourmet.jpg', //'imagePaths[index]',
+                  padding: EdgeInsets.symmetric(
+                    vertical: kToolbarHeight,
+                    horizontal: 16.0,
+                  ),
+                  alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      FlutterIcons.keyboard_backspace_mdi,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ]),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Beverages",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+            ),
+            Positioned(
+              top: 280.0,
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 20, 5, 5),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0.0,
+                            left: 100.0,
+                            child: Opacity(
+                              opacity: 0.1,
+                              child: Image.asset(
+                                "assets/images/coffee2.png",
+                                width: 150.0,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0.0,
+                            right: -180.0,
+                            child: Image.asset(
+                              "assets/images/square.png",
+                            ),
+                          ),
+                          Positioned(
+                            child: Image.asset(
+                              "assets/images/drum.png",
+                            ),
+                            left: -70.0,
+                            bottom: -40.0,
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Top Food ",
+                                style: TextStyle(
+                                  color: black,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 24.0),
+                                height: 50,
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  // Let's create a model for categories and populate with data.
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _activeTab = index;
+                                        });
+                                      },
+                                      // Little switch animation
+                                      child: AnimatedContainer(
+                                        duration: Duration(milliseconds: 450),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0,
+                                        ),
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          color: _activeTab == index
+                                              ? kTextColor1
+                                              : kTextColor1.withOpacity(
+                                                  .2,
+                                                ),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            categories[index].name,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: _activeTab == index
+                                                  ? Colors.white
+                                                  : kTextColor1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) {
+                                    return SizedBox(
+                                      width: 15.0,
+                                    );
+                                  },
+                                  itemCount: 3,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              AnimatedSwitcher(
+                                duration: Duration(
+                                  milliseconds: 450,
+                                ),
+                                child: pages[_activeTab],
+                              )
+                            ],
+                          ),
+                        ],
                       )),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text("See all",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        )),
-                  )
-                ],
+                ),
               ),
             ),
-            _buildBeverages(),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Lunch",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text("See all",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        )),
-                  )
-                ],
-              ),
-            ),
-            _buildLunch(),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Desserts",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text("See all",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        )),
-                  )
-                ],
-              ),
-            ),
-            _buildDesserts()
           ],
         ),
       ),
@@ -406,33 +488,5 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
             ))
           ],
         ));
-  }
-
-  Widget deals1(String dealTitle, {onViewMore, List<Widget> items}) {
-    return Container(
-      margin: EdgeInsets.only(top: 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            height: 200,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: (items != null)
-                  ? items
-                  : <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 15),
-                        child: Text('No items available at this moment.',
-                            style: TextStyle(
-                                color: Colors.black, fontFamily: 'Poppins')),
-                      ),
-                    ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
