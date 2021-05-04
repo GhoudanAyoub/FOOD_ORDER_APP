@@ -118,28 +118,23 @@ class _BeveragePageState extends State<BeveragePage> {
                         fontWeight: FontWeight.w300),
                   ),
                   Divider(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          "\$${price}",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "\$${price}",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
                         ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Icon(
-                            FlutterIcons.add_circle_mdi,
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          FlutterIcons.add_circle_mdi,
+                        ),
+                      )
+                    ],
                   )
                 ],
               ))

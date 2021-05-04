@@ -213,7 +213,7 @@ class _SideBarState extends State<SideBar>
                                                     .AddProductClickedEvent);
                                           },
                                         ),
-                                        MenuItem(
+                                        /*j MenuItem(
                                           icon: Icons
                                               .supervised_user_circle_outlined,
                                           title: "Manage Customers",
@@ -224,7 +224,7 @@ class _SideBarState extends State<SideBar>
                                                 .add(NavigationEvents
                                                     .CustomersClickedEvent);
                                           },
-                                        ),
+                                        ),*/
                                       ],
                                     );
                                   }

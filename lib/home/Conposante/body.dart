@@ -450,22 +450,17 @@ class _BodyState extends State<Body> {
           ),
           child: Column(
             children: [
-              Expanded(
-                child: Container(
-                  child: Image.network(
-                    mediaUrl,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                  ),
+              Container(
+                height: 80,
+                child: Image.network(
+                  mediaUrl,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 12.0,
-                ),
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -480,15 +475,16 @@ class _BodyState extends State<Body> {
                     ),
                     Text(
                       "${description}",
+                      textAlign: TextAlign.justify,
                       style: TextStyle(
-                        fontSize: 13.0,
+                        fontSize: 12.0,
                         color: kTextColor1,
                       ),
                     ),
                     Divider(),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: 8.0,
+                        vertical: 2.0,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

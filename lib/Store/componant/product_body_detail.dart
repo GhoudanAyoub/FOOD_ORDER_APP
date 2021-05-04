@@ -8,6 +8,7 @@ import 'package:mystore/components/text_form_builder.dart';
 import 'package:mystore/models/product.dart';
 import 'package:mystore/utils/validation.dart';
 
+import '../../SizeConfig.dart';
 import '../../constants.dart';
 
 class ProductDetailsBody extends StatefulWidget {
@@ -97,11 +98,8 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               child: Container(
-                height: 550,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 24.0,
-                ),
+                height: 440,
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20.0),
@@ -153,8 +151,6 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                           ],
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
-
-                      // dropdown below..
                       child: DropdownButton<String>(
                           value: dropdownValue ?? dropdownValue,
                           icon: Icon(Icons.arrow_drop_down),
@@ -190,7 +186,8 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                           fontWeight: FontWeight.w600,
                         )),
                     Container(
-                      margin: EdgeInsets.fromLTRB(20, 10, 250, 10),
+                      margin: EdgeInsets.fromLTRB(
+                          20, 10, getProportionateScreenWidth(200), 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [

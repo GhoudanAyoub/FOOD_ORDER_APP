@@ -124,7 +124,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Container(
-                    padding: EdgeInsets.fromLTRB(10, 20, 5, 5),
+                    padding: EdgeInsets.fromLTRB(10, 10, 5, 5),
                     child: Stack(
                       children: [
                         Positioned(
@@ -165,7 +165,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 24.0),
+                              margin: EdgeInsets.only(top: 5.0),
                               height: 50,
                               child: ListView.separated(
                                 shrinkWrap: true,
@@ -218,7 +218,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
                               ),
                             ),
                             SizedBox(
-                              height: 20.0,
+                              height: 5.0,
                             ),
                             AnimatedSwitcher(
                               duration: Duration(
