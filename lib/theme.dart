@@ -24,6 +24,7 @@ ThemeData theme() {
     fontFamily: "Lato-Regular.ttf",
     appBarTheme: appBarTheme(),
     scaffoldBackgroundColor: kFadedScaffoldColor,
+    primaryColor: white,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: GoogleFonts.poppinsTextTheme(),
     inputDecorationTheme: inputDecorationTheme(),

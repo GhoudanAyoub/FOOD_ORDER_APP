@@ -10,7 +10,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0.0,
       title: Center(
         child: Text(
-          'Statistics',
+          'Sales Report',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 25.0,

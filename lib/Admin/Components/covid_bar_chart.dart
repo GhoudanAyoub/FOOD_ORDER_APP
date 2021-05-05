@@ -42,7 +42,7 @@ class CovidBarChart extends StatelessWidget {
                   bottomTitles: SideTitles(
                     margin: 10.0,
                     showTitles: true,
-                    textStyle: TextStyle(
+                    getTextStyles: (value) => const TextStyle(
                       color: Colors.grey,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
@@ -72,11 +72,11 @@ class CovidBarChart extends StatelessWidget {
                   leftTitles: SideTitles(
                       margin: 10.0,
                       showTitles: true,
-                      textStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      getTextStyles: (value) => const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w500,
+                          ),
                       getTitles: (value) {
                         if (value == 0) {
                           return '0';
@@ -105,7 +105,7 @@ class CovidBarChart extends StatelessWidget {
                           barRods: [
                             BarChartRodData(
                               y: value,
-                              color: Colors.red,
+                              colors: [Colors.red],
                             ),
                           ],
                         )))

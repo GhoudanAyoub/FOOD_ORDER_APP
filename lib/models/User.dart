@@ -48,4 +48,8 @@ class UserModel {
     orders = json['orders'];
     admin = json['admin'];
   }
+
+  UserModel copy({String username}) => UserModel(
+        username: username ?? this.username,
+      );
 }

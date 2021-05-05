@@ -191,6 +191,47 @@ class _SideBarState extends State<SideBar>
                                                     .DashboardClickedEvent);
                                           },
                                         ),
+                                        /*j MenuItem(
+                                          icon: Icons
+                                              .supervised_user_circle_outlined,
+                                          title: "Manage Customers",
+                                          onTap: () {
+                                            onIconPressed();
+                                            BlocProvider.of<NavigationBloc>(
+                                                    context)
+                                                .add(NavigationEvents
+                                                    .CustomersClickedEvent);
+                                          },
+                                        ),*/
+                                      ],
+                                    );
+                                  }
+                                  return Container(
+                                    height: 0,
+                                  );
+                                }
+                                return Container(
+                                  height: 0,
+                                );
+                              },
+                            )
+                          : Container(
+                              height: 10,
+                            ),
+                      firebaseAuth.currentUser != null
+                          ? StreamBuilder(
+                              stream: usersRef
+                                  .doc(firebaseAuth.currentUser.uid)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  user1 =
+                                      UserModel.fromJson(snapshot.data.data());
+                                  if (user1.admin == true ||
+                                      user1.sub == true) {
+                                    return Column(
+                                      children: [
                                         MenuItem(
                                           icon: CupertinoIcons.bag,
                                           title: "Manage Shops",
@@ -213,18 +254,6 @@ class _SideBarState extends State<SideBar>
                                                     .AddProductClickedEvent);
                                           },
                                         ),
-                                        /*j MenuItem(
-                                          icon: Icons
-                                              .supervised_user_circle_outlined,
-                                          title: "Manage Customers",
-                                          onTap: () {
-                                            onIconPressed();
-                                            BlocProvider.of<NavigationBloc>(
-                                                    context)
-                                                .add(NavigationEvents
-                                                    .CustomersClickedEvent);
-                                          },
-                                        ),*/
                                       ],
                                     );
                                   }

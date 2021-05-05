@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  fl_chart: ^0.12.0
   syncfusion_flutter_charts:
   bubble_tab_indicator: ^0.1.4
-  fl_chart: ^0.9.4
   flutter_bloc:
   provider:
   badges: ^1.1.6
