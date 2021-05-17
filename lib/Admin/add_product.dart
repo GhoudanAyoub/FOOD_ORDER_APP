@@ -109,8 +109,8 @@ class _AddProductState extends State<AddProduct> {
                                                 onTap: () => showImageChoices(
                                                     context, viewModel),
                                                 child: Container(
-                                                  width: 230,
-                                                  height: 180,
+                                                  width: 150,
+                                                  height: 150,
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey[500],
                                                     borderRadius:
@@ -236,6 +236,9 @@ class _AddProductState extends State<AddProduct> {
                                                                       .cover,
                                                                 ),
                                                     ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
                                                   ),
                                                   InkWell(
                                                     onTap: () =>

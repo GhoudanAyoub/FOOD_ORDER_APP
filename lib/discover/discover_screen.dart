@@ -204,63 +204,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 ),
               ),
             ),
-            /*ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Categories",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      GestureDetector(
-                        onTap: () {
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.CategoriesClickedEvent);
-                        },
-                        child: Text("See all",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            )),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(left: 15, top: 5),
-                    child: _buildCatList()),
-                Container(
-                  margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Top Food ",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Text("See all",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            )),
-                      )
-                    ],
-                  ),
-                ),
-                _buildPopularList(),
-              ],
-            )*/
           ],
         ),
       ));
@@ -280,7 +223,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           child: StaggeredGridView.countBuilder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            // Lets create a coffee model and populate it
             itemCount: filteredShops.length,
             crossAxisCount: 4,
             itemBuilder: (BuildContext context, int index) {
@@ -293,31 +235,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             crossAxisSpacing: 8.0,
           ),
         );
-        /*return GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          childAspectRatio: 0.7,
-          physics: ClampingScrollPhysics(),
-          children: List.generate(filteredShops.length, (index) {
-            DocumentSnapshot doc = filteredShops[index];
-            ShopModel shops = ShopModel.fromJson(doc.data());
-            return ShopsCard(shops);
-          }),
-        );
-
-        Container(
-            child: ListView.builder(
-          itemCount: filteredShops.length,
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          physics: ClampingScrollPhysics(),
-          padding: EdgeInsets.all(10),
-          itemBuilder: (BuildContext context, int index) {
-            DocumentSnapshot doc = filteredShops[index];
-            ShopModel shops = ShopModel.fromJson(doc.data());
-            return ShopsCard(shops);
-          },
-        ));*/
       }
     } else {
       return Center(
@@ -328,32 +245,24 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   ShopsCard(ShopModel shops) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => StoreDetail(
-                      shopModel: shops,
-                    )));
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.white,
-                offset: Offset(1, 2),
-                blurRadius: 6.0,
-              )
-            ],
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StoreDetail(
+                        shopModel: shops,
+                      )));
+        },
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 80,
+                height: 100,
                 child: Image.network(
                   shops.mediaUrl,
                   width: MediaQuery.of(context).size.width,
@@ -399,9 +308,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               )
             ],
           ),
-        ),
-      ),
-    );
+        ));
 
     /* Container(
         margin: EdgeInsets.fromLTRB(10, 10, 5, 10),

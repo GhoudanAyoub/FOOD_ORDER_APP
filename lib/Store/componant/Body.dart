@@ -220,7 +220,7 @@ class _BodyState extends State<Body> {
                 onTap: () {},
                 child: Container(
                   height: 150,
-                  width: 200,
+                  width: 150,
                   child: Card(
                     elevation: 3.0,
                     shape: RoundedRectangleBorder(

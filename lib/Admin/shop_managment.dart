@@ -159,55 +159,61 @@ class _ShopState extends State<Shop> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            return DataTable(
-              columns: [
-                DataColumn(
-                    label: Flexible(
-                      child: Text('Registered Shops',
-                          overflow: TextOverflow.fade,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    tooltip: 'represents name of the Shops'),
-                DataColumn(
-                    label: Text('Status',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                    tooltip: 'represents is the Shops Status'),
-                DataColumn(
-                    label: Flexible(
-                      child: Text('Oder Completion Rate',
-                          overflow: TextOverflow.fade,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    tooltip: 'represents the number of orders completed'),
-              ],
-              rows: _list
-                  .map((data) => DataRow(cells: [
-                        DataCell(
-                            Text(data.name,
+            return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                    child: DataTable(
+                  columns: [
+                    DataColumn(
+                        label: Flexible(
+                          child: Text('Registered Shops',
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        tooltip: 'represents name of the Shops'),
+                    DataColumn(
+                        label: Text('Status',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
+                        tooltip: 'represents is the Shops Status'),
+                    DataColumn(
+                        label: Flexible(
+                          child: Text('Oder Completion Rate',
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        tooltip: 'represents the number of orders completed'),
+                  ],
+                  rows: _list
+                      .map((data) => DataRow(cells: [
+                            DataCell(
+                                Text(data.name,
+                                    style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.normal)),
+                                onTap: () {
+                              print(data.name);
+                            }),
+                            DataCell(Text(
+                                data.status == true ? "Active" : "Paused",
                                 style: TextStyle(
                                     color: Colors.grey[700],
-                                    fontWeight: FontWeight.normal)), onTap: () {
-                          print(data.name);
-                        }),
-                        DataCell(Text(data.status == true ? "Active" : "Paused",
-                            style: TextStyle(
-                                color: Colors.grey[700],
-                                fontWeight: FontWeight.normal))),
-                        DataCell(Text(
-                            "${CountRate(data) != null ? CountRate(data).toString() : 0}%",
-                            style: TextStyle(
-                                color: Colors.grey[700],
-                                fontWeight: FontWeight.normal))),
-                      ]))
-                  .toList(),
-            );
+                                    fontWeight: FontWeight.normal))),
+                            DataCell(Text(
+                                "${CountRate(data) != null ? CountRate(data).toString() : 0}%",
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontWeight: FontWeight.normal))),
+                          ]))
+                      .toList(),
+                )));
           },
         ));
       }

@@ -32,7 +32,7 @@ class StatsGrid extends StatelessWidget {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10.0),

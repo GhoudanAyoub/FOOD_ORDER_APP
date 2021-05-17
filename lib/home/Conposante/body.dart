@@ -435,23 +435,14 @@ class _BodyState extends State<Body> {
                       product: product,
                     )));
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.white,
-                offset: Offset(1, 2),
-                blurRadius: 6.0,
-              )
-            ],
-          ),
           child: Column(
             children: [
               Container(
-                height: 80,
+                height: 90,
                 child: Image.network(
                   mediaUrl,
                   width: MediaQuery.of(context).size.width,

@@ -94,17 +94,18 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
             ),
           ),
           Positioned(
-            top: 280.0,
+            top: 300.0,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               child: Container(
-                height: 440,
+                height: MediaQuery.of(context).size.height - 300,
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: ListView(
+                  shrinkWrap: true,
                   children: [
                     Text(
                       "${widget.product.product_name}",
@@ -556,7 +557,7 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
     return Container(
         margin: EdgeInsets.fromLTRB(10, 15, 10, 15),
         padding: EdgeInsets.fromLTRB(0, 2, 20, 2),
-        width: 300,
+        width: 280,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
