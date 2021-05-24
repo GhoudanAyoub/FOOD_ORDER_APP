@@ -119,6 +119,7 @@ class _StoreBodyDetailsState extends State<StoreBodyDetails> {
               top: 300.0,
               width: MediaQuery.of(context).size.width,
               child: Container(
+                height: MediaQuery.of(context).size.height - 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20.0),

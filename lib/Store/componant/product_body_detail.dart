@@ -123,7 +123,7 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: kTextColor1,
+                        color: Colors.grey,
                         height: 1.8,
                       ),
                     ),
@@ -379,29 +379,7 @@ class _ProductDetailsState extends State<ProductDetailsBody> {
             ),
           )
         ],
-      )
-
-          /*ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-              child: Text(widget.product.type,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  )),
-            ),
-            ShopsCard(widget.product),
-            orderCard(widget.product),
-            DeliverycheckedValue == true
-                ? AddressCard(widget.product)
-                : Container(
-                    height: 0,
-                  ),
-          ],
-        ),*/
-          ),
+      )),
     );
   }
 

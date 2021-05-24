@@ -3,11 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:mystore/Categories/components/cat_food.dart';
 import 'package:mystore/Store/product_detail.dart';
 import 'package:mystore/bloc.navigation_bloc/navigation_bloc.dart';
 import 'package:mystore/components/indicators.dart';
-import 'package:mystore/components/item_card.dart';
 import 'package:mystore/models/User.dart';
 import 'package:mystore/models/categorie_model.dart';
 import 'package:mystore/models/product.dart';
@@ -188,63 +186,6 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ),
-            /*ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Categories",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      GestureDetector(
-                        onTap: () {
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.CategoriesClickedEvent);
-                        },
-                        child: Text("See all",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            )),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(left: 15, top: 5),
-                    child: _buildCatList()),
-                Container(
-                  margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Top Food ",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Text("See all",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            )),
-                      )
-                    ],
-                  ),
-                ),
-                _buildPopularList(),
-              ],
-            )*/
           ],
         ),
       ),
@@ -387,43 +328,6 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget _buildCatList() {
-    if (!loading) {
-      return Container(
-        height: 100,
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          itemCount: 8,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.all(5),
-          itemBuilder: (context, index) {
-            return ItemCard(
-              svgSrc: _listCat[index].picture,
-              title: _listCat[index].name,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return CategoriesFood(
-                        name: _listCat[index].name,
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
-    } else {
-      return Center(
-        child: circularProgress(context),
-      );
-    }
-  }
-
   Widget card(
       mediaUrl, product_name, description, price, int type, Product product) {
     return GestureDetector(
@@ -469,7 +373,7 @@ class _BodyState extends State<Body> {
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: 12.0,
-                        color: kTextColor1,
+                        color: Colors.black,
                       ),
                     ),
                     Divider(),
@@ -504,109 +408,5 @@ class _BodyState extends State<Body> {
         ),
       ),
     );
-    /*
-    return Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(10),
-        width: 200,
-        decoration: BoxDecoration(
-          color: type.isEven ? Colors.white : Colors.redAccent,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(5, 5),
-              blurRadius: 20,
-              color: Colors.grey.withOpacity(0.32),
-            ),
-          ],
-        ),
-        child: Column(
-          children: <Widget>[
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 100,
-                width: 180,
-                child: Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      mediaUrl,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
-            Flexible(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "${product_name}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: type.isEven ? Colors.black : Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "${description}",
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                      color: type.isEven ? Colors.black : Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "\$${price}",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: type.isEven ? Colors.redAccent : Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      color: type.isEven
-                          ? Colors.redAccent
-                          : Colors.grey.withOpacity(0.5),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductDetails(
-                                      product: product,
-                                    )));
-                      },
-                      child: Text(
-                        "Order",
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Lato-Regular.ttf',
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ))
-          ],
-        ));*/
   }
 }

@@ -290,7 +290,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: 13.0,
-                        color: kTextColor1,
+                        color: Colors.black,
                       ),
                     ),
                     Divider(),
